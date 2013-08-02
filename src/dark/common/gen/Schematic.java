@@ -3,6 +3,9 @@ package dark.common.gen;
 import java.io.File;
 import java.io.InputStream;
 
+import dark.common.prefab.PosWorld;
+
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -23,7 +26,7 @@ public class Schematic
         try
         {
             InputStream fis = getClass().getResourceAsStream(fileName + ".schematic");
-            NBTTagCompound nbtdata = NBTCompressedStreamTools(fis);
+            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(fis);
 
             width = nbtdata.getShort("Width");
             height = nbtdata.getShort("Height");
@@ -31,7 +34,10 @@ public class Schematic
 
             blocks = nbtdata.getByteArray("Blocks");
             data = nbtdata.getByteArray("Data");
+            for(int i = 0; i < blocks.length; i++)
+            {
 
+            }
             //NBTTagList entities = nbtdata.getTagList("Entities");
             //NBTTagList tileentities = nbtdata.getTagList("TileEntities");
 
@@ -42,5 +48,10 @@ public class Schematic
             e.printStackTrace();
         }
         return this;
+    }
+
+    public void build(PosWorld location)
+    {
+
     }
 }
