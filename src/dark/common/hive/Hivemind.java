@@ -25,7 +25,7 @@ public class Hivemind implements IHiveObject
     /** Entities(Robots) */
     public Set<Entity> hiveBots = new HashSet<Entity>();
 
-    Set<IHiveSpire> spires = new HashSet<IHiveSpire>();
+    public Set<IHiveSpire> spires = new HashSet<IHiveSpire>();
 
     public Hivemind(PosWorld coreLocation, String hiveID, Object... hiveObjects)
     {
@@ -80,7 +80,10 @@ public class Hivemind implements IHiveObject
         if (obj instanceof TileEntity)
         {
             hiveTiles.add((TileEntity) obj);
-
+        }
+        if(obj instanceof IHiveSpire)
+        {
+            spires.add((IHiveSpire) obj);
         }
     }
 

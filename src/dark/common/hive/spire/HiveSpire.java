@@ -19,14 +19,33 @@ import dark.common.prefab.PosWorld;
 /** Hive node that handles most of the work for the hive without getting in the main hives way */
 public class HiveSpire implements IHiveSpire
 {
+    public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
     PosWorld location;
     Hivemind hivemind;
     String hiveName = "world";
     int size = 1;
     List<IInventory> inventory = new ArrayList<IInventory>();
 
+    public HiveSpire(TileEntitySpire core)
+    {
+        staticList.add(this);
+        location = new PosWorld(core.worldObj, new Pos(core));
+    }
+
+    public static HiveSpire getSpire(PosWorld location)
+    {
+
+    }
+
+    public void init()
+    {
+       this.getHive().addToHive(this);
+       this.scanArea();
+    }
+
     public void scanArea()
     {
+        System.out.print("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
         int delta = size * 50;
         Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
         Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 0), getLocation().zz - delta);
@@ -40,6 +59,14 @@ public class HiveSpire implements IHiveSpire
                     this.onScanBlock(new Pos(x, y, z));
                 }
             }
+        }
+    }
+
+    public void buildSpire(int level)
+    {
+        if(level == 0)
+        {
+
         }
     }
 
@@ -119,5 +146,4 @@ public class HiveSpire implements IHiveSpire
         }
         return this.hiveName;
     }
-
 }
