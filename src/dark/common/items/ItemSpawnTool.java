@@ -1,5 +1,6 @@
 package dark.common.items;
 
+import java.io.File;
 import java.net.URL;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,8 +25,10 @@ public class ItemSpawnTool extends Item
     {
         if (!par2World.isRemote)
         {
-            URL location = ItemSpawnTool.class.getProtectionDomain().getCodeSource().getLocation();
-            System.out.println(location.getFile());
+            // URL location = ItemSpawnTool.class.getProtectionDomain().getCodeSource().getLocation();
+            //String string = location.getPath();
+
+            //System.out.println(location.getFile());
             Schematic scem = new Schematic("fireflower").load();
         }
         return par1ItemStack;
