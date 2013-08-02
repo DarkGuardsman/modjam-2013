@@ -25,7 +25,7 @@ public class HiveManager
         if (!hives.contains(mind))
         {
             hives.add(mind);
-            String name = mind.getID();
+            String name = mind.getHiveID();
             List<Hivemind> list = new ArrayList<Hivemind>();
             list.add(mind);
             if (hivesets.containsKey(name) && hivesets.get(name) != null)
@@ -44,26 +44,39 @@ public class HiveManager
 
     }
 
-    /** @param mind - hivemind
+    /** Used to change a hiveminds tag id and update the hiveset list at the same time
+     *
+     * @param mind - hivemind
      * @param tag - null will remove it from tag list */
     public static void changeHiveTag(Hivemind mind, String tag)
     {
-        if (hivesets.containsKey(mind.getID()))
+        if (hivesets.containsKey(mind.getHiveID()))
         {
-            List<Hivemind> list = hivesets.get(mind.getID());
+            List<Hivemind> list = hivesets.get(mind.getHiveID());
             if (list == null)
             {
-                hivesets.remove(mind.getID());
+                hivesets.remove(mind.getHiveID());
             }
             else
             {
                 list.remove(mind);
-                hivesets.put(mind.getID(), list);
+                hivesets.put(mind.getHiveID(), list);
             }
         }
         if (tag != null)
         {
-            mind.set
+            mind.setHiveID(tag);
+
+            if (hivesets.containsKey(tag))
+            {
+                List<Hivemind> list = hivesets.get(tag);
+                if (list == null)
+                {
+                    list = new ArrayList<Hivemind>();
+                }
+                list.add(mind);
+                hivesets.put(tag, list);
+            }
         }
     }
 
@@ -104,7 +117,7 @@ public class HiveManager
             }
             if (hive != null)
             {
-                return hive.getID();
+                return hive.getHiveID();
             }
         }
 

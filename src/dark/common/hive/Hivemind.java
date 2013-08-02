@@ -116,7 +116,7 @@ public class Hivemind implements IHiveObject
 
     public void refresh()
     {
-
+        //TODO refresh the hive and remove any invalid objects. As well reset the hive id in all objects
     }
 
     public IHiveSpire getClosestSpire(Object obj)
@@ -160,7 +160,7 @@ public class Hivemind implements IHiveObject
 
     public void merger(Hivemind mind)
     {
-        if (mind.getID() == this.getID())
+        if (mind.getHiveID() == this.getHiveID())
         {
 
         }
