@@ -85,17 +85,16 @@ public class Schematic
 
     public void build(PosWorld location)
     {
-        Pos start = new Pos(location.xx + (width / 2), Math.min(location.yy + height, 255), location.zz + (length / 2));
-        Pos end = new Pos(location.xx - (width / 2), Math.max(location.yy, 0), location.zz - (length / 2));
-        int i = 0;
+        Pos start = new Pos(location.xx, location.yy, location.zz);
+        Pos end = new Pos(location.xx + width, Math.min(location.yy + height, 255), location.zz + length);
         int x, y, z;
-        for (y = start.y(); y <= start.y() && y >= end.y(); y--)
+        for (x = start.x(); x <= end.x(); x++)
         {
-            for (x = start.x(); x <= start.x() && x >= end.x(); x--)
+            for (y = start.y(); y <= end.y(); y++)
             {
-                for (z = start.z(); z <= start.z() && z >= end.z(); z--)
+                for (z = start.z(); z <= end.z(); z++)
                 {
-                    i = y * width * length + z * width + x;
+                    int i = (y - start.y()) * width * length + (z - start.z()) * (width + x - start.x());
                     int b = 0;
                     int m = 0;
                     if (i < this.blocks.length)
