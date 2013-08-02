@@ -32,7 +32,7 @@ public class Schematic
         try
         {
             File file = new File(Schematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
-            InputStream fis = new FileInputStream(file.getPath() + File.separator + fileName +".schematic");
+            InputStream fis = new FileInputStream(file.getPath() + File.separator + fileName + ".schematic");
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(fis);
             fis.close();
             width = nbtdata.getShort("Width");
@@ -68,10 +68,6 @@ public class Schematic
                     }
                 }
             }
-            for (int i = 0; i < blocks.length; i++)
-            {
-                //System.out.println("Block: "+blocks[i]);
-            }
             //NBTTagList entities = nbtdata.getTagList("Entities");
             //NBTTagList tileentities = nbtdata.getTagList("TileEntities");
 
@@ -83,7 +79,7 @@ public class Schematic
         return this;
     }
 
-    public void build(PosWorld location)
+    public void build(PosWorld location, boolean air)
     {
         Pos start = new Pos(location.xx, location.yy, location.zz);
         Pos end = new Pos(location.xx + width, Math.min(location.yy + height, 255), location.zz + length);
@@ -105,8 +101,11 @@ public class Schematic
                     {
                         m = this.data[i];
                     }
-                   // System.out.println("Placing: " + b + "  " + m);
-                    location.world.setBlock(x, y, z, b, m, 2);
+                    // System.out.println("Placing: " + b + "  " + m);
+                    if (air && b != 0 || !air)
+                    {
+                        location.world.setBlock(x, y, z, b, m, 2);
+                    }
                 }
             }
         }

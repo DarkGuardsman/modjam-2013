@@ -32,7 +32,7 @@ public class ItemSpawnTool extends Item
             //System.out.println(location.getFile());
             Schematic scem = new Schematic("straight").load();
             par3EntityPlayer.setPosition(par3EntityPlayer.posX, par3EntityPlayer.posY + scem.height, par3EntityPlayer.posZ);
-            scem.build(new PosWorld(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY - scem.height, par3EntityPlayer.posZ));
+            scem.build(new PosWorld(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY - scem.height, par3EntityPlayer.posZ), true);
         }
         return par1ItemStack;
     }
