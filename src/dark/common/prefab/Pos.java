@@ -72,4 +72,9 @@ public class Pos
         double deltaZ = zz - pos.zz;
         return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
     }
+
+    public TileEntity getTileEntity(World world)
+    {
+        return world.getBlockTileEntity(x(), y(), z());
+    }
 }

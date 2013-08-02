@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import dark.common.api.IHiveSpire;
+import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
 /** Hive node that handles most of the work for the hive without getting in the main hives way */
@@ -16,12 +19,37 @@ public class HiveSpire implements IHiveSpire
     PosWorld location;
     Hivemind hivemind;
     String hiveName = "world";
-    int side = 1;
+    int size = 1;
     List<IInventory> inventory = new ArrayList<IInventory>();
 
     public void scanArea()
     {
+        int delta = size * 50;
+        Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
+        Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 0), getLocation().zz - delta);
+        int x, y, z;
+        for (y = start.y(); y <= start.y() && y >= end.y(); y--)
+        {
+            for (x = start.x(); x <= start.x() && x >= end.x(); x--)
+            {
+                for (z = start.z(); z <= start.z() && z >= end.z(); z--)
+                {
+                    this.onScanBlock(new Pos(x, y, z));
+                }
+            }
+        }
+    }
 
+    public void onScanBlock(Pos pos)
+    {
+        int id = pos.getBlockID(getLocation().world);
+        int meta = pos.getBlockMeta(getLocation().world);
+        Block block = Block.blocksList[id];
+        TileEntity entity = pos.getTileEntity(getLocation().world);
+        if(entity instanceof IInventory)
+        {
+
+        }
     }
 
     @Override
@@ -69,18 +97,6 @@ public class HiveSpire implements IHiveSpire
     @Override
     public void receivedItems(ItemStack stackIn, Object obj)
     {
-        if (stackIn != null)
-        {
-            ItemStack stack = stackIn.copy();
-            stack.stackSize = 1;
-            int a = stackIn.stackSize;
-            if (this.containedItems.containsKey(stack))
-            {
-                a += this.containedItems.get(stack);
-            }
-            this.containedItems.put(stack, a);
-
-        }
 
     }
 
