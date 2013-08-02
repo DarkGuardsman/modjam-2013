@@ -105,7 +105,7 @@ public class Schematic
                     {
                         m = this.data[i];
                     }
-                    System.out.println("Placing: " + b + "  " + m);
+                   // System.out.println("Placing: " + b + "  " + m);
                     location.world.setBlock(x, y, z, b, m, 2);
                 }
             }
