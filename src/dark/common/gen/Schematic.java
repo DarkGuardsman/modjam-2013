@@ -87,14 +87,14 @@ public class Schematic
     {
         Pos start = new Pos(location.xx, location.yy, location.zz);
         Pos end = new Pos(location.xx + width, Math.min(location.yy + height, 255), location.zz + length);
-        int x, y, z;
-        for (x = start.x(); x <= end.x(); x++)
+
+        for (int x = start.x(); x < end.x(); x++)
         {
-            for (y = start.y(); y <= end.y(); y++)
+            for (int y = start.y(); y < end.y(); y++)
             {
-                for (z = start.z(); z <= end.z(); z++)
+                for (int z = start.z(); z < end.z(); z++)
                 {
-                    int i = (y - start.y()) * width * length + (z - start.z()) * (width + x - start.x());
+                    int i = (y - start.y()) * width * length + (z - start.z()) * width + (x - start.x());
                     int b = 0;
                     int m = 0;
                     if (i < this.blocks.length)
