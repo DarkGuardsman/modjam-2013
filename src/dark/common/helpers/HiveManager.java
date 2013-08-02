@@ -11,19 +11,24 @@ import dark.common.prefab.Pos;
 public class HiveManager
 {
 
-    protected Set<NetworkHivemind> hives = new HashSet<NetworkHivemind>();
+    protected static Set<NetworkHivemind> hives = new HashSet<NetworkHivemind>();
     public static final String NEUTRIAL = "NEUT";
 
-    public void registerHive(NetworkHivemind mind)
+    public static void registerHive(NetworkHivemind mind)
     {
-        if (!this.hives.contains(mind))
+        if (!getHives().contains(mind))
         {
             hives.add(mind);
         }
     }
 
+    public static Set<NetworkHivemind> getHives()
+    {
+        return hives;
+    }
+
     /** Gets the string ID the bot or Tile will use to ID itself as part of the hive */
-    public String getHiveID(Object obj)
+    public static String getHiveID(Object obj)
     {
         NetworkHivemind hive = null;
         double distance = Double.MAX_VALUE;
@@ -43,7 +48,7 @@ public class HiveManager
 
         if (pos != null && world != null)
         {
-            for (NetworkHivemind entry : hives)
+            for (NetworkHivemind entry : getHives())
             {
                 double distanceTo = entry.getLocation().getDistanceFrom(pos);
                 if (distanceTo < distance)

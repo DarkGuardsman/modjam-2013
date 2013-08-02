@@ -2,7 +2,7 @@ package dark.common.api;
 
 public interface IHiveObject
 {
-    public void setHiveID(int id);
+    public void setHiveID(String id);
 
-    public int getHiveID();
+    public String getHiveID();
 }
