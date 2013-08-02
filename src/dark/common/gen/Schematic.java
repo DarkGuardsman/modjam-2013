@@ -18,7 +18,8 @@ public class Schematic
     short width;
     public short height;
     short length;
-    byte[] blocks, data;
+    short[] blocks = new short[1];
+    byte[] data = new byte[1];
 
     public Schematic(String fileName)
     {
@@ -38,12 +39,37 @@ public class Schematic
             height = nbtdata.getShort("Height");
             length = nbtdata.getShort("Length");
 
-            blocks = nbtdata.getByteArray("Blocks");
+            byte[] blockID = nbtdata.getByteArray("Blocks");
             data = nbtdata.getByteArray("Data");
+            byte[] addId = new byte[0];
+            int l = blocks.length;
+            short[] blocks = new short[l];
+
+            if (nbtdata.hasKey("AddBlocks"))
+            {
+                addId = nbtdata.getByteArray("AddBlocks");
+            }
+
+            // Combine the AddBlocks data with the first 8-bit block ID
             for (int i = 0; i < blocks.length; i++)
             {
-                System.out.println("BlockByte" + i + ":" + blocks[i] +"  "+data[i]);
+                if ((i >> 1) >= addId.length)
+                {
+                    blocks[i] = (short) (blockID[i] & 0xFF);
+                }
+                else
+                {
+                    if ((i & 1) == 0)
+                    {
+                        blocks[i] = (short) (((addId[i >> 1] & 0x0F) << 8) + (blockID[i] & 0xFF));
+                    }
+                    else
+                    {
+                        blocks[i] = (short) (((addId[i >> 1] & 0xF0) << 4) + (blockID[i] & 0xFF));
+                    }
+                }
             }
+
             //NBTTagList entities = nbtdata.getTagList("Entities");
             //NBTTagList tileentities = nbtdata.getTagList("TileEntities");
 
@@ -58,8 +84,8 @@ public class Schematic
 
     public void build(PosWorld location)
     {
-        Pos start = new Pos(location.xx + (width/2), Math.min(location.yy + height, 255), location.zz + (length/2));
-        Pos end = new Pos(location.xx - (width/2), Math.max(location.yy, 0), location.zz - (length/2));
+        Pos start = new Pos(location.xx + (width / 2), Math.min(location.yy + height, 255), location.zz + (length / 2));
+        Pos end = new Pos(location.xx - (width / 2), Math.max(location.yy, 0), location.zz - (length / 2));
         int i = 0;
         int x, y, z;
         for (y = start.y(); y <= start.y() && y >= end.y(); y--)
@@ -68,18 +94,18 @@ public class Schematic
             {
                 for (z = start.z(); z <= start.z() && z >= end.z(); z--)
                 {
-                    i++;
+                    i = y * width * length + z * width + x;
                     int b = 0;
                     int m = 0;
-                    if(i < blocks.length)
+                    if (i < blocks.length)
                     {
                         b = blocks[i];
                     }
-                    if(i <data.length)
+                    if (i < data.length)
                     {
                         m = data[i];
                     }
-                    location.world.setBlock(x, y, z, b,m,2);
+                    location.world.setBlock(x, y, z, b, m, 2);
                 }
             }
         }
