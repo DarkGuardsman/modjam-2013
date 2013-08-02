@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import net.minecraft.world.World;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import dark.common.prefab.Pos;
 
 public class DarkSchematic
@@ -15,7 +13,7 @@ public class DarkSchematic
     public void loadWorldSelection(World world, Pos pos, Pos pos2)
     {
         int deltaX, deltaY, deltaZ;
-        Pos start;
+        Pos start = new Pos(pos.xx > pos2.xx ? pos2.xx : pos.xx, pos.yy > pos2.yy ? pos2.yy : pos.yy, pos.zz > pos2.zz ? pos2.zz : pos.zz);
         if (pos.xx < pos2.xx)
         {
             deltaX = pos2.x() - pos.x();
@@ -39,6 +37,18 @@ public class DarkSchematic
         else
         {
             deltaZ = pos.z() - pos2.z();
+        }
+        for (int x = 0; x < deltaX; ++x)
+        {
+            for (int y = 0; y < deltaY; ++y)
+            {
+                for (int z = 0; z < deltaZ; ++z)
+                {
+                    int blockID = world.getBlockId(start.x() + x, start.y() + y, start.z() + z);
+                    int blockMeta = world.getBlockMetadata(start.x() + x, start.y() + y, start.z() + z);
+                    blocks.put(new Pos(x, y, z), new Pair<Integer, Integer>(blockID,blockMeta ));
+                }
+            }
         }
 
     }

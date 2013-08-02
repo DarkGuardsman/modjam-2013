@@ -47,6 +47,16 @@ public class Pos
         return (int) zz;
     }
 
+    public double getMagnitude()
+    {
+        return Math.sqrt(this.getMagnitudeSquared());
+    }
+
+    public double getMagnitudeSquared()
+    {
+        return xx * xx + yy * yy + zz * zz;
+    }
+
     public int getBlockMeta(World world)
     {
         return world.getBlockMetadata(this.x(), this.y(), this.z());
