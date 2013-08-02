@@ -1,4 +1,4 @@
-package dark.common.hive;
+package dark.common.hive.spire;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import dark.common.api.IHiveSpire;
+import dark.common.hive.HiveManager;
+import dark.common.hive.Hivemind;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
@@ -46,9 +49,9 @@ public class HiveSpire implements IHiveSpire
         int meta = pos.getBlockMeta(getLocation().world);
         Block block = Block.blocksList[id];
         TileEntity entity = pos.getTileEntity(getLocation().world);
-        if(entity instanceof IInventory)
+        if (entity instanceof TileEntityChest && !inventory.contains(entity))
         {
-
+            inventory.add((IInventory) entity);
         }
     }
 

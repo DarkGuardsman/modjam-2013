@@ -8,6 +8,10 @@ public class TileEntityMain extends TileEntity
 {
     protected Pos pos;
     protected long ticks;
+    public static final int sec = 20;
+    public static final int min = sec * 60;
+    public static final int hour = min * 60;
+    public static final int mcday = min * 10;
 
     public void init()
     {
