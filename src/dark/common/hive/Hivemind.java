@@ -145,18 +145,7 @@ public class Hivemind implements IHiveObject
             world = ((IHiveSpire) obj).getLocation().world;
         }
 
-        if (pos != null && world != null)
-        {
-            for (IHiveSpire entry : this.spires)
-            {
-                double distanceTo = entry.getLocation().getDistanceFrom(pos);
-                if (distanceTo < distance)
-                {
-                    hive = entry;
-                    distance = distanceTo;
-                }
-            }
-        }
+
 
         return hive;
     }

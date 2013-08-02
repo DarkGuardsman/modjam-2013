@@ -10,6 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.World;
 import dark.common.api.IHiveSpire;
 import dark.common.hive.HiveManager;
 import dark.common.hive.Hivemind;
@@ -19,11 +20,16 @@ import dark.common.prefab.PosWorld;
 /** Hive node that handles most of the work for the hive without getting in the main hives way */
 public class HiveSpire implements IHiveSpire
 {
+    /** Static list of spire since they run outside the map */
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
+
     PosWorld location;
+
     Hivemind hivemind;
     String hiveName = "world";
-    int size = 1;
+
+    int size = 0;
+
     List<IInventory> inventory = new ArrayList<IInventory>();
 
     public HiveSpire(TileEntitySpire core)
@@ -32,15 +38,36 @@ public class HiveSpire implements IHiveSpire
         location = new PosWorld(core.worldObj, new Pos(core));
     }
 
-    public static HiveSpire getSpire(PosWorld location)
+    /** Gets a spire close to the location. Use mainly if a spire core unloaded from the map and
+     * needs to get its spire instance back to save from creating a new one
+     *
+     * @param location - world location
+     * @param i - max distance to search for the spire
+     * @return */
+    public static HiveSpire getSpire(PosWorld location, int i)
     {
-
+        if (location != null)
+        {
+            double distance = Double.MAX_VALUE;
+            HiveSpire spire = null;
+            for (HiveSpire entry : staticList)
+            {
+                double distanceTo = entry.getLocation().getDistanceFrom(location);
+                if (entry.getLocation().world == location.world && distanceTo < distance && distanceTo < i)
+                {
+                    spire = entry;
+                    distance = distanceTo;
+                }
+            }
+            return spire;
+        }
+        return null;
     }
 
     public void init()
     {
-       this.getHive().addToHive(this);
-       this.scanArea();
+        this.getHive().addToHive(this);
+        this.scanArea();
     }
 
     public void scanArea()
@@ -64,9 +91,11 @@ public class HiveSpire implements IHiveSpire
 
     public void buildSpire(int level)
     {
-        if(level == 0)
+        if (level == 0)
         {
-
+            World world = this.getLocation().world;
+            Pos pos = this.getLocation();
+            this.size = 1;
         }
     }
 

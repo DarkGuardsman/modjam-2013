@@ -1,5 +1,7 @@
 package dark.common.hive.spire;
 
+import dark.common.prefab.Pos;
+import dark.common.prefab.PosWorld;
 import dark.common.prefab.TileEntityMain;
 
 public class TileEntitySpire extends TileEntityMain
@@ -29,6 +31,7 @@ public class TileEntitySpire extends TileEntityMain
     {
         if (spire == null)
         {
+            spire = HiveSpire.getSpire(new PosWorld(this.worldObj, new Pos(this)),3);
             spire = new HiveSpire(this);
         }
         return spire;
