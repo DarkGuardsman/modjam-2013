@@ -50,26 +50,25 @@ public class Schematic
             {
                 addId = nbtdata.getByteArray("AddBlocks");
             }
-
-            // Combine the AddBlocks data with the first 8-bit block ID
-            for (int i = 0; i < blockID.length; i++)
+            for (int index = 0; index < blockID.length; index++)
             {
-                if ((i >> 1) >= addId.length)
+                if ((index >> 1) >= addId.length)
                 {
-                    this.blocks[i] = (short) (blockID[i] & 0xFF);
+                    blocks[index] = (short) (blockID[index] & 0xFF);
                 }
                 else
                 {
-                    if ((i & 1) == 0)
+                    if ((index & 1) == 0)
                     {
-                        this.blocks[i] = (short) (((addId[i >> 1] & 0x0F) << 8) + (blockID[i] & 0xFF));
+                        blocks[index] = (short) (((addId[index >> 1] & 0x0F) << 8) + (blockID[index] & 0xFF));
                     }
                     else
                     {
-                        this.blocks[i] = (short) (((addId[i >> 1] & 0xF0) << 4) + (blockID[i] & 0xFF));
+                        blocks[index] = (short) (((addId[index >> 1] & 0xF0) << 4) + (blockID[index] & 0xFF));
                     }
                 }
             }
+            //We don't need these right now but might include them later
             //NBTTagList entities = nbtdata.getTagList("Entities");
             //NBTTagList tileentities = nbtdata.getTagList("TileEntities");
 
@@ -109,9 +108,11 @@ public class Schematic
                     }
                     if (Block.blocksList[b] == null && b != 0)
                     {
-                        b = 1;
+                        System.out.println("Missing Block: " + b);
+                        b = 0;
                     }
                     // System.out.println("Placing: " + b + "  " + m);
+                    //location.world.setBlock(x + start.x(), y + start.y(), z + start.z(), 0, 0, 2);
                     if (air && b != 0 || !air)
                     {
                         location.world.setBlock(x + start.x(), y + start.y(), z + start.z(), b, m, 2);
