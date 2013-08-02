@@ -15,13 +15,15 @@ public class NetworkHivemind
     public static Pos backupCoreLocation = new Pos(0, 126, 0);
 
     private PosWorld hiveCoreLocation;
+    private String hiveID = "world";
 
     Set<TileEntity> hiveTiles = new HashSet<TileEntity>();
     Set<Entity> hiveBots = new HashSet<Entity>();
 
-    public NetworkHivemind(PosWorld coreLocation, Object... hiveObjects)
+    public NetworkHivemind(PosWorld coreLocation, String hiveID, Object... hiveObjects)
     {
         this.hiveCoreLocation = coreLocation;
+        this.hiveID = hiveID;
         for (int i = 0; hiveObjects != null && i < hiveObjects.length; i++)
         {
             this.addToHive(hiveObjects[i]);
@@ -61,5 +63,14 @@ public class NetworkHivemind
             hiveTiles.remove((TileEntity) obj);
 
         }
+    }
+
+    public String getID()
+    {
+        if (this.hiveID == null || this.hiveID.isEmpty())
+        {
+            this.hiveID = "world";
+        }
+        return this.hiveID;
     }
 }
