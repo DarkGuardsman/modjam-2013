@@ -47,7 +47,6 @@ public class DarkBotMain
         spawnTool = new ItemSpawnTool(12000);
         blockDeco = new BlockDecor(2000);
         config.save();
-        //TODO load configs
         //TODO reg blocks
         //TODO reg oreNames
 

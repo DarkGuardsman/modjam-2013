@@ -32,7 +32,7 @@ public class Schematic
         try
         {
             File file = new File(Schematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
-            InputStream fis = new FileInputStream(file.getPath() + File.separator + "fireflower.schematic");
+            InputStream fis = new FileInputStream(file.getPath() + File.separator + fileName +".schematic");
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(fis);
             fis.close();
             width = nbtdata.getShort("Width");
