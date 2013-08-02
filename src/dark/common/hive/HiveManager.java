@@ -3,6 +3,7 @@ package dark.common.hive;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -14,34 +15,43 @@ import dark.common.prefab.Pos;
 public class HiveManager
 {
 
-    protected static Set<NetworkHivemind> hives = new HashSet<NetworkHivemind>();
-    protected static HashMap<String, List<NetworkHivemind>> hivesets = new HashMap<String, List<NetworkHivemind>>();
+    protected static List<Hivemind> hives = new ArrayList<Hivemind>();
+    protected static HashMap<String, List<Hivemind>> hivesets = new HashMap<String, List<Hivemind>>();
     public static final String NEUTRIAL = "NEUT";
 
     /** Register a network to a list */
-    public static void registerHive(NetworkHivemind mind)
+    public static void registerHive(Hivemind mind)
     {
-        if (!getHives().contains(mind))
+        if (!hives.contains(mind))
         {
             hives.add(mind);
             String name = mind.getID();
-            List<NetworkHivemind> list = new ArrayList<NetworkHivemind>();
+            List<Hivemind> list = new ArrayList<Hivemind>();
             list.add(mind);
             if (hivesets.containsKey(name) && hivesets.get(name) != null)
             {
                 list.addAll(hivesets.get(name));
             }
             hivesets.put(name, list);
+        }else
+        {
+            hives.get(mind).merger(mind);
         }
     }
 
     /** Removes a network from the list */
-    public static void removeHive(NetworkHivemind mind)
+    public static void removeHive(Hivemind mind)
     {
         hives.remove(mind);
+        changeHiveTag(mind, null);
+
+    }
+
+    public static void changeHiveTag(Hivemind mind, String tag)
+    {
         if (hivesets.containsKey(mind.getID()))
         {
-            List<NetworkHivemind> list = hivesets.get(mind.getID());
+            List<Hivemind> list = hivesets.get(mind.getID());
             if (list == null)
             {
                 hivesets.remove(mind.getID());
@@ -52,9 +62,13 @@ public class HiveManager
                 hivesets.put(mind.getID(), list);
             }
         }
+        if (tag != null)
+        {
+
+        }
     }
 
-    public static Set<NetworkHivemind> getHives()
+    public static List<Hivemind> getHives()
     {
         return hives;
     }
@@ -62,7 +76,7 @@ public class HiveManager
     /** Gets the string ID the bot or Tile will use to ID itself as part of the hive */
     public static String getHiveID(Object obj)
     {
-        NetworkHivemind hive = null;
+        Hivemind hive = null;
         double distance = Double.MAX_VALUE;
         Pos pos = null;
         World world = null;
@@ -80,7 +94,7 @@ public class HiveManager
 
         if (pos != null && world != null)
         {
-            for (NetworkHivemind entry : getHives())
+            for (Hivemind entry : getHives())
             {
                 double distanceTo = entry.getLocation().getDistanceFrom(pos);
                 if (distanceTo < distance)
@@ -98,8 +112,22 @@ public class HiveManager
         return NEUTRIAL;
     }
 
-    public static NetworkHivemind getHive(String hiveName)
+    public void cleanup()
     {
-        return null;
+        Iterator<Hivemind> it = HiveManager.getHives().iterator();
+        while (it.hasNext())
+        {
+            Hivemind mind = it.next();
+            if (mind.hiveBots.size() < 0 && mind.hiveTiles.size() < 0)
+            {
+                it.remove();
+                changeHiveTag(mind, null);
+            }
+        }
+    }
+
+    public static Hivemind getHive(String hiveName)
+    {
+        return hivesets.get(hiveName) != null ? hivesets.get(hiveName).get(0) : null;
     }
 }

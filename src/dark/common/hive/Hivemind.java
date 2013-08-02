@@ -11,7 +11,7 @@ import dark.common.api.IHiveSpire;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
-public class NetworkHivemind
+public class Hivemind
 {
     /** Used in the off chance the core location was not set */
     public static Pos backupCoreLocation = new Pos(0, 126, 0);
@@ -20,13 +20,13 @@ public class NetworkHivemind
     private String hiveID = "world";
 
     /** Machines (Sentries, processors, builders) */
-    Set<TileEntity> hiveTiles = new HashSet<TileEntity>();
+    public Set<TileEntity> hiveTiles = new HashSet<TileEntity>();
     /** Entities(Robots) */
-    Set<Entity> hiveBots = new HashSet<Entity>();
+    public Set<Entity> hiveBots = new HashSet<Entity>();
 
     Set<IHiveSpire> spires = new HashSet<IHiveSpire>();
 
-    public NetworkHivemind(PosWorld coreLocation, String hiveID, Object... hiveObjects)
+    public Hivemind(PosWorld coreLocation, String hiveID, Object... hiveObjects)
     {
         this.hiveCoreLocation = coreLocation;
         this.hiveID = hiveID;
@@ -96,9 +96,10 @@ public class NetworkHivemind
         {
             pos = new Pos((TileEntity) obj);
             world = ((TileEntity) obj).worldObj;
-        }else if(obj instanceof IHiveSpire)
+        }
+        else if (obj instanceof IHiveSpire)
         {
-            pos = new Pos(((IHiveSpire) obj).getLocation().xx,((IHiveSpire) obj).getLocation().yy,((IHiveSpire) obj).getLocation().zz);
+            pos = new Pos(((IHiveSpire) obj).getLocation().xx, ((IHiveSpire) obj).getLocation().yy, ((IHiveSpire) obj).getLocation().zz);
             world = ((IHiveSpire) obj).getLocation().world;
         }
 

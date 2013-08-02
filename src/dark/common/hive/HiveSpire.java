@@ -8,11 +8,11 @@ import dark.common.prefab.PosWorld;
 public class HiveSpire implements IHiveSpire
 {
     PosWorld location;
-    NetworkHivemind hivemind;
+    Hivemind hivemind;
     String hiveName = "world";
 
 
-    public NetworkHivemind getHive()
+    public Hivemind getHive()
     {
         if(this.hiveName.equalsIgnoreCase("world"))
         {
