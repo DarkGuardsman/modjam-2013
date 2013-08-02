@@ -1,5 +1,6 @@
 package dark.common.hive;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,12 +18,39 @@ public class HiveManager
     protected static HashMap<String, List<NetworkHivemind>> hivesets = new HashMap<String, List<NetworkHivemind>>();
     public static final String NEUTRIAL = "NEUT";
 
+    /** Register a network to a list */
     public static void registerHive(NetworkHivemind mind)
     {
         if (!getHives().contains(mind))
         {
             hives.add(mind);
             String name = mind.getID();
+            List<NetworkHivemind> list = new ArrayList<NetworkHivemind>();
+            list.add(mind);
+            if (hivesets.containsKey(name) && hivesets.get(name) != null)
+            {
+                list.addAll(hivesets.get(name));
+            }
+            hivesets.put(name, list);
+        }
+    }
+
+    /** Removes a network from the list */
+    public static void removeHive(NetworkHivemind mind)
+    {
+        hives.remove(mind);
+        if (hivesets.containsKey(mind.getID()))
+        {
+            List<NetworkHivemind> list = hivesets.get(mind.getID());
+            if (list == null)
+            {
+                hivesets.remove(mind.getID());
+            }
+            else
+            {
+                list.remove(mind);
+                hivesets.put(mind.getID(), list);
+            }
         }
     }
 
