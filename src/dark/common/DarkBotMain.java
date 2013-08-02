@@ -2,6 +2,7 @@ package dark.common;
 
 import java.io.File;
 
+import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -11,6 +12,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import dark.common.items.ItemSpawnTool;
 
 @Mod(modid = DarkBotMain.MOD_ID, name = DarkBotMain.MOD_NAME, version = DarkBotMain.VERSION)
 @NetworkMod(channels = { DarkBotMain.MAIN_CHANNEL, DarkBotMain.AI_CHANNEL }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
@@ -27,6 +29,7 @@ public class DarkBotMain
     public static final String DOMAIN = "dark";
     public static final String PREFIX = DOMAIN+":";
 
+    public static Item spawnTool;
     public static Configuration config = new Configuration(new File(Loader.instance().getConfigDir(),"Dark/BotMain.cfg"));
 
     @Instance(MOD_ID)
@@ -37,7 +40,7 @@ public class DarkBotMain
     {
         instance = this;
         config.load();
-
+        spawnTool = new ItemSpawnTool(12000);
 
         config.save();
         //TODO load configs

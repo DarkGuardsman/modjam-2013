@@ -12,8 +12,8 @@ import net.minecraft.nbt.NBTTagList;
 public class Schematic
 {
     String fileName;
-    short width,height,length;
-    byte[] blocks,data;
+    short width, height, length;
+    byte[] blocks, data;
 
     public Schematic(String fileName)
     {
@@ -34,9 +34,9 @@ public class Schematic
 
             blocks = nbtdata.getByteArray("Blocks");
             data = nbtdata.getByteArray("Data");
-            for(int i = 0; i < blocks.length; i++)
+            for (int i = 0; i < blocks.length; i++)
             {
-
+                System.out.println("BlockByte" + i + ":" + blocks[i]);
             }
             //NBTTagList entities = nbtdata.getTagList("Entities");
             //NBTTagList tileentities = nbtdata.getTagList("TileEntities");
