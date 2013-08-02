@@ -1,5 +1,10 @@
 package dark.common.hive;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import dark.common.api.IHiveSpire;
 import dark.common.prefab.PosWorld;
@@ -10,6 +15,8 @@ public class HiveSpire implements IHiveSpire
     PosWorld location;
     Hivemind hivemind;
     String hiveName = "world";
+
+    HashMap<ItemStack, Integer> containedItems = new HashMap<ItemStack, Integer>();
 
     @Override
     public Hivemind getHive()
@@ -30,21 +37,44 @@ public class HiveSpire implements IHiveSpire
     @Override
     public void reportIn(Object obj)
     {
-        // TODO Auto-generated method stub
+        if (obj instanceof Entity)
+        {
+            if (!this.getHive().hiveBots.contains(obj))
+            {
+                this.getHive().hiveBots.add((Entity) obj);
+            }
+        }
 
     }
 
     @Override
     public void reportDeath(Object obj)
     {
-        // TODO Auto-generated method stub
+        if (obj instanceof Entity)
+        {
+            if (!this.getHive().hiveBots.contains(obj))
+            {
+                this.getHive().hiveBots.remove((Entity) obj);
+            }
+        }
 
     }
 
     @Override
-    public void receivedItems(ItemStack stack, Object obj)
+    public void receivedItems(ItemStack stackIn, Object obj)
     {
-        // TODO Auto-generated method stub
+        if (stackIn != null)
+        {
+            ItemStack stack = stackIn.copy();
+            stack.stackSize = 1;
+            int a = stackIn.stackSize;
+            if(this.containedItems.containsKey(stack))
+            {
+                a += this.containedItems.get(stack);
+            }
+            this.containedItems.put(stack, a);
+
+        }
 
     }
 
