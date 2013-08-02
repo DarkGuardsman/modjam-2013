@@ -1,6 +1,7 @@
 package dark.common.gen;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 import dark.common.prefab.PosWorld;
@@ -8,6 +9,7 @@ import dark.common.prefab.PosWorld;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
 
 public class Schematic
 {
@@ -17,7 +19,7 @@ public class Schematic
 
     public Schematic(String fileName)
     {
-
+        this.fileName = fileName;
     }
 
     public Schematic load()
@@ -25,7 +27,8 @@ public class Schematic
 
         try
         {
-            InputStream fis = getClass().getResourceAsStream(fileName + ".schematic");
+            ResourceLocation location;
+            InputStream fis = new FileInputStream(fileName + ".schematic");
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(fis);
 
             width = nbtdata.getShort("Width");

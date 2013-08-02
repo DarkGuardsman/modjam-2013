@@ -1,12 +1,14 @@
 package dark.common.items;
 
-import dark.common.DarkBotMain;
-import dark.common.gen.Schematic;
+import java.net.URL;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import dark.common.DarkBotMain;
+import dark.common.gen.Schematic;
 
 public class ItemSpawnTool extends Item
 {
@@ -22,6 +24,8 @@ public class ItemSpawnTool extends Item
     {
         if (!par2World.isRemote)
         {
+            URL location = ItemSpawnTool.class.getProtectionDomain().getCodeSource().getLocation();
+            System.out.println(location.getFile());
             Schematic scem = new Schematic("fireflower").load();
         }
         return par1ItemStack;
