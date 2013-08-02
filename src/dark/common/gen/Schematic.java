@@ -49,6 +49,10 @@ public class Schematic
             if (nbtdata.hasKey("AddBlocks"))
             {
                 addId = nbtdata.getByteArray("AddBlocks");
+                for(int i = 0; i < addId.length;i++)
+                {
+                    System.out.println("AddID: "+addId[i]);
+                }
             }
             for (int index = 0; index < blockID.length; index++)
             {
@@ -85,11 +89,11 @@ public class Schematic
         Pos start = new Pos(location.xx, location.yy, location.zz);
         Pos end = new Pos(location.xx + width, Math.min(location.yy + height, 255), location.zz + length);
 
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < width; ++x)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < height; ++y)
             {
-                for (int z = 0; z < length; z++)
+                for (int z = 0; z < length; ++z)
                 {
                     int i = y * width * length + z * width + x;
                     int b = 0;
@@ -108,7 +112,7 @@ public class Schematic
                     }
                     if (Block.blocksList[b] == null && b != 0)
                     {
-                        System.out.println("Missing Block: " + b);
+                        //System.out.println("Missing Block: " + b);
                         b = 0;
                     }
                     // System.out.println("Placing: " + b + "  " + m);
