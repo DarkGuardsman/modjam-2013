@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import dark.common.DarkBotMain;
 import dark.common.gen.Schematic;
+import dark.common.prefab.PosWorld;
 
 public class ItemSpawnTool extends Item
 {
@@ -30,6 +31,8 @@ public class ItemSpawnTool extends Item
 
             //System.out.println(location.getFile());
             Schematic scem = new Schematic("fireflower").load();
+            par3EntityPlayer.setPosition(par3EntityPlayer.posX, par3EntityPlayer.posY + scem.height, par3EntityPlayer.posZ);
+            scem.build(new PosWorld(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY - scem.height, par3EntityPlayer.posZ));
         }
         return par1ItemStack;
     }

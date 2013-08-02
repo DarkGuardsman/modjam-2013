@@ -15,7 +15,9 @@ import net.minecraft.util.ResourceLocation;
 public class Schematic
 {
     String fileName;
-    short width, height, length;
+    short width;
+    public short height;
+    short length;
     byte[] blocks, data;
 
     public Schematic(String fileName)
