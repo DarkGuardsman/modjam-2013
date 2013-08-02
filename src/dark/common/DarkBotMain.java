@@ -14,6 +14,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
+import dark.common.items.ItemBlockMain;
 import dark.common.items.ItemSpawnTool;
 import dark.common.tiles.BlockDecor;
 
@@ -50,7 +51,7 @@ public class DarkBotMain
         //TODO reg blocks
         //TODO reg oreNames
 
-        GameRegistry.registerBlock(blockDeco, "SpireDecoBlock");
+        GameRegistry.registerBlock(blockDeco, ItemBlockMain.class, "SpireDecoBlock");
     }
 
     @EventHandler

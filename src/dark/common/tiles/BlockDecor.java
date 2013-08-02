@@ -13,6 +13,7 @@ import dark.common.prefab.BlockMain;
 public class BlockDecor extends BlockMain
 {
     Icon[] icons = new Icon[16];
+
     public BlockDecor(int id)
     {
         super(id, "SpireWall", Material.rock);
@@ -25,13 +26,20 @@ public class BlockDecor extends BlockMain
     public void registerIcons(IconRegister par1IconRegister)
     {
         super.registerIcons(par1IconRegister);
-        icons[0] = par1IconRegister.registerIcon(DarkBotMain.PREFIX+"blackMachine");
-        icons[1] = par1IconRegister.registerIcon(DarkBotMain.PREFIX+"redMachine");
+        icons[0] = par1IconRegister.registerIcon(DarkBotMain.PREFIX + "blackMachine");
+        icons[1] = par1IconRegister.registerIcon(DarkBotMain.PREFIX + "redMachine");
     }
+
+    @Override
+    public int damageDropped(int meta)
+    {
+        return meta;
+    }
+
     @Override
     public Icon getIcon(int side, int meta)
     {
-        if(icons[meta] != null)
+        if (icons[meta] != null)
         {
             return icons[meta];
         }
@@ -41,8 +49,8 @@ public class BlockDecor extends BlockMain
     @Override
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List list)
     {
-        list.add(new ItemStack(this.blockID,1,0));
-        list.add(new ItemStack(this.blockID,1,1));
+        list.add(new ItemStack(this.blockID, 1, 0));
+        list.add(new ItemStack(this.blockID, 1, 1));
     }
 
 }
