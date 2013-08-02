@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 
-public class Schematic
+public class McEditSchematic
 {
     String fileName;
     short width;
@@ -24,17 +24,17 @@ public class Schematic
     short[] blocks;
     byte[] data;
 
-    public Schematic(String fileName)
+    public McEditSchematic(String fileName)
     {
         this.fileName = fileName;
     }
 
-    public Schematic load()
+    public McEditSchematic load()
     {
 
         try
         {
-            File file = new File(Schematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+            File file = new File(McEditSchematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".schematic")));
 
             width = nbtdata.getShort("Width");
