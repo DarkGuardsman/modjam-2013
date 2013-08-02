@@ -18,8 +18,8 @@ public class Schematic
     short width;
     public short height;
     short length;
-    short[] blocks = new short[1];
-    byte[] data = new byte[1];
+    short[] blocks;
+    byte[] data;
 
     public Schematic(String fileName)
     {
@@ -34,16 +34,15 @@ public class Schematic
             File file = new File(Schematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
             InputStream fis = new FileInputStream(file.getPath() + File.separator + "fireflower.schematic");
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(fis);
-
+            fis.close();
             width = nbtdata.getShort("Width");
             height = nbtdata.getShort("Height");
             length = nbtdata.getShort("Length");
 
             byte[] blockID = nbtdata.getByteArray("Blocks");
-            data = nbtdata.getByteArray("Data");
+            this.data = nbtdata.getByteArray("Data");
             byte[] addId = new byte[0];
-            int l = blocks.length;
-            short[] blocks = new short[l];
+            this.blocks = new short[blockID.length];
 
             if (nbtdata.hasKey("AddBlocks"))
             {
@@ -51,29 +50,31 @@ public class Schematic
             }
 
             // Combine the AddBlocks data with the first 8-bit block ID
-            for (int i = 0; i < blocks.length; i++)
+            for (int i = 0; i < blockID.length; i++)
             {
                 if ((i >> 1) >= addId.length)
                 {
-                    blocks[i] = (short) (blockID[i] & 0xFF);
+                    this.blocks[i] = (short) (blockID[i] & 0xFF);
                 }
                 else
                 {
                     if ((i & 1) == 0)
                     {
-                        blocks[i] = (short) (((addId[i >> 1] & 0x0F) << 8) + (blockID[i] & 0xFF));
+                        this.blocks[i] = (short) (((addId[i >> 1] & 0x0F) << 8) + (blockID[i] & 0xFF));
                     }
                     else
                     {
-                        blocks[i] = (short) (((addId[i >> 1] & 0xF0) << 4) + (blockID[i] & 0xFF));
+                        this.blocks[i] = (short) (((addId[i >> 1] & 0xF0) << 4) + (blockID[i] & 0xFF));
                     }
                 }
             }
-
+            for (int i = 0; i < blocks.length; i++)
+            {
+                //System.out.println("Block: "+blocks[i]);
+            }
             //NBTTagList entities = nbtdata.getTagList("Entities");
             //NBTTagList tileentities = nbtdata.getTagList("TileEntities");
 
-            fis.close();
         }
         catch (Exception e)
         {
@@ -97,14 +98,15 @@ public class Schematic
                     i = y * width * length + z * width + x;
                     int b = 0;
                     int m = 0;
-                    if (i < blocks.length)
+                    if (i < this.blocks.length)
                     {
-                        b = blocks[i];
+                        b = this.blocks[i];
                     }
-                    if (i < data.length)
+                    if (i < this.data.length)
                     {
-                        m = data[i];
+                        m = this.data[i];
                     }
+                    System.out.println("Placing: " + b + "  " + m);
                     location.world.setBlock(x, y, z, b, m, 2);
                 }
             }
