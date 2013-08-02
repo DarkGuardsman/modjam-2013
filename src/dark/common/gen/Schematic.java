@@ -49,22 +49,18 @@ public class Schematic
             if (nbtdata.hasKey("AddBlocks"))
             {
                 addId = nbtdata.getByteArray("AddBlocks");
-                for (int i = 0; i < addId.length; i++)
-                {
-                    if (blockID[i] != 0 && addId[i] != 0)
-                    {
-                        System.out.println("BlockID: " + blockID[i] + " AddID: " + addId[i]);
-                    }
-                }
             }
             for (int index = 0; index < blockID.length; index++)
             {
+
                 if ((index >> 1) >= addId.length)
                 {
+                    System.out.println("BlockID: " + blockID[index]);
                     blocks[index] = (short) (blockID[index] & 0xFF);
                 }
                 else
                 {
+                    System.out.println("BlockID: " + blockID[index] + " AddID: " + addId[index]);
                     if ((index & 1) == 0)
                     {
                         blocks[index] = (short) (((addId[index >> 1] & 0x0F) << 8) + (blockID[index] & 0xFF));
@@ -73,6 +69,10 @@ public class Schematic
                     {
                         blocks[index] = (short) (((addId[index >> 1] & 0xF0) << 4) + (blockID[index] & 0xFF));
                     }
+                }
+                if (blocks[index] != 0)
+                {
+                    System.out.println("BlockAdd: " + blocks[index]);
                 }
             }
             //We don't need these right now but might include them later
