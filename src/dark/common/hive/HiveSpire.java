@@ -14,7 +14,7 @@ public class HiveSpire implements IHiveSpire
     @Override
     public Hivemind getHive()
     {
-        if (hivemind == null || !hivemind.getID().equalsIgnoreCase(hiveName))
+        if (hivemind == null || !hivemind.getHiveID().equalsIgnoreCase(hiveName))
         {
             this.hivemind = HiveManager.getHive(this.getHiveID());
         }
