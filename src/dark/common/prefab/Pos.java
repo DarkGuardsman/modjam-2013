@@ -62,4 +62,12 @@ public class Pos
         this.zz += direction.offsetZ * lenght;
         return this;
     }
+
+    public double getDistanceFrom(Pos pos)
+    {
+        double deltaX = xx - pos.xx;
+        double deltaY = yy - pos.yy;
+        double deltaZ = zz - pos.zz;
+        return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+    }
 }
