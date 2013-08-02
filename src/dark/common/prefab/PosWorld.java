@@ -4,7 +4,7 @@ import net.minecraft.world.World;
 
 public class PosWorld extends Pos
 {
-    World world;
+    public World world;
 
     public PosWorld(World world, Pos pos)
     {

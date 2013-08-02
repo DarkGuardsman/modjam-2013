@@ -1,6 +1,8 @@
-package dark.common.helpers;
+package dark.common.hive;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.Entity;
@@ -12,6 +14,7 @@ public class HiveManager
 {
 
     protected static Set<NetworkHivemind> hives = new HashSet<NetworkHivemind>();
+    protected static HashMap<String, List<NetworkHivemind>> hivesets = new HashMap<String, List<NetworkHivemind>>();
     public static final String NEUTRIAL = "NEUT";
 
     public static void registerHive(NetworkHivemind mind)
@@ -19,6 +22,7 @@ public class HiveManager
         if (!getHives().contains(mind))
         {
             hives.add(mind);
+            String name = mind.getID();
         }
     }
 
@@ -64,5 +68,10 @@ public class HiveManager
         }
 
         return NEUTRIAL;
+    }
+
+    public static NetworkHivemind getHive(String hiveName)
+    {
+        return null;
     }
 }

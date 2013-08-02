@@ -7,7 +7,9 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class Pos
 {
-    double xx, yy, zz;
+    public double xx;
+    public double yy;
+    public double zz;
 
     public Pos(TileEntity entity)
     {

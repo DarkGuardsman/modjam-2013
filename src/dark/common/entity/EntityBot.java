@@ -1,7 +1,7 @@
 package dark.common.entity;
 
 import dark.common.api.IHiveObject;
-import dark.common.helpers.HiveManager;
+import dark.common.hive.HiveManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.World;
 

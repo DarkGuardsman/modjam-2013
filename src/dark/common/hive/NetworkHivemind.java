@@ -1,4 +1,4 @@
-package dark.common.helpers;
+package dark.common.hive;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -96,6 +96,10 @@ public class NetworkHivemind
         {
             pos = new Pos((TileEntity) obj);
             world = ((TileEntity) obj).worldObj;
+        }else if(obj instanceof IHiveSpire)
+        {
+            pos = new Pos(((IHiveSpire) obj).getLocation().xx,((IHiveSpire) obj).getLocation().yy,((IHiveSpire) obj).getLocation().zz);
+            world = ((IHiveSpire) obj).getLocation().world;
         }
 
         if (pos != null && world != null)
