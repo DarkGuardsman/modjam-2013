@@ -7,6 +7,26 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityMain extends TileEntity
 {
     protected Pos pos;
+    protected long ticks;
+
+    public void init()
+    {
+
+    }
+
+    @Override
+    public void updateEntity()
+    {
+        if (ticks == 0)
+        {
+            this.init();
+        }
+        ticks++;
+        if (ticks >= Long.MAX_VALUE - 10)
+        {
+            ticks = 1;
+        }
+    }
 
     public Pos getPosition()
     {

@@ -7,11 +7,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import dark.common.api.IHiveObject;
 import dark.common.api.IHiveSpire;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
-public class Hivemind
+public class Hivemind implements IHiveObject
 {
     /** Used in the off chance the core location was not set */
     public static Pos backupCoreLocation = new Pos(0, 126, 0);
@@ -34,6 +35,7 @@ public class Hivemind
         {
             this.addToHive(hiveObjects[i]);
         }
+        HiveManager.registerHive(this);
     }
 
     public PosWorld getLocation()
@@ -43,6 +45,30 @@ public class Hivemind
             this.hiveCoreLocation = new PosWorld(DimensionManager.getWorld(0), backupCoreLocation);
         }
         return this.hiveCoreLocation;
+    }
+
+    public void invalidate()
+    {
+        HiveManager.removeHive(this);
+        for (TileEntity entity : hiveTiles)
+        {
+            if (entity instanceof IHiveObject)
+            {
+                ((IHiveObject) entity).setHiveID(HiveManager.NEUTRIAL);
+            }
+        }
+        for (Entity entity : hiveBots)
+        {
+            if (entity instanceof IHiveObject)
+            {
+                ((IHiveObject) entity).setHiveID(HiveManager.NEUTRIAL);
+            }
+        }
+
+        for (IHiveSpire entity : spires)
+        {
+            ((IHiveObject) entity).setHiveID(HiveManager.NEUTRIAL);
+        }
     }
 
     public void addToHive(Object obj)
@@ -71,13 +97,26 @@ public class Hivemind
         }
     }
 
-    public String getID()
+    @Override
+    public void setHiveID(String id)
+    {
+        this.hiveID = id;
+        this.refresh();
+    }
+
+    @Override
+    public String getHiveID()
     {
         if (this.hiveID == null || this.hiveID.isEmpty())
         {
             this.hiveID = "world";
         }
         return this.hiveID;
+    }
+
+    public void refresh()
+    {
+
     }
 
     public IHiveSpire getClosestSpire(Object obj)
@@ -117,5 +156,14 @@ public class Hivemind
         }
 
         return hive;
+    }
+
+    public void merger(Hivemind mind)
+    {
+        if (mind.getID() == this.getID())
+        {
+
+        }
+
     }
 }

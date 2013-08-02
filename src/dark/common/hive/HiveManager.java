@@ -33,9 +33,6 @@ public class HiveManager
                 list.addAll(hivesets.get(name));
             }
             hivesets.put(name, list);
-        }else
-        {
-            hives.get(mind).merger(mind);
         }
     }
 
@@ -47,6 +44,8 @@ public class HiveManager
 
     }
 
+    /** @param mind - hivemind
+     * @param tag - null will remove it from tag list */
     public static void changeHiveTag(Hivemind mind, String tag)
     {
         if (hivesets.containsKey(mind.getID()))
@@ -64,7 +63,7 @@ public class HiveManager
         }
         if (tag != null)
         {
-
+            mind.set
         }
     }
 
@@ -118,7 +117,8 @@ public class HiveManager
         while (it.hasNext())
         {
             Hivemind mind = it.next();
-            if (mind.hiveBots.size() < 0 && mind.hiveTiles.size() < 0)
+            /** Remove hivemind instances that don't have any parts */
+            if (mind.hiveBots.size() < 0 && mind.hiveTiles.size() < 0 && mind.spires.size() < 0)
             {
                 it.remove();
                 changeHiveTag(mind, null);

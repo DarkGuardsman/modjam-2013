@@ -1,12 +1,15 @@
 package dark.common.api;
 
 import net.minecraft.item.ItemStack;
+import dark.common.hive.Hivemind;
 import dark.common.prefab.PosWorld;
 
-public interface IHiveSpire
+public interface IHiveSpire extends IHiveObject
 {
     /** General location of the spire. Usually the base of the tower */
     public PosWorld getLocation();
+
+    public Hivemind getHive();
 
     /** Reports that the hive object is alive */
     public void reportIn(Object obj);

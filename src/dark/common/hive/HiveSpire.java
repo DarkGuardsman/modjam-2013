@@ -11,19 +11,16 @@ public class HiveSpire implements IHiveSpire
     Hivemind hivemind;
     String hiveName = "world";
 
-
+    @Override
     public Hivemind getHive()
     {
-        if(this.hiveName.equalsIgnoreCase("world"))
+        if (hivemind == null || !hivemind.getID().equalsIgnoreCase(hiveName))
         {
-            HiveManager.getHiveID(this);
-        }
-        if(hivemind == null)
-        {
-            this.hivemind = HiveManager.getHive(hiveName);
+            this.hivemind = HiveManager.getHive(this.getHiveID());
         }
         return hivemind;
     }
+
     @Override
     public PosWorld getLocation()
     {
@@ -49,6 +46,23 @@ public class HiveSpire implements IHiveSpire
     {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void setHiveID(String id)
+    {
+        this.hiveName = id;
+
+    }
+
+    @Override
+    public String getHiveID()
+    {
+        if (this.hiveName.equalsIgnoreCase("world") || this.hiveName.equalsIgnoreCase(HiveManager.NEUTRIAL))
+        {
+            this.hiveName = HiveManager.getHiveID(this);
+        }
+        return this.hiveName;
     }
 
 }
