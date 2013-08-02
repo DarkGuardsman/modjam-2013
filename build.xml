@@ -8,7 +8,7 @@
     
 	<target name="build"> 
     	<copy todir="${dir.development}">
-			<fileset dir="../Minecraft Forge/" />
+			<fileset dir="../Minecraft Forge Latest/" />
 		</copy>
         
 		<copy todir="${dir.mcp}/src/minecraft">
