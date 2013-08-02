@@ -60,7 +60,7 @@ public class Schematic
                 }
                 else
                 {
-                    System.out.println("BlockID: " + blockID[index] + " AddID: " + addId[index]);
+                    //System.out.println("BlockID: " + blockID[index] + " AddID: " + addId[index]);
                     if ((index & 1) == 0)
                     {
                         blocks[index] = (short) (((addId[index >> 1] & 0x0F) << 8) + (blockID[index] & 0xFF));
