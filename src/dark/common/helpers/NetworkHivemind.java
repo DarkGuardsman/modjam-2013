@@ -5,7 +5,9 @@ import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import dark.common.api.IHiveSpire;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
@@ -17,8 +19,12 @@ public class NetworkHivemind
     private PosWorld hiveCoreLocation;
     private String hiveID = "world";
 
+    /** Machines (Sentries, processors, builders) */
     Set<TileEntity> hiveTiles = new HashSet<TileEntity>();
+    /** Entities(Robots) */
     Set<Entity> hiveBots = new HashSet<Entity>();
+
+    Set<IHiveSpire> spires = new HashSet<IHiveSpire>();
 
     public NetworkHivemind(PosWorld coreLocation, String hiveID, Object... hiveObjects)
     {
@@ -72,5 +78,39 @@ public class NetworkHivemind
             this.hiveID = "world";
         }
         return this.hiveID;
+    }
+
+    public IHiveSpire getClosestSpire(Object obj)
+    {
+        IHiveSpire hive = null;
+        double distance = Double.MAX_VALUE;
+        Pos pos = null;
+        World world = null;
+
+        if (obj instanceof Entity)
+        {
+            pos = new Pos((Entity) obj);
+            world = ((Entity) obj).worldObj;
+        }
+        else if (obj instanceof TileEntity)
+        {
+            pos = new Pos((TileEntity) obj);
+            world = ((TileEntity) obj).worldObj;
+        }
+
+        if (pos != null && world != null)
+        {
+            for (IHiveSpire entry : this.spires)
+            {
+                double distanceTo = entry.getLocation().getDistanceFrom(pos);
+                if (distanceTo < distance)
+                {
+                    hive = entry;
+                    distance = distanceTo;
+                }
+            }
+        }
+
+        return hive;
     }
 }

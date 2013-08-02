@@ -1,5 +1,6 @@
 package dark.common.entity;
 
+import dark.common.api.IHiveObject;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.World;
 

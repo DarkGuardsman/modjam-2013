@@ -1,4 +1,4 @@
-package dark.common.entity;
+package dark.common.api;
 
 public interface IHiveObject
 {
