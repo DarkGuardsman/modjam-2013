@@ -3,6 +3,7 @@ package dark.common.gen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
 
 import dark.common.DarkBotMain;
 import dark.common.prefab.Pos;
@@ -34,9 +35,8 @@ public class Schematic
         try
         {
             File file = new File(Schematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
-            InputStream fis = new FileInputStream(file.getPath() + File.separator + fileName + ".schematic");
-            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(fis);
-            fis.close();
+            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".schematic")));
+
             width = nbtdata.getShort("Width");
             height = nbtdata.getShort("Height");
             length = nbtdata.getShort("Length");
@@ -49,9 +49,12 @@ public class Schematic
             if (nbtdata.hasKey("AddBlocks"))
             {
                 addId = nbtdata.getByteArray("AddBlocks");
-                for(int i = 0; i < addId.length;i++)
+                for (int i = 0; i < addId.length; i++)
                 {
-                    System.out.println("AddID: "+addId[i]);
+                    if (blockID[i] != 0 && addId[i] != 0)
+                    {
+                        System.out.println("BlockID: " + blockID[i] + " AddID: " + addId[i]);
+                    }
                 }
             }
             for (int index = 0; index < blockID.length; index++)
