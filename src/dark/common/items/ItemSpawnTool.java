@@ -30,7 +30,7 @@ public class ItemSpawnTool extends Item
             //String string = location.getPath();
 
             //System.out.println(location.getFile());
-            Schematic scem = new Schematic("straight").load();
+            Schematic scem = new Schematic("TowerOne").load();
             par3EntityPlayer.setPosition(par3EntityPlayer.posX, par3EntityPlayer.posY + scem.height, par3EntityPlayer.posZ);
             scem.build(new PosWorld(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY - scem.height, par3EntityPlayer.posZ), true);
         }

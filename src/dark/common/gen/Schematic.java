@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import dark.common.DarkBotMain;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -84,13 +86,13 @@ public class Schematic
         Pos start = new Pos(location.xx, location.yy, location.zz);
         Pos end = new Pos(location.xx + width, Math.min(location.yy + height, 255), location.zz + length);
 
-        for (int x = start.x(); x < end.x(); x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = start.y(); y < end.y(); y++)
+            for (int y = 0; y < height; y++)
             {
-                for (int z = start.z(); z < end.z(); z++)
+                for (int z = 0; z < length; z++)
                 {
-                    int i = (y - start.y()) * width * length + (z - start.z()) * width + (x - start.x());
+                    int i = y * width * length + z * width + x;
                     int b = 0;
                     int m = 0;
                     if (i < this.blocks.length)
@@ -101,10 +103,18 @@ public class Schematic
                     {
                         m = this.data[i];
                     }
+                    if (b == 2000)
+                    {
+                        b = DarkBotMain.blockDeco.blockID;
+                    }
+                    if (Block.blocksList[b] == null && b != 0)
+                    {
+                        b = 1;
+                    }
                     // System.out.println("Placing: " + b + "  " + m);
                     if (air && b != 0 || !air)
                     {
-                        location.world.setBlock(x, y, z, b, m, 2);
+                        location.world.setBlock(x + start.x(), y + start.y(), z + start.z(), b, m, 2);
                     }
                 }
             }
