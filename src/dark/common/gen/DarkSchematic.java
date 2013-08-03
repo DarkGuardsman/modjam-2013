@@ -35,10 +35,11 @@ public class DarkSchematic
         this.fileName = fileName;
     }
 
-    public DarkSchematic loadWorldSelection(World world, Pos pos, Pos pos2)
+    public DarkSchematic loadWorldSelection(World world, Pos pos, Pos pos2, Pos center)
     {
         int deltaX, deltaY, deltaZ;
         Pos start = new Pos(pos.xx > pos2.xx ? pos2.xx : pos.xx, pos.yy > pos2.yy ? pos2.yy : pos.yy, pos.zz > pos2.zz ? pos2.zz : pos.zz);
+        this.center = center;
         if (pos.xx < pos2.xx)
         {
             deltaX = pos2.x() - pos.x() + 1;
@@ -85,7 +86,8 @@ public class DarkSchematic
         {
             File file = new File(McEditSchematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".dat")));
-
+            size = new Pos(nbtdata.getInteger("sizeX"), nbtdata.getInteger("sizeY"), nbtdata.getInteger("sizeZ"));
+            center = new Pos(nbtdata.getInteger("centerX"), nbtdata.getInteger("centerY"), nbtdata.getInteger("centerZ"));
             NBTTagCompound blockSet = nbtdata.getCompoundTag(BlockList);
             for (int i = 0; i < blockSet.getInteger("count"); i++)
             {
@@ -160,7 +162,12 @@ public class DarkSchematic
 
             NBTTagCompound nbt = new NBTTagCompound();
             NBTTagCompound blockNBT = nbt.getCompoundTag(BlockList);
-
+            nbt.setInteger("sizeX", size.x());
+            nbt.setInteger("sizeY", size.y());
+            nbt.setInteger("sizeZ", size.z());
+            nbt.setInteger("centerX", center.x());
+            nbt.setInteger("centerY", center.y());
+            nbt.setInteger("centerZ", center.z());
             int i = 0;
 
             for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
@@ -190,13 +197,17 @@ public class DarkSchematic
 
     public void build(PosWorld posWorld, boolean ignoreAir, boolean center, List<Pos> ignore)
     {
+        if (this.center == null)
+        {
+            this.center = this.size.clone().multi(.5);
+        }
         if (ignore == null)
         {
             ignore = new ArrayList<Pos>();
         }
         for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
         {
-            Pos setPos = new Pos(posWorld.xx + entry.getKey().xx, posWorld.yy + entry.getKey().yy, posWorld.zz + entry.getKey().zz);
+            Pos setPos = new Pos(posWorld.xx - this.center.xx + entry.getKey().xx, posWorld.yy - this.center.yy + entry.getKey().yy, posWorld.zz - this.center.zz + entry.getKey().zz);
             if (entry.getValue().getOne() != 0 && ignoreAir || !ignoreAir)
             {
                 if (setPos.getTileEntity(posWorld.world) == null && !ignore.contains(setPos))

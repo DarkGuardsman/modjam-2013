@@ -29,6 +29,7 @@ public class ItemSpawnTool extends Item
     boolean flip = false;
     Pos pos;
     Pos pos2;
+    Pos pos3;
 
     public ItemSpawnTool(int par)
     {
@@ -78,10 +79,15 @@ public class ItemSpawnTool extends Item
                     pos2 = new Pos(x, y, z);
                     player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pos2 one set to " + pos2.toString()));
                 }
-                if (pos2 != null && pos != null)
+                else if (pos3 == null)
+                {
+                    pos3 = new Pos(x, y, z);
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Center set to " + pos3.toString()));
+                }
+                if (pos3 != null && pos2 != null && pos != null)
                 {
                     DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh.mm.ss");
-                    new DarkSchematic("Schematic_" + dateFormat.format(new Date())).loadWorldSelection(world, pos, pos2).save();
+                    new DarkSchematic("Schematic_" + dateFormat.format(new Date())).loadWorldSelection(world, pos, pos2, pos3).save();
                     player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic"));
                     pos = null;
                     pos2 = null;

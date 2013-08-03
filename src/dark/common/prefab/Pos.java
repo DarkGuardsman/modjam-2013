@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class Pos
+public class Pos implements Cloneable
 {
     public double xx;
     public double yy;
@@ -37,6 +37,12 @@ public class Pos
         this.xx = x;
         this.yy = y;
         this.zz = z;
+    }
+
+    @Override
+    public Pos clone()
+    {
+        return new Pos(this.xx, this.yy, this.zz);
     }
 
     public int x()
