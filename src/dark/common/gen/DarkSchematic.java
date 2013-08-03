@@ -27,10 +27,10 @@ public class DarkSchematic
 
     public DarkSchematic(String fileName)
     {
-        fileName = fileName;
+        this.fileName = fileName;
     }
 
-    public void loadWorldSelection(World world, Pos pos, Pos pos2)
+    public DarkSchematic loadWorldSelection(World world, Pos pos, Pos pos2)
     {
         int deltaX, deltaY, deltaZ;
         Pos start = new Pos(pos.xx > pos2.xx ? pos2.xx : pos.xx, pos.yy > pos2.yy ? pos2.yy : pos.yy, pos.zz > pos2.zz ? pos2.zz : pos.zz);
@@ -70,7 +70,7 @@ public class DarkSchematic
                 }
             }
         }
-
+        return this;
     }
 
     public DarkSchematic load()
