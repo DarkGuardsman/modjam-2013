@@ -170,9 +170,13 @@ public class DarkSchematic
         }
     }
 
-    public void build(PosWorld posWorld, boolean b)
+    public void build(PosWorld posWorld, boolean ignoreAir)
     {
-        // TODO Auto-generated method stub
+        for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
+        {
+            Pos setPos = new Pos(posWorld.xx + entry.getKey().xx, posWorld.yy + entry.getKey().yy, posWorld.zz + entry.getKey().zz);
+            setPos.setBlock(posWorld.world, entry.getValue().getOne(), entry.getValue().getTwo());
+        }
 
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import dark.common.DarkBotMain;
 import dark.common.gen.DarkSchematic;
 import dark.common.prefab.Pos;
+import dark.common.prefab.PosWorld;
 
 public class ItemSpawnTool extends Item
 {
@@ -49,7 +50,7 @@ public class ItemSpawnTool extends Item
             else if (stack.getItemDamage() == 1)
             {
                 DarkSchematic scem = new DarkSchematic("TowerOne").load();
-                scem.build(new PosWorld(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY - scem.height, par3EntityPlayer.posZ), true);
+                scem.build(new PosWorld(world, player.posX, player.posY, player.posZ), true);
 
             }
             return true;

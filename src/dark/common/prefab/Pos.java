@@ -74,6 +74,21 @@ public class Pos
         return world.getBlockId(this.x(), this.y(), this.z());
     }
 
+    public void setBlock(World world, int blockID)
+    {
+        this.setBlock(world, blockID, 0);
+    }
+
+    public void setBlock(World world, int blockID, int meta)
+    {
+        this.setBlock(world, blockID, meta, 3);
+    }
+
+    public void setBlock(World world, int blockID, int meta, int flag)
+    {
+        world.setBlock(x(), y(), z(), blockID, meta, flag);
+    }
+
     public Pos modifyBy(ForgeDirection direction, double lenght)
     {
         this.xx += direction.offsetX * lenght;
