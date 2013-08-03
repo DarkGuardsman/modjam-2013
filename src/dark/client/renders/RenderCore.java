@@ -39,11 +39,11 @@ public class RenderCore extends TileEntitySpecialRenderer
     {
 
         GL11.glPushMatrix();
-        GL11.glTranslated(xx + xChange + .54, yy + yChange + 2.2, zz + zChange + .54);
+        GL11.glTranslated(xx + xChange + .50, yy + yChange + 2.2, zz + zChange + .50);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(s, s, s);
         GL11.glRotatef(r, 0F, 1F, 0F);
-        r += .001;
+        r += 2;
 
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/" + texture + ".png"));
         modelTurret.renderAll();
