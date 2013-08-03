@@ -17,7 +17,7 @@ public class BlockDecor extends BlockMain
     public BlockDecor(int id)
     {
         super(id, "SpireWall", Material.rock);
-        this.setHardness(1000);
+        this.setHardness(10);
         this.setResistance(100000);
         this.setCreativeTab(CreativeTabs.tabBlock);
     }
