@@ -1,5 +1,7 @@
 package dark.common.items;
 
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -63,5 +65,12 @@ public class ItemSpawnTool extends Item
             //scem.build(new PosWorld(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY - scem.height, par3EntityPlayer.posZ), true);
         }
         return false;
+    }
+
+    @Override
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    {
+        par3List.add(new ItemStack(this.itemID,1,0));
+        par3List.add(new ItemStack(this.itemID,1,1));
     }
 }
