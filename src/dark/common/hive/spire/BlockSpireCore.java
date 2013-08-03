@@ -3,6 +3,8 @@ package dark.common.hive.spire;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -27,17 +29,27 @@ public class BlockSpireCore extends BlockMain
     {
         if (!player.isSneaking())
         {
+            float change = 0.1f;
+            ItemStack stack = player.getHeldItem();
+            if(stack != null)
+            {
+                if(stack.getItem().itemID == Item.stick.itemID)
+                {
+                    change = 0.01f;
+                }
+            }
             Pos pos = new Pos();
             pos.modifyBy(ForgeDirection.getOrientation(side));
-            pos.multi(.1);
-            RenderCore.xChange += (float) pos.xx;
-            RenderCore.yChange += (float) pos.yy;
-            RenderCore.zChange += (float) pos.zz;
+            RenderCore.xChange += (float) pos.xx * change;
+            RenderCore.yChange += (float) pos.yy * change;
+            RenderCore.zChange += (float) pos.zz * change;
             System.out.println(RenderCore.xChange + "x " + RenderCore.yChange + "y " + RenderCore.zChange + "z ");
         }
         else
         {
-
+            RenderCore.xChange = 0;
+            RenderCore.yChange = 0;
+            RenderCore.zChange = 0;
         }
         return true;
     }
