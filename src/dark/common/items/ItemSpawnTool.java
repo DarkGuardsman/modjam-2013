@@ -41,11 +41,11 @@ public class ItemSpawnTool extends Item
     @Override
     public Icon getIconFromDamage(int par1)
     {
-        if(par1 == 0)
+        if (par1 == 0)
         {
             return wand;
         }
-        if(par1 == 1)
+        if (par1 == 1)
         {
             return place;
         }
