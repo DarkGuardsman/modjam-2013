@@ -18,7 +18,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import dark.common.hive.spire.BlockSpireCore;
 import dark.common.hive.spire.TileEntitySpire;
 import dark.common.items.ItemBlockMain;
-import dark.common.items.ItemSpawnTool;
+import dark.common.items.ItemWorldEdit;
 import dark.common.tiles.BlockDecor;
 
 @Mod(modid = DarkBotMain.MOD_ID, name = DarkBotMain.MOD_NAME, version = DarkBotMain.VERSION)
@@ -53,7 +53,7 @@ public class DarkBotMain
     {
         instance = this;
         config.load();
-        spawnTool = new ItemSpawnTool(12000);
+        spawnTool = new ItemWorldEdit(12000);
         blockDeco = new BlockDecor(2000);
         blockCore = new BlockSpireCore(2001);
         config.save();

@@ -23,18 +23,19 @@ import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
-public class ItemSpawnTool extends Item
+public class ItemWorldEdit extends Item
 {
     static Icon wand;
     static Icon place;
+    static Icon spire;
     static HashMap<String, Pair<Pos, Pos>> playerPointSelection = new HashMap<String, Pair<Pos, Pos>>();
     static HashMap<String, DarkSchematic> playerSchematic = new HashMap<String, DarkSchematic>();
 
-    public ItemSpawnTool(int par)
+    public ItemWorldEdit(int par)
     {
         super(DarkBotMain.config.getItem("SpawnTool", par).getInt());
         this.setUnlocalizedName("SpawnTool");
-        this.setCreativeTab(CreativeTabs.tabRedstone);
+        this.setCreativeTab(CreativeTabs.tabTools);
     }
 
     @SideOnly(Side.CLIENT)
@@ -46,6 +47,10 @@ public class ItemSpawnTool extends Item
             return wand;
         }
         if (par1 == 1)
+        {
+            return spire;
+        }
+        if (par1 == 2)
         {
             return place;
         }
@@ -59,6 +64,7 @@ public class ItemSpawnTool extends Item
         super.registerIcons(par1IconRegister);
         wand = par1IconRegister.registerIcon(DarkBotMain.PREFIX + "WorldEditWand");
         place = par1IconRegister.registerIcon(DarkBotMain.PREFIX + "WorldEditPlacer");
+        spire = par1IconRegister.registerIcon(DarkBotMain.PREFIX + "SpirePlacer");
     }
 
     @Override
