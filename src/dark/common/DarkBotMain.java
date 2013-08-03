@@ -57,6 +57,7 @@ public class DarkBotMain
         //TODO reg oreNames
 
         GameRegistry.registerBlock(blockDeco, ItemBlockMain.class, "SpireDecoBlock");
+        GameRegistry.registerBlock(blockCore, ItemBlockMain.class, "SpireCoreBlock");
     }
 
     @EventHandler

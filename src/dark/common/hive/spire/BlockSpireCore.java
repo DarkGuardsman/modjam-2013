@@ -27,9 +27,16 @@ public class BlockSpireCore extends BlockMain
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world)
+    public TileEntity createTileEntity(World world, int metadata)
     {
-        return new TileEntitySpire();
+        if (metadata == 0)
+        {
+            return new TileEntitySpire();
+        }
+        else
+        {
+            return null;
+        }
     }
 
 }
