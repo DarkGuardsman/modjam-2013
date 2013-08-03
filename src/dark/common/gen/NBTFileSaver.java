@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
 
 public class NBTFileSaver
 {
@@ -19,8 +18,8 @@ public class NBTFileSaver
     {
         try
         {
-            File tempFile = new File(direcotry, filename + "_tmp.dat");
-            File file = new File(direcotry, filename + ".dat");
+            File tempFile = new File(direcotry, filename + "_tmp");
+            File file = new File(direcotry, filename);
 
             CompressedStreamTools.writeCompressed(data, new FileOutputStream(tempFile));
 
@@ -48,22 +47,18 @@ public class NBTFileSaver
     {
         try
         {
-            File file = new File(saveDirectory, filename + ".dat");
-
+            File file = new File(saveDirectory, filename);
             if (file.exists())
             {
                 return CompressedStreamTools.readCompressed(new FileInputStream(file));
-            }
-            else
-            {
-                return new NBTTagCompound();
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return null;
+
         }
+        return null;
     }
 
     public File getSaveFolder()

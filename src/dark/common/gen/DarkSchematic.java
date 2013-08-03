@@ -12,10 +12,17 @@ import net.minecraft.world.World;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 
+/** Schematic system that is only used for creating world gen structures for this mod
+ *
+ * @author DarkGuardsman */
 public class DarkSchematic
 {
     public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<>();
-
+    public static final String BlockList = "BlockList";
+    public static final String MetaList = "MetaList";
+    /* Schematic doesn't save no vanilla blocks the same way */
+    public static final String spireBlock = "B";
+    public static final String spireCore = "C";
     String fileName;
 
     public DarkSchematic(String fileName)
@@ -72,6 +79,13 @@ public class DarkSchematic
         {
             File file = new File(McEditSchematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".sch")));
+
+            NBTTagCompound blockSet = nbtdata.getCompoundTag(BlockList);
+            NBTTagCompound metaSet = nbtdata.getCompoundTag(MetaList);
+            for (int i = 0; i < blockSet.getInteger("count"); i++)
+            {
+                String output = blockSet.getString("Block"+i);
+            }
         }
         catch (Exception e)
         {
