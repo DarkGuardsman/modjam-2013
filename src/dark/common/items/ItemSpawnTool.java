@@ -28,20 +28,29 @@ public class ItemSpawnTool extends Item
     {
         if (!world.isRemote)
         {
-            if (pos == null)
+            if (stack.getItemDamage() == 0)
             {
-                pos = new Pos(x, y, z);
-                player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pos one set to " + pos.toString()));
+                if (pos == null)
+                {
+                    pos = new Pos(x, y, z);
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pos one set to " + pos.toString()));
+                }
+                else if (pos2 == null)
+                {
+                    pos2 = new Pos(x, y, z);
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pos2 one set to " + pos2.toString()));
+                }
+                if (pos2 != null && pos != null)
+                {
+                    new DarkSchematic("TestSeve").loadWorldSelection(world, pos, pos2).save();
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic"));
+                }
             }
-            else if (pos2 == null)
+            else if (stack.getItemDamage() == 1)
             {
-                pos2 = new Pos(x, y, z);
-                player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pos2 one set to " + pos2.toString()));
-            }
-            if (pos2 != null && pos != null)
-            {
-                new DarkSchematic("TestSeve").loadWorldSelection(world, pos, pos2).save();
-                player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic"));
+                DarkSchematic scem = new DarkSchematic("TowerOne").load();
+                scem.build(new PosWorld(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY - scem.height, par3EntityPlayer.posZ), true);
+
             }
             return true;
             // URL location = ItemSpawnTool.class.getProtectionDomain().getCodeSource().getLocation();

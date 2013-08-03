@@ -6,12 +6,14 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import dark.common.DarkBotMain;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
+import dark.common.prefab.PosWorld;
 
 /** Schematic system that is only used for creating world gen structures for this mod
  *
@@ -144,6 +146,8 @@ public class DarkSchematic
     {
         try
         {
+            int sudoID = Block.sponge.blockID;
+
             File file = new File(NBTFileSaver.getSaveFolder(), fileName + ".dat");
             NBTTagCompound nbt = new NBTTagCompound();
             NBTTagCompound blockNBT = nbt.getCompoundTag(BlockList);
@@ -151,12 +155,11 @@ public class DarkSchematic
             for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
             {
                 String output = "";
-                output += "" + entry.getValue().getOne();
+                output += "" + (entry.getValue().getOne() != sudoID ? entry.getValue().getOne() : 0);
                 output += ":" + entry.getValue().getTwo();
                 output += ":" + entry.getKey().x() + ":" + entry.getKey().y() + ":" + entry.getKey().z();
-                blockNBT.setString("Block"+i, output);
+                blockNBT.setString("Block" + i, output);
                 i++;
-
             }
             nbt.setCompoundTag(BlockList, blockNBT);
             CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
@@ -165,5 +168,11 @@ public class DarkSchematic
         {
             e.printStackTrace();
         }
+    }
+
+    public void build(PosWorld posWorld, boolean b)
+    {
+        // TODO Auto-generated method stub
+
     }
 }
