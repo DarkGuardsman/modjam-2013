@@ -3,10 +3,9 @@ package dark.common.items;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Map.Entry;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,8 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import dark.common.DarkBotMain;
 import dark.common.gen.DarkSchematic;
+import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
@@ -25,11 +27,8 @@ public class ItemSpawnTool extends Item
 {
     static Icon wand;
     static Icon place;
-
-    boolean flip = false;
-    Pos pos;
-    Pos pos2;
-    Pos pos3;
+    static HashMap<String, Pair<Pos, Pos>> playerPointSelection = new HashMap<String, Pair<Pos, Pos>>();
+    static HashMap<String, DarkSchematic> playerSchematic = new HashMap<String, DarkSchematic>();
 
     public ItemSpawnTool(int par)
     {
@@ -65,8 +64,21 @@ public class ItemSpawnTool extends Item
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
     {
-        if (!world.isRemote)
+        if (!world.isRemote && player != null)
         {
+            String user = player.username;
+            Pos pos = null;
+            Pos pos2 = null;
+            DarkSchematic schematic = null;
+            if (this.playerPointSelection.containsKey(user))
+            {
+                pos = this.playerPointSelection.get(user).getOne();
+                pos2 = this.playerPointSelection.get(user).getTwo();
+            }
+            if (this.playerSchematic.containsKey(user))
+            {
+                schematic = this.playerSchematic.get(user);
+            }
             if (stack.getItemDamage() == 0)
             {
                 if (pos == null)
@@ -79,25 +91,29 @@ public class ItemSpawnTool extends Item
                     pos2 = new Pos(x, y, z);
                     player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pos2 one set to " + pos2.toString()));
                 }
-                else if (pos3 == null)
-                {
-                    pos3 = new Pos(x, y, z);
-                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Center set to " + pos3.toString()));
-                }
-                if (pos3 != null && pos2 != null && pos != null)
+                if (pos != null && pos2 != null)
                 {
                     DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh.mm.ss");
-                    new DarkSchematic("Schematic_" + dateFormat.format(new Date())).loadWorldSelection(world, pos, pos2, pos3).save();
-                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic"));
-                    pos = null;
-                    pos2 = null;
+                    String name = "Schematic_" + dateFormat.format(new Date());
+                    schematic = new DarkSchematic(name).loadWorldSelection(world, pos, pos2);
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic  " + name));
+                    this.playerSchematic.put(user, schematic);
                 }
+                this.playerPointSelection.put(user, new Pair<Pos, Pos>(pos, pos2));
             }
             else if (stack.getItemDamage() == 1)
             {
                 System.out.println("Calling to build");
                 new DarkSchematic("SpireRoom").load().build(new PosWorld(world, x, y, z), true, null);
 
+            }
+            else if (stack.getItemDamage() == 2)
+            {
+                if (schematic != null)
+                {
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pasting Schematic"));
+                    schematic.build(new PosWorld(world, x, y, z), false, true, null);
+                }
             }
 
             return true;
@@ -117,5 +133,6 @@ public class ItemSpawnTool extends Item
     {
         par3List.add(new ItemStack(this.itemID, 1, 0));
         par3List.add(new ItemStack(this.itemID, 1, 1));
+        par3List.add(new ItemStack(this.itemID, 1, 2));
     }
 }

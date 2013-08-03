@@ -35,11 +35,11 @@ public class DarkSchematic
         this.fileName = fileName;
     }
 
-    public DarkSchematic loadWorldSelection(World world, Pos pos, Pos pos2, Pos center)
+    public DarkSchematic loadWorldSelection(World world, Pos pos, Pos pos2)
     {
         int deltaX, deltaY, deltaZ;
         Pos start = new Pos(pos.xx > pos2.xx ? pos2.xx : pos.xx, pos.yy > pos2.yy ? pos2.yy : pos.yy, pos.zz > pos2.zz ? pos2.zz : pos.zz);
-        this.center = center;
+        this.center = new Pos();
         if (pos.xx < pos2.xx)
         {
             deltaX = pos2.x() - pos.x() + 1;
@@ -73,6 +73,10 @@ public class DarkSchematic
                 {
                     int blockID = world.getBlockId(start.x() + x, start.y() + y, start.z() + z);
                     int blockMeta = world.getBlockMetadata(start.x() + x, start.y() + y, start.z() + z);
+                    if (blockID == DarkBotMain.blockCore.blockID)
+                    {
+                        this.center = new Pos(x, y, z);
+                    }
                     blocks.put(new Pos(x, y, z), new Pair<Integer, Integer>(blockID, blockMeta));
                 }
             }
@@ -154,7 +158,7 @@ public class DarkSchematic
         return this;
     }
 
-    public void save()
+    public DarkSchematic save()
     {
         try
         {
@@ -188,6 +192,7 @@ public class DarkSchematic
         {
             e.printStackTrace();
         }
+        return this;
     }
 
     public void build(PosWorld posWorld, boolean ignoreAir, List<Pos> ignore)
