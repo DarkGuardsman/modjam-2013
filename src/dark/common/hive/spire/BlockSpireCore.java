@@ -26,4 +26,10 @@ public class BlockSpireCore extends BlockMain
         super.breakBlock(world, x, y, z, par5, par6);
     }
 
+    @Override
+    public TileEntity createNewTileEntity(World world)
+    {
+        return new TileEntitySpire();
+    }
+
 }

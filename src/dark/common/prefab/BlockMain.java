@@ -2,14 +2,16 @@ package dark.common.prefab;
 
 import dark.common.DarkBotMain;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
-public class BlockMain extends Block
+public class BlockMain extends BlockContainer
 {
     protected Icon machineSide;
 
@@ -72,6 +74,13 @@ public class BlockMain extends Block
     {
         super.breakBlock(par1World, par2, par3, par4, par5, par6);
         //TODO drop inv
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World world)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

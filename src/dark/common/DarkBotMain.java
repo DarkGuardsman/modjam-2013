@@ -14,6 +14,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
+import dark.common.hive.spire.BlockSpireCore;
 import dark.common.items.ItemBlockMain;
 import dark.common.items.ItemSpawnTool;
 import dark.common.tiles.BlockDecor;
@@ -50,6 +51,7 @@ public class DarkBotMain
         config.load();
         spawnTool = new ItemSpawnTool(12000);
         blockDeco = new BlockDecor(2000);
+        blockCore = new BlockSpireCore(2001);
         config.save();
         //TODO reg blocks
         //TODO reg oreNames
