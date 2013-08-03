@@ -3,6 +3,7 @@ package dark.common.gen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -131,7 +132,6 @@ public class DarkSchematic
                     this.blocks.put(pos, new Pair<Integer, Integer>(b, m));
                 }
 
-
             }
         }
         catch (Exception e)
@@ -145,8 +145,10 @@ public class DarkSchematic
     {
         try
         {
-            File file = new File(NBTFileSaver.getSaveFolder(),fileName + ".sch");
-            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(file));
+            File file = new File(NBTFileSaver.getSaveFolder(), fileName + ".sch");
+            NBTTagCompound nbt = new NBTTagCompound();
+
+            CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
         }
         catch (Exception e)
         {
