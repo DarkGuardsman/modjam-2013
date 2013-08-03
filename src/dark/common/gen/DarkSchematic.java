@@ -38,27 +38,27 @@ public class DarkSchematic
         Pos start = new Pos(pos.xx > pos2.xx ? pos2.xx : pos.xx, pos.yy > pos2.yy ? pos2.yy : pos.yy, pos.zz > pos2.zz ? pos2.zz : pos.zz);
         if (pos.xx < pos2.xx)
         {
-            deltaX = pos2.x() - pos.x();
+            deltaX = pos2.x() - pos.x() + 1;
         }
         else
         {
-            deltaX = pos.x() - pos2.x();
+            deltaX = pos.x() - pos2.x() + 1;
         }
         if (pos.yy < pos2.yy)
         {
-            deltaY = pos2.y() - pos.y();
+            deltaY = pos2.y() - pos.y() + 1;
         }
         else
         {
-            deltaY = pos.y() - pos2.y();
+            deltaY = pos.y() - pos2.y() + 1;
         }
         if (pos.zz < pos2.zz)
         {
-            deltaZ = pos2.z() - pos.z();
+            deltaZ = pos2.z() - pos.z() + 1;
         }
         else
         {
-            deltaZ = pos.z() - pos2.z();
+            deltaZ = pos.z() - pos2.z() + 1;
         }
         for (int x = 0; x < deltaX; ++x)
         {
@@ -174,11 +174,11 @@ public class DarkSchematic
 
     public void build(PosWorld posWorld, boolean ignoreAir)
     {
-        System.out.println("Building Schematic "+fileName.replace(".dat", ""));
+        System.out.println("Building Schematic " + fileName.replace(".dat", ""));
         for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
         {
             Pos setPos = new Pos(posWorld.xx + entry.getKey().xx, posWorld.yy + entry.getKey().yy, posWorld.zz + entry.getKey().zz);
-            if (entry.getValue().getOne() == 0 && ignoreAir || !ignoreAir)
+            if (entry.getValue().getOne() != 0 && ignoreAir || !ignoreAir)
             {
                 if (setPos.getTileEntity(posWorld.world) == null)
                 {
