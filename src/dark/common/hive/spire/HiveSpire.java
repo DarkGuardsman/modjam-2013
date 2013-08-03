@@ -73,7 +73,7 @@ public class HiveSpire implements IHiveSpire
     public void scanArea()
     {
         System.out.print("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
-        int delta = size * 50;
+        int delta = size * 5;
         Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
         Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 0), getLocation().zz - delta);
         int x, y, z;
