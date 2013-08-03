@@ -19,6 +19,11 @@ public class HiveManager
     protected static HashMap<String, List<Hivemind>> hivesets = new HashMap<String, List<Hivemind>>();
     public static final String NEUTRIAL = "NEUT";
 
+    static
+    {
+        hives.add(new Hivemind());
+    }
+
     /** Register a network to a list */
     public static void registerHive(Hivemind mind)
     {
