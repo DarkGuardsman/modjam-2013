@@ -105,6 +105,16 @@ public class NBTFileSaver
         return new File(parent, worldName + File.separator);
     }
 
+    public static File getFolder(String file, boolean make)
+    {
+        File fil = new File(getBaseFolder(), file + File.separator);
+        if (make && !fil.exists())
+        {
+            fil.mkdir();
+        }
+        return fil;
+    }
+
     public static File getBaseFolder()
     {
         if (FMLCommonHandler.instance().getSide().isClient())

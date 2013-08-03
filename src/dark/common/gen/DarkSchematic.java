@@ -165,7 +165,7 @@ public class DarkSchematic
             blockNBT.setInteger("count", i);
             nbt.setCompoundTag(BlockList, blockNBT);
 
-            NBTFileSaver.saveNBTFile(fileName + ".dat", NBTFileSaver.getSaveFolder(), nbt, false);
+            NBTFileSaver.saveNBTFile(fileName + ".dat", NBTFileSaver.getFolder("schematics", true), nbt, false);
         }
         catch (Exception e)
         {
