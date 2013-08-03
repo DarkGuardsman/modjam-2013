@@ -75,14 +75,14 @@ public class ItemSpawnTool extends Item
             Pos pos = null;
             Pos pos2 = null;
             DarkSchematic schematic = null;
-            if (this.playerPointSelection.containsKey(user))
+            if (playerPointSelection.containsKey(user))
             {
-                pos = this.playerPointSelection.get(user).getOne();
-                pos2 = this.playerPointSelection.get(user).getTwo();
+                pos = playerPointSelection.get(user).getOne();
+                pos2 = playerPointSelection.get(user).getTwo();
             }
-            if (this.playerSchematic.containsKey(user))
+            if (playerSchematic.containsKey(user))
             {
-                schematic = this.playerSchematic.get(user);
+                schematic = playerSchematic.get(user);
             }
             /* Load schematic from world */
             if (stack.getItemDamage() == 0)
