@@ -38,12 +38,12 @@ public class RenderCore extends TileEntitySpecialRenderer
     {
 
         GL11.glPushMatrix();
-        GL11.glTranslated(xx, yy, zz);
+        GL11.glTranslated(xx + 1.5, yy + 2, zz);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(s, s, s);
         GL11.glRotatef(0, 0F, 1F, 0F);
 
-        FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "uv/" + texture + ".png"));
+        FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/" + texture + ".png"));
         modelTurret.renderAll();
 
         GL11.glEnable(GL11.GL_CULL_FACE);

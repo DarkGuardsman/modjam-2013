@@ -14,14 +14,19 @@ import dark.common.prefab.Pos;
 
 public class HiveManager
 {
-
+    /** List of loaded hiveminds */
     protected static List<Hivemind> hives = new ArrayList<Hivemind>();
+    /** Map of hives with the same hivemind name */
     protected static HashMap<String, List<Hivemind>> hivesets = new HashMap<String, List<Hivemind>>();
+    /** Neutral hive ID, all hive objects default to this */
     public static final String NEUTRIAL = "NEUT";
+    /** Neutral hivemind used to store hive objects as the try to load a non-neutral hive */
+    public static final Hivemind NEUT_HIVE = new Hivemind(null, NEUTRIAL);
+    //MinecraftServer.worldServers.world.provider.dimensionId
 
     static
     {
-        hives.add(new Hivemind());
+        registerHive(NEUT_HIVE);
     }
 
     /** Register a network to a list */
