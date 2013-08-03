@@ -1,6 +1,7 @@
 package dark.common.hive.spire;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import dark.common.prefab.BlockMain;
@@ -13,6 +14,7 @@ public class BlockSpireCore extends BlockMain
         super(id, "SpireCore", Material.iron);
         this.setHardness(1000);
         this.setResistance(100000);
+        this.setCreativeTab(CreativeTabs.tabBlock);
     }
 
     @Override

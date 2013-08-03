@@ -9,12 +9,14 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import dark.common.hive.spire.BlockSpireCore;
+import dark.common.hive.spire.TileEntitySpire;
 import dark.common.items.ItemBlockMain;
 import dark.common.items.ItemSpawnTool;
 import dark.common.tiles.BlockDecor;
@@ -43,6 +45,8 @@ public class DarkBotMain
     @Instance(MOD_ID)
     public static DarkBotMain instance;
 
+    @SidedProxy(clientSide = "dark.client.ClientProxy", serverSide = "dark.common.CommonProxy")
+    public static CommonProxy proxy;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -58,19 +62,22 @@ public class DarkBotMain
 
         GameRegistry.registerBlock(blockDeco, ItemBlockMain.class, "SpireDecoBlock");
         GameRegistry.registerBlock(blockCore, ItemBlockMain.class, "SpireCoreBlock");
+        proxy.preInit();
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         //TODO reg handlers
-        //TODO reg tiles
+        GameRegistry.registerTileEntity(TileEntitySpire.class, "HiveSpire");
         //TODO reg entities
+        proxy.init();
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
         //TODO reg recipes
+        proxy.postInit();
     }
 }
