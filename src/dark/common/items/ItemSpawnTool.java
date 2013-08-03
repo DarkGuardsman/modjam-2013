@@ -4,6 +4,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
 import dark.common.DarkBotMain;
 import dark.common.gen.DarkSchematic;
@@ -27,25 +28,22 @@ public class ItemSpawnTool extends Item
     {
         if (!world.isRemote)
         {
-            if (!player.isSneaking())
+            if (pos == null)
             {
-                if (pos == null)
-                {
-                    pos = new Pos(x, y, z);
-                    return true;
-                }
-                else if (pos2 == null)
-                {
-                    pos2 = new Pos(x, y, z);
-                    return true;
-                }
+                pos = new Pos(x, y, z);
+                player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pos one set to " + pos.toString()));
             }
-            else
+            else if (pos2 == null)
             {
-                new DarkSchematic("TestSeve.sch").loadWorldSelection(world, pos, pos2).save();
-
-                return true;
+                pos2 = new Pos(x, y, z);
+                player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pos2 one set to " + pos2.toString()));
             }
+            if (pos2 != null && pos != null)
+            {
+                new DarkSchematic("TestSeve").loadWorldSelection(world, pos, pos2).save();
+                player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic"));
+            }
+            return true;
             // URL location = ItemSpawnTool.class.getProtectionDomain().getCodeSource().getLocation();
             //String string = location.getPath();
 

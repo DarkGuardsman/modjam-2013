@@ -94,4 +94,10 @@ public class Pos
     {
         return world.getBlockTileEntity(x(), y(), z());
     }
+
+    @Override
+    public String toString()
+    {
+        return x() + "X " + y() + "Y " + z() + "Z ";
+    }
 }
