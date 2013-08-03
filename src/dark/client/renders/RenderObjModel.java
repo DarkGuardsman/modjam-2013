@@ -16,10 +16,10 @@ public class RenderObjModel extends Render
     private IModelCustom modelTurret;
     private float scale;
 
-    public RenderObjModel(float scaleDown)
+    public RenderObjModel(String modelName, float scaleDown)
     {
-        modelTurret = AdvancedModelLoader.loadModel("");
-        scale = scaleDown;
+        modelTurret = AdvancedModelLoader.loadModel("/assets/dark/models/" + modelName + ".obj");
+        this.scale = scaleDown;
     }
 
     @Override
