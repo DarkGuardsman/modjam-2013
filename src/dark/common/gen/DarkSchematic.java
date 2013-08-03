@@ -2,10 +2,9 @@ package dark.common.gen;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -147,7 +146,17 @@ public class DarkSchematic
         {
             File file = new File(NBTFileSaver.getSaveFolder(), fileName + ".sch");
             NBTTagCompound nbt = new NBTTagCompound();
+            int i = 0;
+            for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
+            {
+                String output = "";
+                output += "" + entry.getValue().getOne();
+                output += ":" + entry.getValue().getTwo();
+                output += ":" + entry.getKey().x() + ":" + entry.getKey().y() + ":" + entry.getKey().z();
+                i++;
+                nbt.getCompoundTag(this.BlockList).setString("Block"+i, output);
 
+            }
             CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
         }
         catch (Exception e)
