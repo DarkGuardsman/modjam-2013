@@ -61,7 +61,7 @@ public class NBTFileSaver
         return null;
     }
 
-    public File getSaveFolder()
+    public static File getSaveFolder()
     {
         File saveDirectory = getWorldSaveFolder(MinecraftServer.getServer().getFolderName());
         File file = new File(saveDirectory, "dark");

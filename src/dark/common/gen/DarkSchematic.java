@@ -9,6 +9,7 @@ import java.util.HashMap;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import dark.common.DarkBotMain;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 
@@ -19,7 +20,6 @@ public class DarkSchematic
 {
     public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<>();
     public static final String BlockList = "BlockList";
-    public static final String MetaList = "MetaList";
     /* Schematic doesn't save no vanilla blocks the same way */
     public static final String spireBlock = "B";
     public static final String spireCore = "C";
@@ -81,10 +81,57 @@ public class DarkSchematic
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".sch")));
 
             NBTTagCompound blockSet = nbtdata.getCompoundTag(BlockList);
-            NBTTagCompound metaSet = nbtdata.getCompoundTag(MetaList);
             for (int i = 0; i < blockSet.getInteger("count"); i++)
             {
-                String output = blockSet.getString("Block"+i);
+                String output = blockSet.getString("Block" + i);
+                String[] out = output.split(":");
+                int b = 0;
+                int m = 0;
+                Pos pos = new Pos();
+                if (out != null)
+                {
+                    try
+                    {
+                        if (out.length > 0)
+                        {
+                            if (out.equals(spireBlock))
+                            {
+                                b = DarkBotMain.blockDeco.blockID;
+                            }
+                            else if (out.equals(spireCore))
+                            {
+                                b = DarkBotMain.blockCore.blockID;
+                            }
+                            else
+                            {
+                                b = Integer.parseInt(out[0]);
+                            }
+                        }
+                        if (out.length > 1)
+                        {
+                            m = Integer.parseInt(out[1]);
+                        }
+                        if (out.length > 2)
+                        {
+                            pos.xx = Integer.parseInt(out[2]);
+                        }
+                        if (out.length > 3)
+                        {
+                            pos.yy = Integer.parseInt(out[3]);
+                        }
+                        if (out.length > 4)
+                        {
+                            pos.zz = Integer.parseInt(out[4]);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    this.blocks.put(pos, new Pair<Integer, Integer>(b, m));
+                }
+
+
             }
         }
         catch (Exception e)
@@ -98,8 +145,8 @@ public class DarkSchematic
     {
         try
         {
-            File file = new File(McEditSchematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
-            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".sch")));
+            File file = new File(NBTFileSaver.getSaveFolder(),fileName + ".sch");
+            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(file));
         }
         catch (Exception e)
         {

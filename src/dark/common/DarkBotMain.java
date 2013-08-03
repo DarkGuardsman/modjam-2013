@@ -35,10 +35,13 @@ public class DarkBotMain
 
     public static Item spawnTool;
     public static Block blockDeco;
+    public static Block blockCore;
+
     public static Configuration config = new Configuration(new File(Loader.instance().getConfigDir(), "Dark/BotMain.cfg"));
 
     @Instance(MOD_ID)
     public static DarkBotMain instance;
+
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)

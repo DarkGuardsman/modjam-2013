@@ -11,6 +11,13 @@ public class Pos
     public double yy;
     public double zz;
 
+    public Pos()
+    {
+        this.xx = 0;
+        this.yy = 0;
+        this.zz = 0;
+    }
+
     public Pos(TileEntity entity)
     {
         this.xx = entity.xCoord;
