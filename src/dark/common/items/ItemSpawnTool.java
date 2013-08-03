@@ -1,5 +1,8 @@
 package dark.common.items;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -45,7 +48,8 @@ public class ItemSpawnTool extends Item
                 }
                 if (pos2 != null && pos != null)
                 {
-                    new DarkSchematic("TestSeve").loadWorldSelection(world, pos, pos2).save();
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
+                    new DarkSchematic("Schematic_" + dateFormat.format(new Date())).loadWorldSelection(world, pos, pos2).save();
                     player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic"));
                     pos = null;
                     pos2 = null;

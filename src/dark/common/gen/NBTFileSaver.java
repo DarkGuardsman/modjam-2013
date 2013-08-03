@@ -14,7 +14,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 public class NBTFileSaver
 {
 
-    public static boolean saveNBTFile(String filename, File direcotry, NBTTagCompound data)
+    public static boolean saveNBTFile(String filename, File direcotry, NBTTagCompound data, boolean override)
     {
         try
         {
@@ -25,7 +25,21 @@ public class NBTFileSaver
 
             if (file.exists())
             {
-                file.delete();
+                if (override)
+                {
+                    file.delete();
+                }
+                else
+                {
+                    File fileNew = new File(direcotry, "Back_" + filename);
+                    int i = 1;
+                    while (fileNew.exists())
+                    {
+                        i++;
+                        fileNew = new File(direcotry, "Back_" + i + "_" + filename);
+                    }
+                    file.renameTo(fileNew);
+                }
             }
 
             tempFile.renameTo(file);
@@ -40,7 +54,7 @@ public class NBTFileSaver
 
     public static boolean saveNBTFile(String filename, NBTTagCompound data)
     {
-        return saveNBTFile(filename, getWorldSaveFolder(MinecraftServer.getServer().getFolderName()), data);
+        return saveNBTFile(filename, getWorldSaveFolder(MinecraftServer.getServer().getFolderName()), data, true);
     }
 
     public static NBTTagCompound getSaveFile(File saveDirectory, String filename)

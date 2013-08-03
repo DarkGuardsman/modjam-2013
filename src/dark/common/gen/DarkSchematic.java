@@ -150,7 +150,6 @@ public class DarkSchematic
         {
             int sudoID = Block.sponge.blockID;
 
-            File file = new File(NBTFileSaver.getSaveFolder(), fileName + ".dat");
             NBTTagCompound nbt = new NBTTagCompound();
             NBTTagCompound blockNBT = nbt.getCompoundTag(BlockList);
             int i = 0;
@@ -166,7 +165,7 @@ public class DarkSchematic
             blockNBT.setInteger("count", i);
             nbt.setCompoundTag(BlockList, blockNBT);
 
-            CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
+            NBTFileSaver.saveNBTFile(fileName + ".dat", NBTFileSaver.getSaveFolder(), nbt, false);
         }
         catch (Exception e)
         {
