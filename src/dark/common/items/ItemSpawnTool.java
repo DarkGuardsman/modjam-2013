@@ -64,6 +64,11 @@ public class ItemSpawnTool extends Item
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
     {
+        //TODO add security check for use of item
+        //TODO add shift rotation system to change tool selection rather than meta data
+        //TODO add rotation code
+        //TODO add deletion code
+        //TODO add clear code
         if (!world.isRemote && player != null)
         {
             String user = player.username;
@@ -79,6 +84,7 @@ public class ItemSpawnTool extends Item
             {
                 schematic = this.playerSchematic.get(user);
             }
+            /* Load schematic from world */
             if (stack.getItemDamage() == 0)
             {
                 if (pos == null)
@@ -94,9 +100,12 @@ public class ItemSpawnTool extends Item
                 if (pos != null && pos2 != null)
                 {
                     DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh.mm.ss");
-                    String name = "Schematic_" + dateFormat.format(new Date());
+                    String name = user + "_Schematic_" + dateFormat.format(new Date());
                     schematic = new DarkSchematic(name).loadWorldSelection(world, pos, pos2);
-                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic  " + name));
+                    //player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic  " + name));
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Copied region  "));
+                    pos = null;
+                    pos2 = null;
                     this.playerSchematic.put(user, schematic);
                 }
                 this.playerPointSelection.put(user, new Pair<Pos, Pos>(pos, pos2));
@@ -111,19 +120,16 @@ public class ItemSpawnTool extends Item
             {
                 if (schematic != null)
                 {
-                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pasting Schematic"));
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pasting schematic"));
                     schematic.build(new PosWorld(world, x, y, z), false, true, null);
+                }
+                else
+                {
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("No schematic loaded"));
                 }
             }
 
             return true;
-            // URL location = ItemSpawnTool.class.getProtectionDomain().getCodeSource().getLocation();
-            //String string = location.getPath();
-
-            //System.out.println(location.getFile());
-            //McEditSchematic scem = new McEditSchematic("TowerOne").load();
-            //par3EntityPlayer.setPosition(par3EntityPlayer.posX, par3EntityPlayer.posY + scem.height, par3EntityPlayer.posZ);
-            //scem.build(new PosWorld(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY - scem.height, par3EntityPlayer.posZ), true);
         }
         return false;
     }
