@@ -20,7 +20,7 @@ public class RenderCore extends TileEntitySpecialRenderer
     private IModelCustom modelTurret;
     private float scale;
     private String texture;
-    public static int xChange,yChange,zChange;
+    public static float xChange, yChange, zChange;
 
     public RenderCore(String modelName, String textureName, float scaleDown)
     {
@@ -39,7 +39,7 @@ public class RenderCore extends TileEntitySpecialRenderer
     {
 
         GL11.glPushMatrix();
-        GL11.glTranslated(xx, yy + 2, zz);
+        GL11.glTranslated(xx + xChange, yy + yChange, zz + zChange);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(s, s, s);
         GL11.glRotatef(0, 0F, 1F, 0F);

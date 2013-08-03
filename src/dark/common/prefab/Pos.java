@@ -89,6 +89,12 @@ public class Pos
         world.setBlock(x(), y(), z(), blockID, meta, flag);
     }
 
+    public void modifyBy(ForgeDirection direction)
+    {
+        this.modifyBy(direction, 1);
+
+    }
+
     public Pos modifyBy(ForgeDirection direction, double lenght)
     {
         this.xx += direction.offsetX * lenght;
@@ -114,5 +120,14 @@ public class Pos
     public String toString()
     {
         return x() + "X " + y() + "Y " + z() + "Z ";
+    }
+
+    public Pos multi(double d)
+    {
+        this.xx *= d;
+        this.yy *= d;
+        this.zz *= d;
+        return this;
+
     }
 }

@@ -2,9 +2,13 @@ package dark.common.hive.spire;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import dark.client.renders.RenderCore;
 import dark.common.prefab.BlockMain;
+import dark.common.prefab.Pos;
 
 public class BlockSpireCore extends BlockMain
 {
@@ -15,6 +19,27 @@ public class BlockSpireCore extends BlockMain
         this.setHardness(1000);
         this.setResistance(100000);
         this.setCreativeTab(CreativeTabs.tabBlock);
+
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+    {
+        if (!player.isSneaking())
+        {
+            Pos pos = new Pos();
+            pos.modifyBy(ForgeDirection.getOrientation(side));
+            pos.multi(.1);
+            RenderCore.xChange += (float) pos.xx;
+            RenderCore.yChange += (float) pos.yy;
+            RenderCore.zChange += (float) pos.zz;
+            System.out.println(RenderCore.xChange + "x " + RenderCore.yChange + "y " + RenderCore.zChange + "z ");
+        }
+        else
+        {
+
+        }
+        return true;
     }
 
     @Override
