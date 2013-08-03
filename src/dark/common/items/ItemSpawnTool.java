@@ -95,7 +95,8 @@ public class ItemSpawnTool extends Item
             }
             else if (stack.getItemDamage() == 1)
             {
-                new DarkSchematic("TestSeve").load().build(new PosWorld(world, x, y, z), true, null);
+                System.out.println("Calling to build");
+                new DarkSchematic("SpireRoom").load().build(new PosWorld(world, x, y, z), true, null);
 
             }
 
