@@ -1,5 +1,8 @@
 package dark.common.hive.spire;
 
+import net.minecraft.util.AxisAlignedBB;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 import dark.common.prefab.TileEntityMain;
@@ -35,5 +38,11 @@ public class TileEntitySpire extends TileEntityMain
             spire = new HiveSpire(this);
         }
         return spire;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox()
+    {
+        return AxisAlignedBB.getAABBPool().getAABB(this.xCoord-1, this.yCoord, this.zCoord-1, this.xCoord + 1, this.yCoord + 4, this.zCoord + 1);
     }
 }

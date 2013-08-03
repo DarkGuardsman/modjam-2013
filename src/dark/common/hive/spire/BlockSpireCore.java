@@ -29,21 +29,32 @@ public class BlockSpireCore extends BlockMain
     {
         if (!player.isSneaking())
         {
-            float change = 0.1f;
+            float change = 0f;
             ItemStack stack = player.getHeldItem();
-            if(stack != null)
+            if (stack != null)
             {
-                if(stack.getItem().itemID == Item.stick.itemID)
+                if (stack.getItem().itemID == Item.stick.itemID)
                 {
                     change = 0.01f;
                 }
+                else if (stack.getItem().itemID == Item.arrow.itemID)
+                {
+                    change = 0.1f;
+                }
             }
-            Pos pos = new Pos();
-            pos.modifyBy(ForgeDirection.getOrientation(side));
-            RenderCore.xChange += (float) pos.xx * change;
-            RenderCore.yChange += (float) pos.yy * change;
-            RenderCore.zChange += (float) pos.zz * change;
-            System.out.println(RenderCore.xChange + "x " + RenderCore.yChange + "y " + RenderCore.zChange + "z ");
+            if (change != 0f)
+            {
+                Pos pos = new Pos();
+                pos.modifyBy(ForgeDirection.getOrientation(side));
+                RenderCore.xChange += (float) pos.xx * change;
+                RenderCore.yChange += (float) pos.yy * change;
+                RenderCore.zChange += (float) pos.zz * change;
+                System.out.println(RenderCore.xChange + "x " + RenderCore.yChange + "y " + RenderCore.zChange + "z ");
+            }
+            else
+            {
+                //TODO send chat to the player saying what the core is
+            }
         }
         else
         {

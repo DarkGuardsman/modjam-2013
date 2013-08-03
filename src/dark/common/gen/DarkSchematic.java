@@ -26,6 +26,8 @@ public class DarkSchematic
     /* Schematic doesn't save no vanilla blocks the same way */
     public static final String spireBlock = "B";
     public static final String spireCore = "C";
+    public Pos center;
+    public Pos size;
     String fileName;
 
     public DarkSchematic(String fileName)
@@ -61,6 +63,7 @@ public class DarkSchematic
         {
             deltaZ = pos.z() - pos2.z() + 1;
         }
+        this.size = new Pos(deltaX, deltaY, deltaZ);
         for (int x = 0; x < deltaX; ++x)
         {
             for (int y = 0; y < deltaY; ++y)
@@ -95,6 +98,7 @@ public class DarkSchematic
                 {
                     try
                     {
+                        boolean flag = false;
                         if (out.length > 0)
                         {
                             if (out.equals(spireBlock))
@@ -104,6 +108,7 @@ public class DarkSchematic
                             else if (out.equals(spireCore))
                             {
                                 b = DarkBotMain.blockCore.blockID;
+                                flag = true;
                             }
                             else
                             {
@@ -125,6 +130,10 @@ public class DarkSchematic
                         if (out.length > 4)
                         {
                             pos.zz = Integer.parseInt(out[4]);
+                        }
+                        if (flag)
+                        {
+                            this.center = pos;
                         }
                     }
                     catch (Exception e)
@@ -175,6 +184,11 @@ public class DarkSchematic
     }
 
     public void build(PosWorld posWorld, boolean ignoreAir, List<Pos> ignore)
+    {
+        this.build(posWorld, ignoreAir, false, ignore);
+    }
+
+    public void build(PosWorld posWorld, boolean ignoreAir, boolean center, List<Pos> ignore)
     {
         if (ignore == null)
         {
