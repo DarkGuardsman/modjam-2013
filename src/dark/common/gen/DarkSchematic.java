@@ -144,8 +144,9 @@ public class DarkSchematic
     {
         try
         {
-            File file = new File(NBTFileSaver.getSaveFolder(), fileName + ".sch");
+            File file = new File(NBTFileSaver.getSaveFolder(), fileName + ".dat");
             NBTTagCompound nbt = new NBTTagCompound();
+            NBTTagCompound blockNBT = nbt.getCompoundTag(BlockList);
             int i = 0;
             for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
             {
@@ -153,10 +154,11 @@ public class DarkSchematic
                 output += "" + entry.getValue().getOne();
                 output += ":" + entry.getValue().getTwo();
                 output += ":" + entry.getKey().x() + ":" + entry.getKey().y() + ":" + entry.getKey().z();
+                blockNBT.setString("Block"+i, output);
                 i++;
-                nbt.getCompoundTag(this.BlockList).setString("Block"+i, output);
 
             }
+            nbt.setCompoundTag(BlockList, blockNBT);
             CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
         }
         catch (Exception e)
