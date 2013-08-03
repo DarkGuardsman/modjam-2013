@@ -51,8 +51,7 @@ public class ItemSpawnTool extends Item
             }
             else if (stack.getItemDamage() == 1)
             {
-                DarkSchematic scem = new DarkSchematic("TestOne").load();
-                scem.build(new PosWorld(world, player.posX, player.posY, player.posZ), true);
+                new DarkSchematic("TestSeve").load().build(new PosWorld(world, x, y, z), true);
 
             }
 

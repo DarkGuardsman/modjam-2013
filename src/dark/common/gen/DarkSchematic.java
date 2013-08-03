@@ -161,7 +161,9 @@ public class DarkSchematic
                 blockNBT.setString("Block" + i, output);
                 i++;
             }
+            blockNBT.setInteger("count", i);
             nbt.setCompoundTag(BlockList, blockNBT);
+
             CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
         }
         catch (Exception e)
@@ -172,10 +174,17 @@ public class DarkSchematic
 
     public void build(PosWorld posWorld, boolean ignoreAir)
     {
+        System.out.println("Building Schematic "+fileName.replace(".dat", ""));
         for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
         {
             Pos setPos = new Pos(posWorld.xx + entry.getKey().xx, posWorld.yy + entry.getKey().yy, posWorld.zz + entry.getKey().zz);
-            setPos.setBlock(posWorld.world, entry.getValue().getOne(), entry.getValue().getTwo());
+            if (entry.getValue().getOne() == 0 && ignoreAir || !ignoreAir)
+            {
+                if (setPos.getTileEntity(posWorld.world) == null)
+                {
+                    setPos.setBlock(posWorld.world, entry.getValue().getOne(), entry.getValue().getTwo());
+                }
+            }
         }
 
     }
