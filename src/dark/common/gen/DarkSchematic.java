@@ -21,7 +21,7 @@ import dark.common.prefab.PosWorld;
  * @author DarkGuardsman */
 public class DarkSchematic
 {
-    public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<>();
+    public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<Pos, Pair<Integer, Integer>>();
     public static final String BlockList = "BlockList";
     /* Schematic doesn't save no vanilla blocks the same way */
     public static final String spireBlock = "B";
