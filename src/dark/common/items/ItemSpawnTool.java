@@ -51,10 +51,11 @@ public class ItemSpawnTool extends Item
             }
             else if (stack.getItemDamage() == 1)
             {
-                DarkSchematic scem = new DarkSchematic("TowerOne").load();
+                DarkSchematic scem = new DarkSchematic("TestOne").load();
                 scem.build(new PosWorld(world, player.posX, player.posY, player.posZ), true);
 
             }
+
             return true;
             // URL location = ItemSpawnTool.class.getProtectionDomain().getCodeSource().getLocation();
             //String string = location.getPath();

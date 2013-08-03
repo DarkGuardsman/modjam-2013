@@ -80,7 +80,7 @@ public class DarkSchematic
         try
         {
             File file = new File(McEditSchematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
-            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".sch")));
+            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".dat")));
 
             NBTTagCompound blockSet = nbtdata.getCompoundTag(BlockList);
             for (int i = 0; i < blockSet.getInteger("count"); i++)
