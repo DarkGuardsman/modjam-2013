@@ -2,7 +2,6 @@ package dark.common.gen;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -152,7 +151,9 @@ public class DarkSchematic
 
             NBTTagCompound nbt = new NBTTagCompound();
             NBTTagCompound blockNBT = nbt.getCompoundTag(BlockList);
+
             int i = 0;
+
             for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
             {
                 String output = "";
