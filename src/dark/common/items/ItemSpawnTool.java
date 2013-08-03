@@ -47,11 +47,13 @@ public class ItemSpawnTool extends Item
                 {
                     new DarkSchematic("TestSeve").loadWorldSelection(world, pos, pos2).save();
                     player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic"));
+                    pos = null;
+                    pos2 = null;
                 }
             }
             else if (stack.getItemDamage() == 1)
             {
-                new DarkSchematic("TestSeve").load().build(new PosWorld(world, x, y, z), true);
+                new DarkSchematic("TestSeve").load().build(new PosWorld(world, x, y, z), true, null);
 
             }
 
@@ -70,7 +72,7 @@ public class ItemSpawnTool extends Item
     @Override
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        par3List.add(new ItemStack(this.itemID,1,0));
-        par3List.add(new ItemStack(this.itemID,1,1));
+        par3List.add(new ItemStack(this.itemID, 1, 0));
+        par3List.add(new ItemStack(this.itemID, 1, 1));
     }
 }

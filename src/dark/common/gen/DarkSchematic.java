@@ -3,7 +3,9 @@ package dark.common.gen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
@@ -172,15 +174,18 @@ public class DarkSchematic
         }
     }
 
-    public void build(PosWorld posWorld, boolean ignoreAir)
+    public void build(PosWorld posWorld, boolean ignoreAir, List<Pos> ignore)
     {
-        System.out.println("Building Schematic " + fileName.replace(".dat", ""));
+        if (ignore == null)
+        {
+            ignore = new ArrayList<Pos>();
+        }
         for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
         {
             Pos setPos = new Pos(posWorld.xx + entry.getKey().xx, posWorld.yy + entry.getKey().yy, posWorld.zz + entry.getKey().zz);
             if (entry.getValue().getOne() != 0 && ignoreAir || !ignoreAir)
             {
-                if (setPos.getTileEntity(posWorld.world) == null)
+                if (setPos.getTileEntity(posWorld.world) == null && !ignore.contains(setPos))
                 {
                     setPos.setBlock(posWorld.world, entry.getValue().getOne(), entry.getValue().getTwo());
                 }
