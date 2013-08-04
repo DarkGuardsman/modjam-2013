@@ -185,6 +185,7 @@ public class DarkSchematic
             int sudoID = Block.sponge.blockID;
 
             NBTTagCompound nbt = new NBTTagCompound();
+            nbt.setCompoundTag("extradata", this.extraData);
             NBTTagCompound blockNBT = nbt.getCompoundTag(BlockList);
             nbt.setInteger("sizeX", size.x());
             nbt.setInteger("sizeY", size.y());
