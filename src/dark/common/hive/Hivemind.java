@@ -177,7 +177,7 @@ public class Hivemind implements IHiveObject
                 tag.setInteger("zCoord", spire.getLocation().z());
                 tag.setString("HiveID", this.getHiveID());
                 spire.saveSpire(tag);
-                NBTFileSaver.saveNBTFile("HiveSpire_" + this.getHiveID() + "_" + this.getLocation().world.provider.dimensionId + "_", NBTFileSaver.getSaveFolder(), tag, true);
+                NBTFileSaver.saveNBTFile("HiveSpire_" + this.getHiveID() + "_" + this.getLocation().world.provider.dimensionId + "_" + this.getLocation().toString().replace(" ", "") + ".dat", NBTFileSaver.getSaveFolder(), tag, true);
             }
         }
     }
