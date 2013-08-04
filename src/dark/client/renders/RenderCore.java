@@ -44,7 +44,7 @@ public class RenderCore extends TileEntitySpecialRenderer
         GL11.glScalef(1, 1, 1);
         GL11.glRotatef(r, 0F, 1F, 0F);
 
-        r = ((r + 2) % 360) - 180;
+        //r = ((r + 2) % 360) - 180;
 
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/Core.Render.png"));
         modelCore.renderAll();

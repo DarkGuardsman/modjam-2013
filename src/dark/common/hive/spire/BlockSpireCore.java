@@ -23,6 +23,7 @@ public class BlockSpireCore extends BlockMain
         this.setHardness(1000);
         this.setResistance(100000);
         this.setCreativeTab(CreativeTabs.tabBlock);
+        this.setBlockBounds(0, 0, 0, 1, 0.2f, 1);
 
     }
 
