@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -45,6 +44,19 @@ public class DarkSchematic
             blockChangeIDs.put("B", DarkBotMain.blockDeco.blockID);
             blockChangeIDs.put("C", DarkBotMain.blockDeco.blockID);
         }
+    }
+
+    public Pos getCenter()
+    {
+        if (this.center == null && size != null)
+        {
+            this.center = this.size.clone().multi(.5);
+        }
+        if (this.center == null)
+        {
+            this.center = new Pos();
+        }
+        return center;
     }
 
     public DarkSchematic loadWorldSelection(World world, Pos pos, Pos pos2)
@@ -202,12 +214,7 @@ public class DarkSchematic
         return this;
     }
 
-    public void build(PosWorld posWorld, boolean ignoreAir, List<Pos> ignore)
-    {
-        this.build(posWorld, ignoreAir, true, 0, ignore);
-    }
-
-    public static void buildNormal(PosWorld posWorld, Pos offset, boolean replaceAir, HashMap<Pos, Pair<Integer, Integer>> placementMap, Pos...ignoredSpots)
+    public static void buildNormal(PosWorld posWorld, Pos offset, boolean replaceAir, HashMap<Pos, Pair<Integer, Integer>> placementMap, Pos... ignoredSpots)
     {
         List<Pos> ignore = new ArrayList<Pos>();
         ignore.addAll(Arrays.asList(ignoredSpots));
@@ -229,10 +236,19 @@ public class DarkSchematic
             }
     }
 
-    public void build(PosWorld posWorld, boolean ignoreAir, boolean center, int path, List<Pos> ignore)
+    /** Builds a normal schematic setup
+     *
+     * @param posWorld - world location to build the center of the schematic at
+     * @param ignoreAir - should we
+     * @param ignore - location to ignore */
+    public void build(PosWorld posWorld, boolean ignoreAir, Pos... ignore)
+    {
+        buildNormal(posWorld, this.getCenter(), ignoreAir, this.blocks, ignore);
+    }
+
+    public void buildSpire(PosWorld posWorld, boolean ignoreAir, boolean center, int path, Pos... ignoreList)
     {
         System.out.println("Building schematic " + posWorld.toString());
-        Pos cen = this.center;
         int pathMark = 0;
         List<Integer> replaceIDs = new ArrayList<Integer>();
         for (Entry<Integer, Pair<String, Integer>> entry : pathBlockMap.entrySet())
@@ -246,44 +262,28 @@ public class DarkSchematic
                 replaceIDs.add(entry.getValue().getTwo());
             }
         }
-        if (!center)
-        {
-            cen = new Pos();
-        }
-        if (cen == null && size != null)
-        {
-            cen = this.size.clone().multi(.5);
-        }
-        if (ignore == null)
-        {
-            ignore = new ArrayList<Pos>();
-        }
+        HashMap<Pos, Pair<Integer, Integer>> newMap = new HashMap<Pos, Pair<Integer, Integer>>();
         for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
         {
-            Pos setPos = new Pos(posWorld.xx - cen.xx + entry.getKey().xx, posWorld.yy - cen.yy + entry.getKey().yy, posWorld.zz - cen.zz + entry.getKey().zz);
-            if (entry.getValue().getOne() != 0 && ignoreAir || !ignoreAir)
+            int blockID = entry.getValue().getOne();
+            int meta = entry.getValue().getTwo();
+            if (pathMark != 0)
             {
-                if (setPos.getTileEntity(posWorld.world) == null && !ignore.contains(setPos))
+                if (blockID == pathMark)
                 {
-                    int blockID = entry.getValue().getOne();
-                    int meta = entry.getValue().getTwo();
-                    if (pathMark != 0)
-                    {
-                        if (blockID == pathMark)
-                        {
-                            blockID = 0;
-                            meta = 0;
-                        }
-                        else if (replaceIDs.contains(blockID))
-                        {
-                            blockID = DarkBotMain.blockDeco.blockID;
-                            meta = 0;
-                        }
-                    }
-                    setPos.setBlock(posWorld.world, blockID, meta);
+                    blockID = 0;
+                    meta = 0;
+                }
+                else if (replaceIDs.contains(blockID))
+                {
+                    blockID = DarkBotMain.blockDeco.blockID;
+                    meta = 0;
                 }
             }
+            newMap.put(entry.getKey(), new Pair<Integer, Integer>(blockID, meta));
+
         }
+        buildNormal(posWorld, this.getCenter(), ignoreAir, newMap, ignoreList);
 
     }
 }
