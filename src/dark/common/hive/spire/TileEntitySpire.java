@@ -1,5 +1,8 @@
 package dark.common.hive.spire;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,6 +30,20 @@ public class TileEntitySpire extends TileEntityMain
         {
             this.getSpire().scanArea();
         }
+        if (this.ticks % 5 == 0)
+        {
+            List<Entity> list = this.getSpire().getEntitiesInRange();
+            if (list != null)
+            {
+                for (Entity entity : list)
+                {
+                    if(entity instanceof EntityPlayer)
+                    {
+
+                    }
+                }
+            }
+        }
 
     }
 
@@ -34,7 +51,7 @@ public class TileEntitySpire extends TileEntityMain
     {
         if (spire == null)
         {
-            spire = HiveSpire.getSpire(new PosWorld(this.worldObj, new Pos(this)),3);
+            spire = HiveSpire.getSpire(new PosWorld(this.worldObj, new Pos(this)), 3);
             spire = new HiveSpire(this);
         }
         return spire;
@@ -43,6 +60,6 @@ public class TileEntitySpire extends TileEntityMain
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
-        return AxisAlignedBB.getAABBPool().getAABB(this.xCoord-1, this.yCoord, this.zCoord-1, this.xCoord + 1, this.yCoord + 4, this.zCoord + 1);
+        return AxisAlignedBB.getAABBPool().getAABB(this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 1, this.yCoord + 4, this.zCoord + 1);
     }
 }

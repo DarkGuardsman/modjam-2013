@@ -3,6 +3,7 @@ package dark.common.prefab;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -152,5 +153,10 @@ public class Pos implements Cloneable
         this.yy = tag.getDouble("yy");
         this.zz = tag.getDouble("zz");
         return this;
+    }
+
+    public AxisAlignedBB expandBound(Pos end)
+    {
+        return AxisAlignedBB.getBoundingBox(xx, yy, zz, xx, yy, zz).expand(end.xx, end.yy, end.zz);
     }
 }

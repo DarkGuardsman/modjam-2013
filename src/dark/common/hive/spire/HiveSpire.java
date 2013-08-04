@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.AxisAlignedBB;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.DarkSchematic;
 import dark.common.hive.HiveManager;
@@ -105,6 +106,18 @@ public class HiveSpire implements IHiveSpire
         nbt.setInteger("Size", this.size);
     }
 
+    public List<Entity> getEntitiesInRange()
+    {
+        List<Entity> entityList = new ArrayList<Entity>();
+        int delta = size * 5;
+        if (level_List.containsKey(this.size))
+        {
+            delta = level_List.get(this.size).getOne();
+        }
+        entityList.addAll(this.getLocation().world.getEntitiesWithinAABB(Entity.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(delta, delta, delta))));
+        return entityList;
+    }
+
     public void scanArea()
     {
         //TODO add one mine timer to suck up all items and store them
@@ -116,7 +129,7 @@ public class HiveSpire implements IHiveSpire
         System.out.println("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
         HashMap<Pos, Pair<Integer, Integer>> scanList = new HashMap<Pos, Pair<Integer, Integer>>();
 
-        int delta = size * 5; //TODO change this to a map of schematics per size
+        int delta = size * 5;
         if (level_List.containsKey(this.size))
         {
             delta = level_List.get(this.size).getOne();
