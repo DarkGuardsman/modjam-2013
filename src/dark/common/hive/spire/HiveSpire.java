@@ -102,14 +102,17 @@ public class HiveSpire implements IHiveSpire
     {
         if (level == 0)
         {
-            World world = this.getLocation().world;
-            Pos pos = this.getLocation();
+
             this.size = 1;
             if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
             {
                 this.spireSchematic = new DarkSchematic("SpireOne").load();
             }
             this.spireSchematic.build(this.getLocation(), false, true, null);
+        }
+        if (level == 1)
+        {
+
         }
     }
 
