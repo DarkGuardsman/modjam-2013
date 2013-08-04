@@ -133,7 +133,7 @@ public class HiveSpire implements IHiveSpire
                 {
                     if (pos.getDistanceFrom(trap.pos) < 3)
                     {
-                        System.out.println("Trap reset "+trap.toString());
+                        System.out.println("Trap reset " + trap.toString());
                         spire.markTrapReturn(trap, 10, new Pair<Integer, Integer>(pos.getBlockID(this.getLocation().world), pos.getBlockMeta(this.getLocation().world)));
                         pos.setBlock(this.getLocation().world, 0);
                         it.remove();
@@ -236,7 +236,10 @@ public class HiveSpire implements IHiveSpire
                 NBTTagCompound trap = traps.getCompoundTag("trap" + i);
                 if (trap != null && !trap.hasNoTags())
                 {
-                    trapList.add(Trap.load(trap));
+                    Trap lTrap = Trap.load(trap);
+                    lTrap.pos.add(corner);
+                    trapList.add(lTrap);
+                    System.out.println("loaded Trap " + trap.toString());
                 }
             }
             this.loadedTraps.clear();
