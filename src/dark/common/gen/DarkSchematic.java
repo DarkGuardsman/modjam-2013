@@ -133,12 +133,14 @@ public class DarkSchematic
 
     /** Moves the player to the saved respawn location if it was saved
      *
+     * @param corner - needs to be the corner of the schematic
      * @param player */
-    public void movePlayerToSpawn(EntityPlayer player)
+    public void movePlayerToSpawn(Pos corner, EntityPlayer player)
     {
         Pos pos = new Pos().load(this.extraData.getCompoundTag("Spawn"));
         if (player != null && !pos.equals(new Pos()))
         {
+            pos.add(corner);
             player.setPositionAndUpdate(pos.xx + 0.5, pos.yy + 0.5, pos.zz + 0.5);
         }
     }

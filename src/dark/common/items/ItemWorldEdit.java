@@ -121,7 +121,7 @@ public class ItemWorldEdit extends Item
             }
             else if (stack.getItemDamage() == 1)
             {
-                HiveSpire hiveSpire = HiveSpire.getSpire(new PosWorld(world, pos), 30);
+                HiveSpire hiveSpire = HiveSpire.getSpire(new PosWorld(world, new Pos(x, y, z)), 30);
                 if (hiveSpire == null)
                 {
                     TileEntitySpire spire = new TileEntitySpire();
@@ -135,7 +135,7 @@ public class ItemWorldEdit extends Item
                 HiveSpire.buildSpire(hiveSpire, HiveSpire.MAX_SIZE);
                 if (hiveSpire.spireSchematic != null)
                 {
-                    hiveSpire.spireSchematic.movePlayerToSpawn(player);
+                    hiveSpire.spireSchematic.movePlayerToSpawn(hiveSpire.getLocation().sub(hiveSpire.spireSchematic.getCenter()), player);
                 }
             }
             else if (stack.getItemDamage() == 2)
