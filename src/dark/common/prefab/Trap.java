@@ -23,4 +23,10 @@ public class Trap
     {
         return new Trap(new Pos().load(nbt.getCompoundTag("start")), nbt.getString("type"));
     }
+
+    @Override
+    public String toString()
+    {
+        return pos.toString() + " " + type;
+    }
 }

@@ -133,6 +133,7 @@ public class HiveSpire implements IHiveSpire
                 {
                     if (pos.getDistanceFrom(trap.pos) < 3)
                     {
+                        System.out.println("Trap reset "+trap.toString());
                         spire.markTrapReturn(trap, 10, new Pair<Integer, Integer>(pos.getBlockID(this.getLocation().world), pos.getBlockMeta(this.getLocation().world)));
                         pos.setBlock(this.getLocation().world, 0);
                         it.remove();

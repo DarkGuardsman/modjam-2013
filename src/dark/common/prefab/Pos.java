@@ -124,10 +124,9 @@ public class Pos implements Cloneable
         return world.getBlockTileEntity(x(), y(), z());
     }
 
-    @Override
-    public String toString()
+    public AxisAlignedBB expandBound(Pos end)
     {
-        return x() + "X " + y() + "Y " + z() + "Z ";
+        return AxisAlignedBB.getBoundingBox(xx, yy, zz, xx, yy, zz).expand(end.xx, end.yy, end.zz);
     }
 
     public Pos multi(double d)
@@ -137,6 +136,57 @@ public class Pos implements Cloneable
         this.zz *= d;
         return this;
 
+    }
+
+    public Pos div(double d)
+    {
+        if (d != 0)
+        {
+            this.xx /= d;
+            this.yy /= d;
+            this.zz /= d;
+        }
+        return this;
+    }
+
+    public Pos div(Pos d)
+    {
+        if (d.xx != 0)
+        {
+            this.xx /= xx;
+        }
+        if (d.yy != 0)
+        {
+            this.yy /= yy;
+        }
+        if (d.zz != 0)
+        {
+            this.zz /= zz;
+        }
+
+        return this;
+    }
+
+    public Pos add(Pos center)
+    {
+        xx += center.xx;
+        yy += center.yy;
+        zz += center.zz;
+        return this;
+    }
+
+    public Pos sub(Pos center)
+    {
+        xx -= center.xx;
+        yy -= center.yy;
+        zz -= center.zz;
+        return this;
+    }
+
+    @Override
+    public String toString()
+    {
+        return x() + "X " + y() + "Y " + z() + "Z ";
     }
 
     public NBTTagCompound save(NBTTagCompound tag)
@@ -155,24 +205,4 @@ public class Pos implements Cloneable
         return this;
     }
 
-    public AxisAlignedBB expandBound(Pos end)
-    {
-        return AxisAlignedBB.getBoundingBox(xx, yy, zz, xx, yy, zz).expand(end.xx, end.yy, end.zz);
-    }
-
-    public Pos add(Pos center)
-    {
-        xx += center.xx;
-        yy += center.yy;
-        zz += center.zz;
-        return this;
-    }
-
-    public Pos sub(Pos center)
-    {
-        xx -= center.xx;
-        yy -= center.yy;
-        zz -= center.zz;
-        return this;
-    }
 }
