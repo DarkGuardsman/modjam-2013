@@ -121,13 +121,18 @@ public class ItemWorldEdit extends Item
             }
             else if (stack.getItemDamage() == 1)
             {
-                TileEntitySpire spire = new TileEntitySpire();
-                spire.worldObj = world;
-                spire.xCoord = x;
-                spire.yCoord = y;
-                spire.zCoord = z;
+                HiveSpire hiveSpire = HiveSpire.getSpire(new PosWorld(world, pos), 30);
+                if (hiveSpire == null)
+                {
+                    TileEntitySpire spire = new TileEntitySpire();
+                    spire.worldObj = world;
+                    spire.xCoord = x;
+                    spire.yCoord = y;
+                    spire.zCoord = z;
+                    hiveSpire = new HiveSpire(spire);
+                }
                 player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Building Max Size Spire at " + new Pos(x, y, z).toString()));
-                HiveSpire.buildSpire(new HiveSpire(spire), HiveSpire.MAX_SIZE);
+                HiveSpire.buildSpire(hiveSpire, HiveSpire.MAX_SIZE);
             }
             else if (stack.getItemDamage() == 2)
             {

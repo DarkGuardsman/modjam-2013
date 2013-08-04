@@ -217,6 +217,7 @@ public class HiveSpire implements IHiveSpire
             {
                 int path = new Random().nextBoolean() ? 1 : 2;
                 spire.spireSchematic.buildSpire(spire, true, true, path);
+                spire.size = level;
                 spire.loadTraps();
             }
         }
