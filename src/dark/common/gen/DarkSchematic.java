@@ -22,14 +22,14 @@ import dark.common.prefab.PosWorld;
  * @author DarkGuardsman */
 public class DarkSchematic
 {
-    public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<Pos, Pair<Integer, Integer>>();
     public static final String BlockList = "BlockList";
-    /* Schematic save some blockIDs to prevent mess ups with change in blockIDs */
-    public static final String trapID = "D";
     public static boolean mapSet = false;
+
     public static HashMap<Integer, Pair<String, Integer>> pathBlockMap = new HashMap<Integer, Pair<String, Integer>>();
     public static HashMap<String, Integer> blockChangeIDs = new HashMap<String, Integer>();
     public static HashMap<Integer, String> blockChangeIDReverse = new HashMap<Integer, String>();
+
+    public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<Pos, Pair<Integer, Integer>>();
     public NBTTagCompound extraData = new NBTTagCompound();
     public Pos center;
     public Pos size;
@@ -202,8 +202,11 @@ public class DarkSchematic
             {
                 String output = "";
                 String block = "" + entry.getValue().getOne();
-                if (entry.getValue().getOne())
-                    output += block;
+                if (this.blockChangeIDReverse.containsKey(entry.getValue().getOne()))
+                {
+                    block = blockChangeIDReverse.get(entry.getValue().getOne());
+                }
+                output += block;
                 output += ":" + entry.getValue().getTwo();
                 output += ":" + entry.getKey().x() + ":" + entry.getKey().y() + ":" + entry.getKey().z();
                 blockNBT.setString("Block" + i, output);
