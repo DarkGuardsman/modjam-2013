@@ -26,7 +26,7 @@ public class RenderCore extends TileEntitySpecialRenderer
     public RenderCore()
     {
         modelCore = AdvancedModelLoader.loadModel("/assets/dark/models/Core.Render.obj");
-        modelClaw = AdvancedModelLoader.loadModel("/assets/dark/models/Core.Holder.obj");
+       // modelClaw = AdvancedModelLoader.loadModel("/assets/dark/models/Core.Holder.obj");
     }
 
     @Override
@@ -52,8 +52,8 @@ public class RenderCore extends TileEntitySpecialRenderer
         GL11.glTranslated(0 + xChange, -.5 + yChange, 0 + zChange);
         GL11.glScalef(.8f, .8f, .8f);
         //GL11.glRotatef(-r, 0F, 1F, 0F);
-        FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/Core.Holder.png"));
-        modelClaw.renderAll();
+       // FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/Core.Holder.png"));
+        //modelClaw.renderAll();
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glPopMatrix();
