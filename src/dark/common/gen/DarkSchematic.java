@@ -208,7 +208,7 @@ public class DarkSchematic
         {
             cen = new Pos();
         }
-        if (cen == null)
+        if (cen == null && size != null)
         {
             cen = this.size.clone().multi(.5);
         }

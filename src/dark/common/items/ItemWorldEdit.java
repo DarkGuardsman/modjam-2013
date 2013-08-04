@@ -107,9 +107,9 @@ public class ItemWorldEdit extends Item
                 {
                     DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh.mm.ss");
                     String name = user + "_Schematic_" + dateFormat.format(new Date());
-                    schematic = new DarkSchematic(name).loadWorldSelection(world, pos, pos2);
-                    //player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic  " + name));
-                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Copied region  "));
+                    schematic = new DarkSchematic(name).loadWorldSelection(world, pos, pos2).save();
+                    player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic  " + name));
+                    //player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Copied region  "));
                     pos = null;
                     pos2 = null;
                     this.playerSchematic.put(user, schematic);
@@ -119,7 +119,7 @@ public class ItemWorldEdit extends Item
             else if (stack.getItemDamage() == 1)
             {
                 System.out.println("Calling to build");
-                new DarkSchematic("SpireRoom").load().build(new PosWorld(world, x, y, z), true, null);
+                new DarkSchematic("SpireOne").load().build(new PosWorld(world, x, y, z), true, null);
 
             }
             else if (stack.getItemDamage() == 2)
