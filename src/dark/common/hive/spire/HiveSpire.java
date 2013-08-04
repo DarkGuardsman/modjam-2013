@@ -78,14 +78,16 @@ public class HiveSpire implements IHiveSpire
         //Case if the spire's core was removed and it can't re-populate the core
     }
 
+    @Override
     public void loadSpire()
     {
-
+        //TODO load from NBT.dat file
     }
 
+    @Override
     public void saveSpire()
     {
-
+        //TODO save to NBT.dat file
     }
 
     public void scanArea()
@@ -135,6 +137,7 @@ public class HiveSpire implements IHiveSpire
                 this.spireSchematic = new DarkSchematic("SpireTwo").load();
             }
             this.spireSchematic.build(this.getLocation(), false, true, null);
+            this.location = new PosWorld(this.location.world, this.spireSchematic.center);
         }
     }
 
