@@ -17,6 +17,7 @@ import dark.common.hive.spire.HiveSpire;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
+import dark.common.prefab.Trap;
 
 /** Schematic system that is only used for creating world gen structures for this mod
  *
@@ -329,8 +330,7 @@ public class DarkSchematic
         if (t != null)
         {
             NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("type", t);
-            tag.setCompoundTag("start", start.save(new NBTTagCompound()));
+            new Trap(start, t).save(tag);
 
             NBTTagCompound trap = this.extraData.getCompoundTag("traps");
             int c = trap.getInteger("count");

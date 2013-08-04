@@ -2,6 +2,7 @@ package dark.common.hive.spire;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +21,7 @@ import dark.common.hive.Hivemind;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
+import dark.common.prefab.Trap;
 
 /** Hive node that handles most of the work for the hive without getting in the main hives way */
 public class HiveSpire implements IHiveSpire
@@ -36,7 +38,7 @@ public class HiveSpire implements IHiveSpire
     Hivemind hivemind;
     String hiveName = "world";
 
-    private List<Pair<Pos, String>> loadedTraps = new ArrayList<Pair<Pos, String>>();
+    private List<Trap> loadedTraps = new ArrayList<Trap>();
     private int size = 0;
     private boolean built = false;
 
@@ -118,19 +120,24 @@ public class HiveSpire implements IHiveSpire
         return entityList;
     }
 
-    public void triggerTrapIfNear(EntityPlayer player)
+    public void triggerTrapIfNear(TileEntitySpire spire, EntityPlayer player)
     {
         if (player != null)
         {
             Pos pos = new Pos(player);
-            for (Pair<Pos, String> trap : this.loadedTraps)
+            Iterator<Pair<Pos, String>> it = this.loadedTraps.iterator();
+            while (it.hasNext())
             {
+                Pair<Pos, String> trap = it.next();
                 Pos trapPos = trap.getOne();
                 String type = trap.getTwo();
                 if (type.equalsIgnoreCase("fall"))
                 {
                     if (pos.getDistanceFrom(trapPos) < 1)
                     {
+                        spire.markBlockReturn(trapPos, 10, pos.getBlockID(this.getLocation().world), type);
+                        pos.setBlock(this.getLocation().world, 0);
+                        it.remove();
 
                     }
                 }
@@ -223,14 +230,14 @@ public class HiveSpire implements IHiveSpire
         {
             NBTTagCompound traps = this.spireSchematic.extraData.getCompoundTag("traps");
             int count = traps.getInteger("count");
-            List<Pair<Pos, String>> trapList = new ArrayList<Pair<Pos, String>>();
+            List<Trap> trapList = new ArrayList<Trap>();
             Pos corner = this.getLocation().sub(this.spireSchematic.getCenter());
             for (int i = 0; i < count; i++)
             {
                 NBTTagCompound trap = traps.getCompoundTag("trap" + i);
                 if (trap != null && !trap.hasNoTags())
                 {
-                    trapList.add(new Pair<Pos, String>(new Pos().load(trap.getCompoundTag("start")).add(corner), trap.getString("type")));
+                    trapList.add(Trap.load(trap));
                 }
             }
             this.loadedTraps.clear();

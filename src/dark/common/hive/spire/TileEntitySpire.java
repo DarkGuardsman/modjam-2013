@@ -14,7 +14,7 @@ import dark.common.prefab.TileEntityMain;
 public class TileEntitySpire extends TileEntityMain
 {
     HiveSpire spire;
-
+    HashMap<>
     @Override
     public void init()
     {
@@ -39,13 +39,19 @@ public class TileEntitySpire extends TileEntityMain
                 for (Entity entity : list)
                 {
                     Pos pos = new Pos(entity);
-                    if(entity instanceof EntityPlayer)
+                    if (entity instanceof EntityPlayer)
                     {
-
+                        this.getSpire().triggerTrapIfNear(this, (EntityPlayer) entity);
                     }
                 }
             }
         }
+
+    }
+
+    public void markBlockReturn(Pos pos, int ticks, int blockID, String trap)
+    {
+        // TODO Auto-generated method stub
 
     }
 
@@ -64,4 +70,5 @@ public class TileEntitySpire extends TileEntityMain
     {
         return AxisAlignedBB.getAABBPool().getAABB(this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 1, this.yCoord + 4, this.zCoord + 1);
     }
+
 }
