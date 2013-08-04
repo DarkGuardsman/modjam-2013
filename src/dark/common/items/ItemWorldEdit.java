@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -108,13 +107,15 @@ public class ItemWorldEdit extends Item
                     DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh.mm.ss");
                     String name = user + "_Schematic_" + dateFormat.format(new Date());
                     schematic = new DarkSchematic(name).loadWorldSelection(world, pos, pos2).save();
+
                     player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Saved Schematic  " + name));
+
                     //player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Copied region  "));
                     pos = null;
                     pos2 = null;
-                    this.playerSchematic.put(user, schematic);
+                    playerSchematic.put(user, schematic);
                 }
-                this.playerPointSelection.put(user, new Pair<Pos, Pos>(pos, pos2));
+                playerPointSelection.put(user, new Pair<Pos, Pos>(pos, pos2));
             }
             else if (stack.getItemDamage() == 1)
             {
