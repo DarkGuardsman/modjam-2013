@@ -38,7 +38,7 @@ public class HiveSpire implements IHiveSpire
     Hivemind hivemind;
     String hiveName = "world";
 
-    private List<Trap> loadedTraps = new ArrayList<Trap>();
+    public List<Trap> loadedTraps = new ArrayList<Trap>();
     private int size = 0;
     private boolean built = false;
 
@@ -125,17 +125,15 @@ public class HiveSpire implements IHiveSpire
         if (player != null)
         {
             Pos pos = new Pos(player);
-            Iterator<Pair<Pos, String>> it = this.loadedTraps.iterator();
+            Iterator<Trap> it = this.loadedTraps.iterator();
             while (it.hasNext())
             {
-                Pair<Pos, String> trap = it.next();
-                Pos trapPos = trap.getOne();
-                String type = trap.getTwo();
-                if (type.equalsIgnoreCase("fall"))
+                Trap trap = it.next();
+                if (trap.type.equalsIgnoreCase("fall"))
                 {
-                    if (pos.getDistanceFrom(trapPos) < 1)
+                    if (pos.getDistanceFrom(trap.pos) < 3)
                     {
-                        spire.markBlockReturn(trapPos, 10, pos.getBlockID(this.getLocation().world), type);
+                        spire.markTrapReturn(trap, 10, new Pair<Integer, Integer>(pos.getBlockID(this.getLocation().world), pos.getBlockMeta(this.getLocation().world)));
                         pos.setBlock(this.getLocation().world, 0);
                         it.remove();
 

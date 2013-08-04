@@ -4,8 +4,8 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class Trap
 {
-    Pos pos;
-    String type;
+    public Pos pos;
+    public String type;
 
     public Trap(Pos pos, String type)
     {
