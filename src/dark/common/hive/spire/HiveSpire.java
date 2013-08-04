@@ -29,6 +29,7 @@ public class HiveSpire implements IHiveSpire
     String hiveName = "world";
 
     int size = 0;
+    final int maxLevel = 2;
 
     List<IInventory> inventory = new ArrayList<IInventory>();
 
@@ -73,6 +74,8 @@ public class HiveSpire implements IHiveSpire
 
     public void scanArea()
     {
+        this.size = Math.min(this.size++, this.maxLevel);
+        this.buildSpire(this.size);
         System.out.print("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
         int delta = size * 5;
         Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
