@@ -23,9 +23,12 @@ public class DarkSchematic
 {
     public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<Pos, Pair<Integer, Integer>>();
     public static final String BlockList = "BlockList";
-    /* Schematic doesn't save no vanilla blocks the same way */
+    /* Schematic save some blockIDs to prevent mess ups with change in blockIDs */
     public static final String spireBlock = "B";
     public static final String spireCore = "C";
+    public static final String trapID = "D";
+    public static final String wallAID = "AA";
+    public static final String wallBID = "AB";
     public Pos center;
     public Pos size;
     public String fileName;
@@ -200,7 +203,7 @@ public class DarkSchematic
         this.build(posWorld, ignoreAir, true, ignore);
     }
 
-    public void build(PosWorld posWorld, boolean ignoreAir, boolean center, List<Pos> ignore)
+    public void build(PosWorld posWorld, boolean ignoreAir, boolean center, int path, List<Pos> ignore)
     {
         System.out.println("Building schematic " + posWorld.toString());
         Pos cen = this.center;
