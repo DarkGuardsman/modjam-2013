@@ -109,6 +109,12 @@ public class DarkSchematic
                         blockID = 0;
                         blockMeta = 0;
                     }
+                    if (blockID == Block.blockDiamond.blockID)
+                    {
+                        blockID = DarkBotMain.blockDeco.blockID;
+                        blockMeta = 0;
+                        this.defineTrap(0, new Pos(x, y, z), new Pos(x, y, z));
+                    }
                     blocks.put(new Pos(x, y, z), new Pair<Integer, Integer>(blockID, blockMeta));
                 }
             }
@@ -323,7 +329,15 @@ public class DarkSchematic
         {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("type", t);
-            tag.setString("start",);
+            tag.setCompoundTag("start", start.save(new NBTTagCompound()));
+            tag.setCompoundTag("end", end.save(new NBTTagCompound()));
+
+            NBTTagCompound trap = this.extraData.getCompoundTag("traps");
+            int c = trap.getInteger("count");
+            trap.setCompoundTag("trap" + c + 1, tag);
+            trap.setInteger("count", c);
+            this.extraData.setCompoundTag("traps", trap);
         }
+
     }
 }

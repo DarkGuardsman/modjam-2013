@@ -138,11 +138,12 @@ public class Pos implements Cloneable
 
     }
 
-    public void save(NBTTagCompound tag)
+    public NBTTagCompound save(NBTTagCompound tag)
     {
         tag.setDouble("xx", xx);
         tag.setDouble("yy", yy);
         tag.setDouble("zz", zz);
+        return tag;
     }
 
     public Pos load(NBTTagCompound tag)
