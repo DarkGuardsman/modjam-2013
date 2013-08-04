@@ -76,7 +76,7 @@ public class HiveSpire implements IHiveSpire
     {
         this.size = Math.min(this.size++, this.maxLevel);
         this.buildSpire(this.size);
-        System.out.print("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
+        System.out.println("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
         int delta = size * 5;
         Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
         Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 0), getLocation().zz - delta);
@@ -103,6 +103,7 @@ public class HiveSpire implements IHiveSpire
 
     public void buildSpire(int level)
     {
+        System.out.println("Spire replicating itself at size "+ this.size);
         if (level == 1)
         {
             if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
@@ -113,7 +114,7 @@ public class HiveSpire implements IHiveSpire
         }
         if (level == 2)
         {
-            if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
+            if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireTwo"))
             {
                 this.spireSchematic = new DarkSchematic("SpireTwo").load();
             }

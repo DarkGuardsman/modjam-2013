@@ -1,5 +1,6 @@
 package dark.common.hive.spire;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,6 +54,14 @@ public class BlockSpireCore extends BlockMain
                 else if (stack.getItem().itemID == Item.arrow.itemID)
                 {
                     change = 0.1f;
+                }
+                else if (stack.getItem().itemID == Block.dirt.blockID)
+                {
+                    TileEntity entity = world.getBlockTileEntity(x, y, z);
+                    if (entity instanceof TileEntitySpire)
+                    {
+                        ((TileEntitySpire) entity).getSpire().scanArea();
+                    }
                 }
             }
             if (change != 0f)
