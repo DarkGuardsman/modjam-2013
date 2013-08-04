@@ -222,6 +222,10 @@ public class HiveSpire implements IHiveSpire
         {
             this.location = new PosWorld(spire.worldObj, new Pos(spire));
         }
+        else if (!coreFound)
+        {
+            this.setInvalid();
+        }
         //TODO compare schematic to scan list and mark for correction
     }
 
