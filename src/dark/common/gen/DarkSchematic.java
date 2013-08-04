@@ -239,13 +239,20 @@ public class DarkSchematic
     /** Builds a normal schematic setup
      *
      * @param posWorld - world location to build the center of the schematic at
-     * @param ignoreAir - should we
+     * @param ignoreAir - should we replace blocks with air if the schematic calls for it
      * @param ignore - location to ignore */
-    public void build(PosWorld posWorld, boolean ignoreAir, Pos... ignore)
+    public void build(PosWorld posWorld, boolean replaceAir, Pos... ignore)
     {
-        buildNormal(posWorld, this.getCenter(), ignoreAir, this.blocks, ignore);
+        buildNormal(posWorld, this.getCenter(), replaceAir, this.blocks, ignore);
     }
 
+    /** Builds a spire schematic to a set of rules
+     *
+     * @param posWorld - world location
+     * @param ignoreAir - should ignore air blocks in schematic
+     * @param center - center the schematic to the core
+     * @param path - path var to go with. Will change the schematic behavior
+     * @param ignoreList - list of blocks to ignore. generaly the core block */
     public void buildSpire(PosWorld posWorld, boolean ignoreAir, boolean center, int path, Pos... ignoreList)
     {
         System.out.println("Building schematic " + posWorld.toString());
