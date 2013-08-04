@@ -1,9 +1,12 @@
 package dark.common.hive;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -15,6 +18,7 @@ import net.minecraftforge.event.world.WorldEvent.Save;
 import dark.common.api.IHiveObject;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.NBTFileSaver;
+import dark.common.hive.spire.HiveSpire;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
@@ -173,9 +177,7 @@ public class Hivemind implements IHiveObject
             for (IHiveSpire spire : this.spires)
             {
                 NBTTagCompound tag = new NBTTagCompound();
-                tag.setInteger("xCoord", spire.getLocation().x());
-                tag.setInteger("yCoord", spire.getLocation().y());
-                tag.setInteger("zCoord", spire.getLocation().z());
+                tag.setCompoundTag("location", spire.getLocation().save(new NBTTagCompound()));
                 tag.setString("HiveID", this.getHiveID());
                 spire.saveSpire(tag);
                 NBTFileSaver.saveNBTFile("HiveSpire_" + spire.getHiveID() + "_" + spire.getLocation().toString().replace(" ", "") + ".dat", NBTFileSaver.getSaveFolder(), tag, true);
@@ -186,7 +188,31 @@ public class Hivemind implements IHiveObject
     @ForgeSubscribe
     public void onWorldLoad(Load event)
     {
-
+        File file = NBTFileSaver.getSaveFolder();
+        if (file != null && file.exists())
+        {
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++)
+            {
+                File saveFile = files[i];
+                if (saveFile != null && saveFile.exists() && saveFile.getName().contains("HiveSpire"))
+                {
+                    try
+                    {
+                        NBTTagCompound tag = CompressedStreamTools.readCompressed(new FileInputStream(saveFile));
+                        if (tag.hasKey("HiveID") && tag.hasKey("location"))
+                        {
+                            HiveSpire spire = new HiveSpire(new PosWorld().load(tag.getCompoundTag("location")));
+                            spire.setHiveID(tag.getString("HiveID"));
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     @ForgeSubscribe

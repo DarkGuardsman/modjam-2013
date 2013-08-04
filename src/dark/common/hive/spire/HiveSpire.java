@@ -16,7 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.DarkSchematic;
-import dark.common.gen.NBTFileSaver;
 import dark.common.hive.HiveManager;
 import dark.common.hive.Hivemind;
 import dark.common.prefab.Pair;
@@ -56,8 +55,15 @@ public class HiveSpire implements IHiveSpire
 
     public HiveSpire(TileEntitySpire core)
     {
+        this(new PosWorld(core.worldObj, new Pos(core)));
+    }
+
+    public HiveSpire(PosWorld pos)
+    {
+        location = pos;
         staticList.add(this);
-        location = new PosWorld(core.worldObj, new Pos(core));
+        this.getHive().addToHive(this);
+        this.init();
     }
 
     /** Gets a spire close to the location. Use mainly if a spire core unloaded from the map and
@@ -88,12 +94,7 @@ public class HiveSpire implements IHiveSpire
 
     public void init()
     {
-        this.getHive().addToHive(this);
         this.scanArea();
-        if(!this.loaded)
-        {
-            this.loaded = true;
-        }
     }
 
     public void setInvalid()

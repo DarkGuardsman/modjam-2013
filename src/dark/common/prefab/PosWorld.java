@@ -1,10 +1,18 @@
 package dark.common.prefab;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 public class PosWorld extends Pos
 {
     public World world;
+
+    public PosWorld()
+    {
+        super();
+        this.world = DimensionManager.getWorld(0);
+    }
 
     public PosWorld(World world, Pos pos)
     {
@@ -15,6 +23,21 @@ public class PosWorld extends Pos
     {
         super(x, y, z);
         this.world = world;
+    }
+
+    @Override
+    public NBTTagCompound save(NBTTagCompound tag)
+    {
+        tag.setInteger("dim", this.world.provider.dimensionId);
+        return super.save(tag);
+    }
+
+    @Override
+    public PosWorld load(NBTTagCompound tag)
+    {
+        super.load(tag);
+        this.world = DimensionManager.getWorld(tag.getInteger("dim"));
+        return this;
     }
 
     @Override
