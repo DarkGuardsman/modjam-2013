@@ -133,6 +133,10 @@ public class ItemWorldEdit extends Item
                 }
                 player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Building Max Size Spire at " + new Pos(x, y, z).toString()));
                 HiveSpire.buildSpire(hiveSpire, HiveSpire.MAX_SIZE);
+                if (hiveSpire.spireSchematic != null)
+                {
+                    hiveSpire.spireSchematic.movePlayerToSpawn(player);
+                }
             }
             else if (stack.getItemDamage() == 2)
             {

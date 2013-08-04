@@ -34,7 +34,7 @@ public class HiveSpire implements IHiveSpire
     public static HashMap<Integer, String> level_Schematic = new HashMap<Integer, String>();
 
     PosWorld location;
-    DarkSchematic spireSchematic;
+    public DarkSchematic spireSchematic;
     Hivemind hivemind;
     String hiveName = "world";
 
