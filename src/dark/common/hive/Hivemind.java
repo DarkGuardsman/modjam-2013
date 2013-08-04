@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import dark.common.api.IHiveObject;
 import dark.common.api.IHiveSpire;
@@ -181,4 +182,20 @@ public class Hivemind implements IHiveObject
             }
         }
     }
+
+    @ForgeSubscribe
+    public void onWorldLoad(Load event)
+    {
+
+    }
+
+    @ForgeSubscribe
+    public void onWorldUnLoad(Load event)
+    {
+        if (event != null && event.world != null)
+        {
+            this.onWorldSave(new Save(event.world));
+        }
+    }
+
 }

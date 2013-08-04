@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.DarkSchematic;
+import dark.common.gen.NBTFileSaver;
 import dark.common.hive.HiveManager;
 import dark.common.hive.Hivemind;
 import dark.common.prefab.Pair;
@@ -41,6 +42,7 @@ public class HiveSpire implements IHiveSpire
     public List<Trap> loadedTraps = new ArrayList<Trap>();
     private int size = 0;
     private boolean built = false;
+    private boolean loaded = false;
 
     List<IInventory> inventory = new ArrayList<IInventory>();
 
@@ -88,6 +90,10 @@ public class HiveSpire implements IHiveSpire
     {
         this.getHive().addToHive(this);
         this.scanArea();
+        if(!this.loaded)
+        {
+            this.loaded = true;
+        }
     }
 
     public void setInvalid()
@@ -211,7 +217,7 @@ public class HiveSpire implements IHiveSpire
             {
                 spire.spireSchematic = new DarkSchematic(level_Schematic.get(level)).load();
             }
-            spire.location = new PosWorld(spire.getLocation().world, new Pos(spire.getLocation().xx, Math.max(spire.getLocation().yy - drop, 6), spire.getLocation().zz));
+            spire.location.sub(new Pos(0, -drop, 0));
 
             if (spire.spireSchematic != null)
             {

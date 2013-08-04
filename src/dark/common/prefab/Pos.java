@@ -153,15 +153,15 @@ public class Pos implements Cloneable
     {
         if (d.xx != 0)
         {
-            this.xx /= xx;
+            this.xx /= d.xx;
         }
         if (d.yy != 0)
         {
-            this.yy /= yy;
+            this.yy /= d.yy;
         }
         if (d.zz != 0)
         {
-            this.zz /= zz;
+            this.zz /= d.zz;
         }
 
         return this;
