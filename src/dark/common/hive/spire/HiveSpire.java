@@ -103,19 +103,16 @@ public class HiveSpire implements IHiveSpire
 
     public void buildSpire(int level)
     {
-        if (level == 0)
+        if (level == 1)
         {
-
-            this.size = 1;
             if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
             {
                 this.spireSchematic = new DarkSchematic("SpireOne").load();
             }
             this.spireSchematic.build(this.getLocation(), false, true, null);
         }
-        if (level == 1)
+        if (level == 2)
         {
-            this.size = 2;
             if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
             {
                 this.spireSchematic = new DarkSchematic("SpireTwo").load();
