@@ -159,4 +159,20 @@ public class Pos implements Cloneable
     {
         return AxisAlignedBB.getBoundingBox(xx, yy, zz, xx, yy, zz).expand(end.xx, end.yy, end.zz);
     }
+
+    public Pos add(Pos center)
+    {
+        xx += center.xx;
+        yy += center.yy;
+        zz += center.zz;
+        return this;
+    }
+
+    public Pos sub(Pos center)
+    {
+        xx -= center.xx;
+        yy -= center.yy;
+        zz -= center.zz;
+        return this;
+    }
 }

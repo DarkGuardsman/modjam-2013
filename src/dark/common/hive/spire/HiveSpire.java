@@ -210,7 +210,7 @@ public class HiveSpire implements IHiveSpire
             if (spire.spireSchematic != null)
             {
                 int path = new Random().nextBoolean() ? 1 : 2;
-                spire.spireSchematic.buildSpire(spire.getLocation(), true, true, path);
+                spire.spireSchematic.buildSpire(spire, true, true, path);
                 spire.loadTraps();
             }
         }
@@ -224,12 +224,13 @@ public class HiveSpire implements IHiveSpire
             NBTTagCompound traps = this.spireSchematic.extraData.getCompoundTag("traps");
             int count = traps.getInteger("count");
             List<Pair<Pos, String>> trapList = new ArrayList<Pair<Pos, String>>();
+            Pos corner = this.getLocation().sub(this.spireSchematic.getCenter());
             for (int i = 0; i < count; i++)
             {
                 NBTTagCompound trap = traps.getCompoundTag("trap" + i);
                 if (trap != null && !trap.hasNoTags())
                 {
-                    trapList.add(new Pair<Pos, String>(new Pos().load(trap.getCompoundTag("start")), trap.getString("type")));
+                    trapList.add(new Pair<Pos, String>(new Pos().load(trap.getCompoundTag("start")).add(corner), trap.getString("type")));
                 }
             }
             this.loadedTraps.clear();

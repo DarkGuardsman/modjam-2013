@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import dark.common.DarkBotMain;
+import dark.common.hive.spire.HiveSpire;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
@@ -274,9 +275,9 @@ public class DarkSchematic
      * @param center - center the schematic to the core
      * @param path - path var to go with. Will change the schematic behavior
      * @param ignoreList - list of blocks to ignore. generaly the core block */
-    public void buildSpire(PosWorld posWorld, boolean ignoreAir, boolean center, int path, Pos... ignoreList)
+    public void buildSpire(HiveSpire spire, boolean ignoreAir, boolean center, int path, Pos... ignoreList)
     {
-        System.out.println("Building schematic " + posWorld.toString());
+        System.out.println("Building schematic " + spire.getLocation().toString());
         int pathMark = 0;
         List<Integer> replaceIDs = new ArrayList<Integer>();
         for (Entry<Integer, Pair<String, Integer>> entry : pathBlockMap.entrySet())
@@ -314,7 +315,7 @@ public class DarkSchematic
             newMap.put(entry.getKey(), new Pair<Integer, Integer>(blockID, meta));
 
         }
-        buildNormal(posWorld, this.getCenter(), ignoreAir, newMap, ignoreList);
+        buildNormal(spire.getLocation(), this.getCenter(), ignoreAir, newMap, ignoreList);
 
     }
 
