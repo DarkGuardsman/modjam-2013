@@ -19,4 +19,8 @@ public interface IHiveSpire extends IHiveObject
 
     /** Called when something gives the spire supplies general to build with */
     public void receivedItems(ItemStack stack, Object obj);
+
+    public void loadSpire();
+
+    public void saveSpire();
 }

@@ -28,8 +28,8 @@ public class HiveSpire implements IHiveSpire
     Hivemind hivemind;
     String hiveName = "world";
 
-    int size = 0;
-    final int maxLevel = 2;
+    private int size = 0;
+    public static final int maxLevel = 2;
 
     List<IInventory> inventory = new ArrayList<IInventory>();
 
@@ -72,6 +72,22 @@ public class HiveSpire implements IHiveSpire
         this.buildSpire(this.size);
     }
 
+    public void setInvalid()
+    {
+        //TODO clear the spire and mark all elements for deletion
+        //Case if the spire's core was removed and it can't re-populate the core
+    }
+
+    public void loadSpire()
+    {
+
+    }
+
+    public void saveSpire()
+    {
+
+    }
+
     public void scanArea()
     {
         this.size = Math.min(this.size++, this.maxLevel);
@@ -103,7 +119,7 @@ public class HiveSpire implements IHiveSpire
 
     public void buildSpire(int level)
     {
-        System.out.println("Spire replicating itself at size "+ this.size);
+        System.out.println("Spire replicating itself at size " + this.size);
         if (level == 1)
         {
             if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
