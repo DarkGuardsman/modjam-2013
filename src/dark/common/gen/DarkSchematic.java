@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -117,11 +118,29 @@ public class DarkSchematic
                         blockMeta = 0;
                         this.defineTrap(0, new Pos(x, y, z));
                     }
+                    if (blockID == Block.oreCoal.blockID)
+                    {
+                        this.extraData.setCompoundTag("Spawn", new Pos(x, y, z).save(new NBTTagCompound()));
+                        blockID = 0;
+                        blockMeta = 0;
+                    }
                     blocks.put(new Pos(x, y, z), new Pair<Integer, Integer>(blockID, blockMeta));
                 }
             }
         }
         return this;
+    }
+
+    /** Moves the player to the saved respawn location if it was saved
+     *
+     * @param player */
+    public void movePlayerToSpawn(EntityPlayer player)
+    {
+        Pos pos = new Pos().load(this.extraData.getCompoundTag("Spawn"));
+        if (player != null && !pos.equals(new Pos()))
+        {
+            player.setPositionAndUpdate(pos.xx + 0.5, pos.yy + 0.5, pos.zz + 0.5);
+        }
     }
 
     public DarkSchematic load()
@@ -313,7 +332,7 @@ public class DarkSchematic
                 blockID = DarkBotMain.blockDeco.blockID;
                 meta = 0;
             }
-            else if(blockID == Block.sandStone.blockID)
+            else if (blockID == Block.sandStone.blockID)
             {
                 continue;
             }

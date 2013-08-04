@@ -17,4 +17,15 @@ public class PosWorld extends Pos
         this.world = world;
     }
 
+    @Override
+    public boolean equals(Object paramObject)
+    {
+        if (super.equals(paramObject) && paramObject instanceof PosWorld)
+        {
+            PosWorld pos = (PosWorld) paramObject;
+            return this.world == pos.world;
+        }
+        return false;
+    }
+
 }

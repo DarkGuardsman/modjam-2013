@@ -189,6 +189,17 @@ public class Pos implements Cloneable
         return x() + "X " + y() + "Y " + z() + "Z ";
     }
 
+    @Override
+    public boolean equals(Object paramObject)
+    {
+        if (paramObject instanceof Pos)
+        {
+            Pos pos = (Pos) paramObject;
+            return pos.xx == this.xx && pos.yy == this.yy && pos.zz == this.zz;
+        }
+        return false;
+    }
+
     public NBTTagCompound save(NBTTagCompound tag)
     {
         tag.setDouble("xx", xx);
