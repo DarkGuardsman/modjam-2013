@@ -1,6 +1,7 @@
 package dark.common.api;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import dark.common.hive.Hivemind;
 import dark.common.prefab.PosWorld;
 
@@ -20,7 +21,7 @@ public interface IHiveSpire extends IHiveObject
     /** Called when something gives the spire supplies general to build with */
     public void receivedItems(ItemStack stack, Object obj);
 
-    public void loadSpire();
+    public void loadSpire(NBTTagCompound nbt);
 
-    public void saveSpire();
+    public void saveSpire(NBTTagCompound nbt);
 }

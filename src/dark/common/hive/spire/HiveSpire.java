@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import dark.common.api.IHiveSpire;
@@ -92,15 +93,15 @@ public class HiveSpire implements IHiveSpire
     }
 
     @Override
-    public void loadSpire()
+    public void loadSpire(NBTTagCompound nbt)
     {
-        //TODO load from NBT.dat file
+        this.size = nbt.getInteger("Size");
     }
 
     @Override
-    public void saveSpire()
+    public void saveSpire(NBTTagCompound nbt)
     {
-        //TODO save to NBT.dat file
+        nbt.setInteger("Size", this.size);
     }
 
     public void scanArea()
@@ -108,7 +109,7 @@ public class HiveSpire implements IHiveSpire
         //TODO add one mine timer to suck up all items and store them
         if (this.built = false)
         {
-            buildSpire(this,this.size);
+            buildSpire(this, this.size);
             this.built = true;
         }
         System.out.println("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
