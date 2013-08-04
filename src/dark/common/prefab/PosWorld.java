@@ -57,4 +57,14 @@ public class PosWorld extends Pos
         return false;
     }
 
+    public int getBlockID()
+    {
+        return this.getBlockID(this.world);
+    }
+
+    public int getBlockMeta()
+    {
+        return this.getBlockMeta(this.world);
+    }
+
 }

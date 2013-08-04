@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.chunk.Chunk;
+import dark.common.DarkBotMain;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.DarkSchematic;
 import dark.common.hive.HiveManager;
@@ -94,13 +96,24 @@ public class HiveSpire implements IHiveSpire
 
     public void init()
     {
-        this.scanArea();
+        Chunk chunk = this.getLocation().world.getChunkFromBlockCoords(this.getLocation().x(), this.getLocation().z());
+        if (chunk != null && chunk.isChunkLoaded)
+        {
+            this.scanArea();
+            int blockID = this.getLocation().getBlockID();
+            if (blockID != DarkBotMain.blockCore.blockID)
+            {
+                this.setInvalid();
+            }
+        }
     }
 
     public void setInvalid()
     {
         //TODO clear the spire and mark all elements for deletion
         //Case if the spire's core was removed and it can't re-populate the core
+        this.getHive().remove(this);
+        staticList.remove(this);
     }
 
     @Override
@@ -170,6 +183,10 @@ public class HiveSpire implements IHiveSpire
         Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
         Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 6), getLocation().zz - delta);
 
+        TileEntitySpire spire = null;
+        double distance = Double.MAX_VALUE;
+        boolean coreFound = false;
+
         for (int y = start.y(); y <= start.y() && y >= end.y(); y--)
         {
             for (int x = start.x(); x <= start.x() && x >= end.x(); x--)
@@ -183,7 +200,15 @@ public class HiveSpire implements IHiveSpire
 
                     Block block = Block.blocksList[id];
                     TileEntity entity = pos.getTileEntity(getLocation().world);
-
+                    if (entity instanceof TileEntitySpire && new Pos(entity).getDistanceFrom(this.getLocation()) < distance)
+                    {
+                        spire = (TileEntitySpire) entity;
+                        distance = new Pos(entity).getDistanceFrom(this.getLocation());
+                        if (new Pos(entity).equals(this.getLocation()))
+                        {
+                            coreFound = true;
+                        }
+                    }
                     if (entity instanceof TileEntityChest && !inventory.contains(entity))
                     {
                         inventory.add((IInventory) entity);
@@ -192,6 +217,10 @@ public class HiveSpire implements IHiveSpire
                     scanList.put(pos, new Pair<Integer, Integer>(id, meta));
                 }
             }
+        }
+        if (!coreFound && spire != null)
+        {
+            this.location = new PosWorld(spire.worldObj, new Pos(spire));
         }
         //TODO compare schematic to scan list and mark for correction
     }
