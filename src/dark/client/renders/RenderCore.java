@@ -24,7 +24,7 @@ public class RenderCore extends TileEntitySpecialRenderer
 
     public RenderCore(String modelName, String textureName, float scaleDown)
     {
-        modelTurret = AdvancedModelLoader.loadModel("/assets/dark/models/" + modelName + ".obj");
+        modelTurret = AdvancedModelLoader.loadModel("/assets/dark/models/" + modelName + ".obj.model");
         this.scale = scaleDown;
         this.texture = textureName;
     }
