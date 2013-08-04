@@ -104,6 +104,11 @@ public class DarkSchematic
                     {
                         this.center = new Pos(x, y, z);
                     }
+                    if (blockID == Block.sponge.blockID)
+                    {
+                        blockID = 0;
+                        blockMeta = 0;
+                    }
                     blocks.put(new Pos(x, y, z), new Pair<Integer, Integer>(blockID, blockMeta));
                 }
             }
@@ -135,9 +140,9 @@ public class DarkSchematic
                         boolean flag = false;
                         if (out.length > 0)
                         {
-                            if (blockChangeIDs.containsKey(b))
+                            if (blockChangeIDs.containsKey(out[0]))
                             {
-                                b = blockChangeIDs.get(b);
+                                b = blockChangeIDs.get(out[0]);
                             }
                             else
                             {
@@ -285,7 +290,12 @@ public class DarkSchematic
             int blockID = entry.getValue().getOne();
             int meta = entry.getValue().getTwo();
 
-            if (blockID == pathMark)
+            if (blockID == Block.sponge.blockID || blockID == Block.blockDiamond.blockID)
+            {
+                blockID = 0;
+                meta = 0;
+            }
+            else if (blockID == pathMark)
             {
                 blockID = 0;
                 meta = 0;
@@ -300,5 +310,20 @@ public class DarkSchematic
         }
         buildNormal(posWorld, this.getCenter(), ignoreAir, newMap, ignoreList);
 
+    }
+
+    public void defineTrap(int type, Pos start, Pos end)
+    {
+        String t = null;
+        if (type == 0)
+        {
+            t = "fall";
+        }
+        if (t != null)
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("type", t);
+            tag.setString("start",);
+        }
     }
 }

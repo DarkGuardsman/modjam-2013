@@ -1,6 +1,7 @@
 package dark.common.prefab;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -135,5 +136,20 @@ public class Pos implements Cloneable
         this.zz *= d;
         return this;
 
+    }
+
+    public void save(NBTTagCompound tag)
+    {
+        tag.setDouble("xx", xx);
+        tag.setDouble("yy", yy);
+        tag.setDouble("zz", zz);
+    }
+
+    public Pos load(NBTTagCompound tag)
+    {
+        this.xx = tag.getDouble("xx");
+        this.yy = tag.getDouble("yy");
+        this.zz = tag.getDouble("zz");
+        return this;
     }
 }

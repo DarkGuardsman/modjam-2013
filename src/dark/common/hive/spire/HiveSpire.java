@@ -3,6 +3,7 @@ package dark.common.hive.spire;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -175,7 +176,8 @@ public class HiveSpire implements IHiveSpire
 
             if (spire.spireSchematic != null)
             {
-                spire.spireSchematic.buildSpire(spire.getLocation(), false, true, 1);
+                int path = new Random().nextBoolean() ? 1 : 2;
+                spire.spireSchematic.buildSpire(spire.getLocation(), true, true, path);
             }
         }
 
