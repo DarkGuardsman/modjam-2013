@@ -1,7 +1,6 @@
 package dark.common.hive.spire;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -12,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import dark.common.api.IHiveSpire;
+import dark.common.gen.DarkSchematic;
 import dark.common.hive.HiveManager;
 import dark.common.hive.Hivemind;
 import dark.common.prefab.Pos;
@@ -24,7 +24,7 @@ public class HiveSpire implements IHiveSpire
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
 
     PosWorld location;
-
+    DarkSchematic spireSchematic;
     Hivemind hivemind;
     String hiveName = "world";
 
@@ -68,6 +68,7 @@ public class HiveSpire implements IHiveSpire
     {
         this.getHive().addToHive(this);
         this.scanArea();
+        this.buildSpire(this.size);
     }
 
     public void scanArea()
@@ -83,7 +84,15 @@ public class HiveSpire implements IHiveSpire
             {
                 for (z = start.z(); z <= start.z() && z >= end.z(); z--)
                 {
-                    this.onScanBlock(new Pos(x, y, z));
+                    Pos pos = new Pos(x, y, z);
+                    int id = pos.getBlockID(getLocation().world);
+                    int meta = pos.getBlockMeta(getLocation().world);
+                    Block block = Block.blocksList[id];
+                    TileEntity entity = pos.getTileEntity(getLocation().world);
+                    if (entity instanceof TileEntityChest && !inventory.contains(entity))
+                    {
+                        inventory.add((IInventory) entity);
+                    }
                 }
             }
         }
@@ -96,18 +105,11 @@ public class HiveSpire implements IHiveSpire
             World world = this.getLocation().world;
             Pos pos = this.getLocation();
             this.size = 1;
-        }
-    }
-
-    public void onScanBlock(Pos pos)
-    {
-        int id = pos.getBlockID(getLocation().world);
-        int meta = pos.getBlockMeta(getLocation().world);
-        Block block = Block.blocksList[id];
-        TileEntity entity = pos.getTileEntity(getLocation().world);
-        if (entity instanceof TileEntityChest && !inventory.contains(entity))
-        {
-            inventory.add((IInventory) entity);
+            if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
+            {
+                this.spireSchematic = new DarkSchematic("SpireOne").load();
+            }
+            this.spireSchematic.build(this.getLocation(), false, true, null);
         }
     }
 

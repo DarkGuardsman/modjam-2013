@@ -28,7 +28,7 @@ public class DarkSchematic
     public static final String spireCore = "C";
     public Pos center;
     public Pos size;
-    String fileName;
+    public String fileName;
 
     public DarkSchematic(String fileName)
     {
