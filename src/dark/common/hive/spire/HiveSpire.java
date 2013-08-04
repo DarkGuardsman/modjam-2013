@@ -26,7 +26,7 @@ public class HiveSpire implements IHiveSpire
     /** Static list of spire since they run outside the map */
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
 
-    public static HashMap<Integer, Pair<Integer, String>> level_List = new HashMap<Integer, Pair<Integer, String>>();
+    public static HashMap<Integer, Pair<Integer, Integer>> level_List = new HashMap<Integer, Pair<Integer, Integer>>();
 
     PosWorld location;
     DarkSchematic spireSchematic;
@@ -40,8 +40,8 @@ public class HiveSpire implements IHiveSpire
 
     static
     {
-        level_List.put(1, new Pair<Integer, String>(10, "SpireOne"));
-        level_List.put(2, new Pair<Integer, String>(30, "SpireTwo"));
+        level_List.put(1, new Pair<Integer, Integer>(10, 0));
+        level_List.put(2, new Pair<Integer, Integer>(30, 18));
     }
 
     public HiveSpire(TileEntitySpire core)
@@ -142,6 +142,13 @@ public class HiveSpire implements IHiveSpire
     public void buildSpire()
     {
         System.out.println("Spire replicating itself at size " + this.size);
+        int drop = 0;
+        if(this.level_List.containsKey(this.size))
+        {
+            drop = level_List.get(this.size).getTwo();
+        }
+        this.location = new PosWorld(this.location.world, new Pos(this.location.xx, this.location.yy - drop, this.location.zz));
+
         if (this.size == 0)
         {
             this.size = 1;
@@ -158,8 +165,7 @@ public class HiveSpire implements IHiveSpire
             {
                 this.spireSchematic = new DarkSchematic("SpireTwo").load();
             }
-            this.location = new PosWorld(this.location.world, new Pos(this.location.xx, this.location.yy - 17, this.location.zz));
-        }
+             }
         if (this.spireSchematic != null)
         {
             this.spireSchematic.build(this.getLocation(), false, true, null);
