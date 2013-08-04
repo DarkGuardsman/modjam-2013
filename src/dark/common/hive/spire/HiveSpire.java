@@ -48,7 +48,7 @@ public class HiveSpire implements IHiveSpire
     {
         level_List.put(1, new Pair<Integer, Integer>(10, 0));
         level_Schematic.put(1, "SpireOne");
-        level_List.put(2, new Pair<Integer, Integer>(30, 18));
+        level_List.put(2, new Pair<Integer, Integer>(20, 18));
         level_Schematic.put(2, "SpireTwo");
     }
 
@@ -111,12 +111,12 @@ public class HiveSpire implements IHiveSpire
     public List<Entity> getEntitiesInRange()
     {
         List<Entity> entityList = new ArrayList<Entity>();
-        int delta = size * 5;
+        int delta = size * 50;
         if (level_List.containsKey(this.size))
         {
             delta = level_List.get(this.size).getOne();
         }
-        entityList.addAll(this.getLocation().world.getEntitiesWithinAABB(Entity.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(delta, delta, delta))));
+        entityList.addAll(this.getLocation().world.getEntitiesWithinAABB(Entity.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(delta, delta + 50, delta))));
         return entityList;
     }
 

@@ -34,7 +34,7 @@ public class DarkSchematic
 
     public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<Pos, Pair<Integer, Integer>>();
     public NBTTagCompound extraData = new NBTTagCompound();
-    public Pos center;
+    private Pos center;
     public Pos size;
     public String fileName;
 
@@ -69,8 +69,7 @@ public class DarkSchematic
     {
         int deltaX, deltaY, deltaZ;
         Pos start = new Pos(pos.xx > pos2.xx ? pos2.xx : pos.xx, pos.yy > pos2.yy ? pos2.yy : pos.yy, pos.zz > pos2.zz ? pos2.zz : pos.zz);
-        this.center = new Pos();
-        if (pos.xx < pos2.xx)
+       if (pos.xx < pos2.xx)
         {
             deltaX = pos2.x() - pos.x() + 1;
         }
@@ -269,7 +268,8 @@ public class DarkSchematic
         if (placementMap != null && posWorld != null)
             for (Entry<Pos, Pair<Integer, Integer>> entry : placementMap.entrySet())
             {
-                Pos setPos = new Pos(posWorld.xx - offset.xx + entry.getKey().xx, posWorld.yy - offset.yy + entry.getKey().yy, posWorld.zz - offset.zz + entry.getKey().zz);
+                Pos setPos = posWorld.clone().sub(offset).add(entry.getKey());
+                //Pos setPos = new Pos(posWorld.xx - offset.xx + entry.getKey().xx, posWorld.yy - offset.yy + entry.getKey().yy, posWorld.zz - offset.zz + entry.getKey().zz);
                 if (entry.getValue().getOne() != 0 && !replaceAir || replaceAir)
                 {
                     if (setPos.getTileEntity(posWorld.world) == null && !ignore.contains(setPos))

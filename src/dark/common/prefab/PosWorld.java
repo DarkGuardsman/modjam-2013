@@ -18,6 +18,12 @@ public class PosWorld extends Pos
     }
 
     @Override
+    public String toString()
+    {
+        return world.provider.dimensionId + "D " + x() + "X " + y() + "Y " + z() + "Z ";
+    }
+
+    @Override
     public boolean equals(Object paramObject)
     {
         if (super.equals(paramObject) && paramObject instanceof PosWorld)

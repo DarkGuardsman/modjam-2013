@@ -135,7 +135,7 @@ public class ItemWorldEdit extends Item
                 HiveSpire.buildSpire(hiveSpire, HiveSpire.MAX_SIZE);
                 if (hiveSpire.spireSchematic != null)
                 {
-                    hiveSpire.spireSchematic.movePlayerToSpawn(hiveSpire.getLocation().sub(hiveSpire.spireSchematic.getCenter()), player);
+                    hiveSpire.spireSchematic.movePlayerToSpawn(hiveSpire.getLocation().clone().sub(hiveSpire.spireSchematic.getCenter()), player);
                 }
             }
             else if (stack.getItemDamage() == 2)

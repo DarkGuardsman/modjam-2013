@@ -126,7 +126,7 @@ public class Pos implements Cloneable
 
     public AxisAlignedBB expandBound(Pos end)
     {
-        return AxisAlignedBB.getBoundingBox(xx, yy, zz, xx, yy, zz).expand(end.xx, end.yy, end.zz);
+        return AxisAlignedBB.getBoundingBox(xx - .1, yy - .1, zz - .1, xx + .1, yy + .1, zz + .1).expand(end.xx, end.yy, end.zz);
     }
 
     public Pos multi(double d)
