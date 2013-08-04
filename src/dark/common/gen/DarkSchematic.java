@@ -24,8 +24,6 @@ public class DarkSchematic
     public HashMap<Pos, Pair<Integer, Integer>> blocks = new HashMap<Pos, Pair<Integer, Integer>>();
     public static final String BlockList = "BlockList";
     /* Schematic save some blockIDs to prevent mess ups with change in blockIDs */
-    public static final String spireBlock = "B";
-    public static final String spireCore = "C";
     public static final String trapID = "D";
     public static boolean mapSet = false;
     public static HashMap<Integer, Pair<String, Integer>> pathBlockMap = new HashMap<Integer, Pair<String, Integer>>();
@@ -42,6 +40,8 @@ public class DarkSchematic
         {
             pathBlockMap.put(1, new Pair<String, Integer>("AA", Block.oreGold.blockID));
             pathBlockMap.put(2, new Pair<String, Integer>("AB", Block.oreLapis.blockID));
+            blockChangeIDs.put("B", DarkBotMain.blockDeco.blockID);
+            blockChangeIDs.put("C", DarkBotMain.blockDeco.blockID);
         }
     }
 
@@ -117,14 +117,9 @@ public class DarkSchematic
                         boolean flag = false;
                         if (out.length > 0)
                         {
-                            if (out.equals(spireBlock))
+                            if (blockChangeIDs.containsKey(b))
                             {
-                                b = DarkBotMain.blockDeco.blockID;
-                            }
-                            else if (out.equals(spireCore))
-                            {
-                                b = DarkBotMain.blockCore.blockID;
-                                flag = true;
+                                b = blockChangeIDs.get(b);
                             }
                             else
                             {
@@ -215,13 +210,16 @@ public class DarkSchematic
         System.out.println("Building schematic " + posWorld.toString());
         Pos cen = this.center;
         int pathMark = 0;
-        if (path == 1)
+        List<Integer> replaceIDs = new ArrayList<Integer>();
+        for(Entry<Integer,Pair<String,Integer>> entry : pathBlockMap.entrySet())
         {
-            pathMark = wallBID.getTwo();
-        }
-        if(path == 2)
-        {
-            pathMark = wallAID.getTwo();
+            if(entry.getKey() == path)
+            {
+                pathMark = entry.getValue().getTwo();
+            }else
+            {
+                replaceIDs.add(entry.getValue().getTwo());
+            }
         }
         if (!center)
         {
