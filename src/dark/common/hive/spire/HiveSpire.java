@@ -7,12 +7,12 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.AxisAlignedBB;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.DarkSchematic;
 import dark.common.hive.HiveManager;
@@ -28,7 +28,6 @@ public class HiveSpire implements IHiveSpire
 
     /** Static list of spire since they run outside the map */
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
-
     public static HashMap<Integer, Pair<Integer, Integer>> level_List = new HashMap<Integer, Pair<Integer, Integer>>();
     public static HashMap<Integer, String> level_Schematic = new HashMap<Integer, String>();
 
@@ -37,6 +36,7 @@ public class HiveSpire implements IHiveSpire
     Hivemind hivemind;
     String hiveName = "world";
 
+    private List<Pair<Pos, String>> loadedTraps = new ArrayList<Pair<Pos, String>>();
     private int size = 0;
     private boolean built = false;
 
@@ -118,6 +118,26 @@ public class HiveSpire implements IHiveSpire
         return entityList;
     }
 
+    public void triggerTrapIfNear(EntityPlayer player)
+    {
+        if (player != null)
+        {
+            Pos pos = new Pos(player);
+            for (Pair<Pos, String> trap : this.loadedTraps)
+            {
+                Pos trapPos = trap.getOne();
+                String type = trap.getTwo();
+                if (type.equalsIgnoreCase("fall"))
+                {
+                    if (pos.getDistanceFrom(trapPos) < 1)
+                    {
+
+                    }
+                }
+            }
+        }
+    }
+
     public void scanArea()
     {
         //TODO add one mine timer to suck up all items and store them
@@ -191,9 +211,30 @@ public class HiveSpire implements IHiveSpire
             {
                 int path = new Random().nextBoolean() ? 1 : 2;
                 spire.spireSchematic.buildSpire(spire.getLocation(), true, true, path);
+                spire.loadTraps();
             }
         }
 
+    }
+
+    private void loadTraps()
+    {
+        if (this.spireSchematic != null)
+        {
+            NBTTagCompound traps = this.spireSchematic.extraData.getCompoundTag("traps");
+            int count = traps.getInteger("count");
+            List<Pair<Pos, String>> trapList = new ArrayList<Pair<Pos, String>>();
+            for (int i = 0; i < count; i++)
+            {
+                NBTTagCompound trap = traps.getCompoundTag("trap" + i);
+                if (trap != null && !trap.hasNoTags())
+                {
+                    trapList.add(new Pair<Pos, String>(new Pos().load(trap.getCompoundTag("start")), trap.getString("type")));
+                }
+            }
+            this.loadedTraps.clear();
+            this.loadedTraps.addAll(trapList);
+        }
     }
 
     @Override

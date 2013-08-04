@@ -3,6 +3,7 @@ package dark.common.hive.spire;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,6 +38,7 @@ public class TileEntitySpire extends TileEntityMain
             {
                 for (Entity entity : list)
                 {
+                    Pos pos = new Pos(entity);
                     if(entity instanceof EntityPlayer)
                     {
 

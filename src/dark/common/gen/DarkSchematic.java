@@ -113,7 +113,7 @@ public class DarkSchematic
                     {
                         blockID = DarkBotMain.blockDeco.blockID;
                         blockMeta = 0;
-                        this.defineTrap(0, new Pos(x, y, z), new Pos(x, y, z));
+                        this.defineTrap(0, new Pos(x, y, z));
                     }
                     blocks.put(new Pos(x, y, z), new Pair<Integer, Integer>(blockID, blockMeta));
                 }
@@ -318,7 +318,7 @@ public class DarkSchematic
 
     }
 
-    public void defineTrap(int type, Pos start, Pos end)
+    public void defineTrap(int type, Pos start)
     {
         String t = null;
         if (type == 0)
@@ -330,12 +330,11 @@ public class DarkSchematic
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("type", t);
             tag.setCompoundTag("start", start.save(new NBTTagCompound()));
-            tag.setCompoundTag("end", end.save(new NBTTagCompound()));
 
             NBTTagCompound trap = this.extraData.getCompoundTag("traps");
             int c = trap.getInteger("count");
             trap.setCompoundTag("trap" + c + 1, tag);
-            trap.setInteger("count", c);
+            trap.setInteger("count", c + 1);
             this.extraData.setCompoundTag("traps", trap);
         }
 
