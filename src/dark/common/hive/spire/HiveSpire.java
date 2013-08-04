@@ -175,7 +175,7 @@ public class HiveSpire implements IHiveSpire
 
             if (spire.spireSchematic != null)
             {
-                spire.spireSchematic.build(spire.getLocation(), false, true, null);
+                spire.spireSchematic.buildSpire(spire.getLocation(), false, true, 1);
             }
         }
 

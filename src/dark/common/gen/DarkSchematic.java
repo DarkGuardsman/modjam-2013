@@ -274,18 +274,16 @@ public class DarkSchematic
         {
             int blockID = entry.getValue().getOne();
             int meta = entry.getValue().getTwo();
-            if (pathMark != 0)
+
+            if (blockID == pathMark)
             {
-                if (blockID == pathMark)
-                {
-                    blockID = 0;
-                    meta = 0;
-                }
-                else if (replaceIDs.contains(blockID))
-                {
-                    blockID = DarkBotMain.blockDeco.blockID;
-                    meta = 0;
-                }
+                blockID = 0;
+                meta = 0;
+            }
+            else if (replaceIDs.contains(blockID))
+            {
+                blockID = DarkBotMain.blockDeco.blockID;
+                meta = 0;
             }
             newMap.put(entry.getKey(), new Pair<Integer, Integer>(blockID, meta));
 

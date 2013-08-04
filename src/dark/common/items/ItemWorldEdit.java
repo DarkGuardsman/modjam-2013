@@ -134,7 +134,7 @@ public class ItemWorldEdit extends Item
                 if (schematic != null)
                 {
                     player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Pasting schematic"));
-                    schematic.build(new PosWorld(world, x, y, z), false, true, null);
+                    schematic.build(new PosWorld(world, x, y, z), true);
                 }
                 else
                 {
