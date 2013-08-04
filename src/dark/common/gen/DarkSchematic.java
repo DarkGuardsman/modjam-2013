@@ -29,7 +29,7 @@ public class DarkSchematic
     public static boolean mapSet = false;
     public static HashMap<Integer, Pair<String, Integer>> pathBlockMap = new HashMap<Integer, Pair<String, Integer>>();
     public static HashMap<String, Integer> blockChangeIDs = new HashMap<String, Integer>();
-
+    public NBTTagCompound extraData = new NBTTagCompound();
     public Pos center;
     public Pos size;
     public String fileName;
@@ -116,6 +116,7 @@ public class DarkSchematic
             NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".dat")));
             size = new Pos(nbtdata.getInteger("sizeX"), nbtdata.getInteger("sizeY"), nbtdata.getInteger("sizeZ"));
             center = new Pos(nbtdata.getInteger("centerX"), nbtdata.getInteger("centerY"), nbtdata.getInteger("centerZ"));
+            this.extraData = nbtdata.getCompoundTag("extradata");
             NBTTagCompound blockSet = nbtdata.getCompoundTag(BlockList);
             for (int i = 0; i < blockSet.getInteger("count"); i++)
             {
