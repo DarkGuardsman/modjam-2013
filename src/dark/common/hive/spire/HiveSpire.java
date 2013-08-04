@@ -44,7 +44,7 @@ public class HiveSpire implements IHiveSpire
         level_List.put(1, new Pair<Integer, Integer>(10, 0));
         level_Schematic.put(1, "SpireOne");
         level_List.put(2, new Pair<Integer, Integer>(30, 18));
-        level_Schematic.put(1, "SpireTwo");
+        level_Schematic.put(2, "SpireTwo");
     }
 
     public HiveSpire(TileEntitySpire core)
