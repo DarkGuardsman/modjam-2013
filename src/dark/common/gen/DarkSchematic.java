@@ -29,6 +29,7 @@ public class DarkSchematic
     public static boolean mapSet = false;
     public static HashMap<Integer, Pair<String, Integer>> pathBlockMap = new HashMap<Integer, Pair<String, Integer>>();
     public static HashMap<String, Integer> blockChangeIDs = new HashMap<String, Integer>();
+    public static HashMap<Integer, String> blockChangeIDReverse = new HashMap<Integer, String>();
     public NBTTagCompound extraData = new NBTTagCompound();
     public Pos center;
     public Pos size;
@@ -42,7 +43,9 @@ public class DarkSchematic
             pathBlockMap.put(1, new Pair<String, Integer>("AA", Block.oreGold.blockID));
             pathBlockMap.put(2, new Pair<String, Integer>("AB", Block.oreLapis.blockID));
             blockChangeIDs.put("B", DarkBotMain.blockDeco.blockID);
-            blockChangeIDs.put("C", DarkBotMain.blockDeco.blockID);
+            blockChangeIDReverse.put(DarkBotMain.blockDeco.blockID, "B");
+            blockChangeIDs.put("C", DarkBotMain.blockCore.blockID);
+            blockChangeIDReverse.put(DarkBotMain.blockCore.blockID, "C");
         }
     }
 
@@ -198,7 +201,9 @@ public class DarkSchematic
             for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
             {
                 String output = "";
-                output += "" + (entry.getValue().getOne() != sudoID ? entry.getValue().getOne() : 0);
+                String block = "" + entry.getValue().getOne();
+                if (entry.getValue().getOne())
+                    output += block;
                 output += ":" + entry.getValue().getTwo();
                 output += ":" + entry.getKey().x() + ":" + entry.getKey().y() + ":" + entry.getKey().z();
                 blockNBT.setString("Block" + i, output);
