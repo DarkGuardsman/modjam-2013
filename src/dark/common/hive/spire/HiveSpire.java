@@ -1,6 +1,7 @@
 package dark.common.hive.spire;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -13,14 +14,19 @@ import dark.common.api.IHiveSpire;
 import dark.common.gen.DarkSchematic;
 import dark.common.hive.HiveManager;
 import dark.common.hive.Hivemind;
+import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
 /** Hive node that handles most of the work for the hive without getting in the main hives way */
 public class HiveSpire implements IHiveSpire
 {
+    public static final int MAX_SIZE = 2;
+
     /** Static list of spire since they run outside the map */
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
+
+    public static HashMap<Integer, Pair<Integer, String>> level_List = new HashMap<Integer, Pair<Integer, String>>();
 
     PosWorld location;
     DarkSchematic spireSchematic;
@@ -28,9 +34,15 @@ public class HiveSpire implements IHiveSpire
     String hiveName = "world";
 
     private int size = 0;
-    public static final int maxLevel = 2;
+    private boolean built = false;
 
     List<IInventory> inventory = new ArrayList<IInventory>();
+
+    static
+    {
+        level_List.put(1, new Pair<Integer, String>(10, "SpireOne"));
+        level_List.put(2, new Pair<Integer, String>(30, "SpireTwo"));
+    }
 
     public HiveSpire(TileEntitySpire core)
     {
@@ -68,7 +80,6 @@ public class HiveSpire implements IHiveSpire
     {
         this.getHive().addToHive(this);
         this.scanArea();
-        this.buildSpire(this.size);
     }
 
     public void setInvalid()
@@ -91,13 +102,21 @@ public class HiveSpire implements IHiveSpire
 
     public void scanArea()
     {
-        this.size = Math.min(this.size++, this.maxLevel);
-        this.buildSpire(this.size);
+        //TODO add one mine timer to suck up all items and store them
+        if (this.built = false)
+        {
+            this.buildSpire();
+            this.built = true;
+        }
         System.out.println("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
-        int delta = size * 5;
+        HashMap<Pos, Pair<Integer, Integer>> scanList = new HashMap<Pos, Pair<Integer, Integer>>();
+
+        int delta = size * 5; //TODO change this to a map of schematics per size
+
         Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
         Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 0), getLocation().zz - delta);
         int x, y, z;
+
         for (y = start.y(); y <= start.y() && y >= end.y(); y--)
         {
             for (x = start.x(); x <= start.x() && x >= end.x(); x--)
@@ -113,24 +132,28 @@ public class HiveSpire implements IHiveSpire
                     {
                         inventory.add((IInventory) entity);
                     }
+                    scanList.put(pos, new Pair<Integer, Integer>(id, meta));
                 }
             }
         }
+        //TODO compare schematic to scan list and mark for correction
     }
 
-    public void buildSpire(int level)
+    public void buildSpire()
     {
         System.out.println("Spire replicating itself at size " + this.size);
-        if (level == 1)
+        if (this.size == 0)
         {
+            this.size = 1;
             if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
             {
                 this.spireSchematic = new DarkSchematic("SpireOne").load();
             }
             this.spireSchematic.build(this.getLocation(), false, true, null);
         }
-        if (level == 2)
+        if (this.size == 1)
         {
+            this.size = 2;
             if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireTwo"))
             {
                 this.spireSchematic = new DarkSchematic("SpireTwo").load();
