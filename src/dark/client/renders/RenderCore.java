@@ -17,14 +17,16 @@ import dark.common.DarkBotMain;
 public class RenderCore extends TileEntitySpecialRenderer
 {
 
-    private IModelCustom modeCore;
+    private IModelCustom modelCore;
+    private IModelCustom modelClaw;
     private float scale;
     private String texture;
     public static float xChange, yChange, zChange, r;
 
     public RenderCore(String modelName, String textureName, float scaleDown)
     {
-        modeCore = AdvancedModelLoader.loadModel("/assets/dark/models/" + modelName + ".obj");
+        modelCore = AdvancedModelLoader.loadModel("/assets/dark/models/Core.Render.obj");
+        modelCore = AdvancedModelLoader.loadModel("/assets/dark/models/Core.Holder.obj");
         this.scale = scaleDown;
         this.texture = textureName;
     }
@@ -32,21 +34,21 @@ public class RenderCore extends TileEntitySpecialRenderer
     @Override
     public void renderTileEntityAt(TileEntity entity, double xx, double yy, double zz, float f)
     {
-        render(entity, xx, yy, zz, scale);
+        render(entity, xx, yy, zz);
     }
 
-    private void render(TileEntity laser, double xx, double yy, double zz, float s)
+    private void render(TileEntity laser, double xx, double yy, double zz)
     {
 
         GL11.glPushMatrix();
         GL11.glTranslated(xx + xChange + .50, yy + yChange + 2.2, zz + zChange + .50);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glScalef(s, s, s);
+        GL11.glScalef(1, 1, 1);
         GL11.glRotatef(r, 0F, 1F, 0F);
         r += 2;
 
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/" + texture + ".png"));
-        modeCore.renderAll();
+        modelCore.renderAll();
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glPopMatrix();
