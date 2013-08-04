@@ -17,14 +17,14 @@ import dark.common.DarkBotMain;
 public class RenderCore extends TileEntitySpecialRenderer
 {
 
-    private IModelCustom modelTurret;
+    private IModelCustom modeCore;
     private float scale;
     private String texture;
     public static float xChange, yChange, zChange, r;
 
     public RenderCore(String modelName, String textureName, float scaleDown)
     {
-        modelTurret = AdvancedModelLoader.loadModel("/assets/dark/models/" + modelName + ".obj");
+        modeCore = AdvancedModelLoader.loadModel("/assets/dark/models/" + modelName + ".obj");
         this.scale = scaleDown;
         this.texture = textureName;
     }
@@ -46,7 +46,7 @@ public class RenderCore extends TileEntitySpecialRenderer
         r += 2;
 
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/" + texture + ".png"));
-        modelTurret.renderAll();
+        modeCore.renderAll();
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glPopMatrix();
