@@ -44,22 +44,14 @@ public class RenderCore extends TileEntitySpecialRenderer
         GL11.glScalef(1, 1, 1);
         GL11.glRotatef(r, 0F, 1F, 0F);
 
-        r += 2;
-        if(r > 180)
-        {
-            r = r % 180;
-        }
-        if(r < -180)
-        {
-            r = -(Math.abs(r) % 180);
-        }
+        r = ((r + 2) % 360) - 180;
 
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/Core.Render.png"));
         modelCore.renderAll();
 
         GL11.glTranslated(0, -.5, 0);
         GL11.glScalef(.8f, .8f, .8f);
-        GL11.glRotatef(Math.-r, 0F, 1F, 0F);
+        //GL11.glRotatef(-r, 0F, 1F, 0F);
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/Core.Holder.png"));
         modelClaw.renderAll();
 
