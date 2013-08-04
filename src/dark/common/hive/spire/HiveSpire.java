@@ -112,7 +112,12 @@ public class HiveSpire implements IHiveSpire
         }
         if (level == 1)
         {
-
+            this.size = 2;
+            if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
+            {
+                this.spireSchematic = new DarkSchematic("SpireTwo").load();
+            }
+            this.spireSchematic.build(this.getLocation(), false, true, null);
         }
     }
 
