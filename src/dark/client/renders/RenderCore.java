@@ -39,7 +39,7 @@ public class RenderCore extends TileEntitySpecialRenderer
     {
 
         GL11.glPushMatrix();
-        GL11.glTranslated(xx + xChange + .50, yy + yChange + 2.2, zz + zChange + .50);
+        GL11.glTranslated(xx + .50, yy + 2.2, zz + .50);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(1, 1, 1);
         GL11.glRotatef(r, 0F, 1F, 0F);
@@ -49,11 +49,11 @@ public class RenderCore extends TileEntitySpecialRenderer
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/Core.Render.png"));
         modelCore.renderAll();
 
-        GL11.glTranslated(0, -.5, 0);
+        GL11.glTranslated(0 + xChange, -.5 + yChange, 0 + zChange);
         GL11.glScalef(.8f, .8f, .8f);
         //GL11.glRotatef(-r, 0F, 1F, 0F);
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/Core.Holder.png"));
-        modelClaw.renderAll();
+       // modelClaw.renderAll();
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glPopMatrix();

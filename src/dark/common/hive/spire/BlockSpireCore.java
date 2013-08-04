@@ -6,11 +6,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import dark.client.renders.RenderCore;
 import dark.common.prefab.BlockMain;
 import dark.common.prefab.Pos;
+import dark.common.tiles.BlockDecor;
 
 public class BlockSpireCore extends BlockMain
 {
@@ -22,6 +24,16 @@ public class BlockSpireCore extends BlockMain
         this.setResistance(100000);
         this.setCreativeTab(CreativeTabs.tabBlock);
 
+    }
+
+    @Override
+    public Icon getIcon(int side, int meta)
+    {
+        if (BlockDecor.icons[meta] != null)
+        {
+            return BlockDecor.icons[meta];
+        }
+        return this.machineSide;
     }
 
     @Override

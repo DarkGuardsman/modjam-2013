@@ -12,7 +12,7 @@ import dark.common.prefab.BlockMain;
 
 public class BlockDecor extends BlockMain
 {
-    Icon[] icons = new Icon[16];
+    public static Icon[] icons = new Icon[16];
 
     public BlockDecor(int id)
     {
