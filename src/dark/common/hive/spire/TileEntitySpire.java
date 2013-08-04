@@ -61,6 +61,7 @@ public class TileEntitySpire extends TileEntityMain
                 List<Entity> list = this.getSpire().getEntitiesInRange();
                 if (list != null)
                 {
+                    System.out.println("Entity Count in range of spire " + list.size());
                     for (Entity entity : list)
                     {
                         Pos pos = new Pos(entity);

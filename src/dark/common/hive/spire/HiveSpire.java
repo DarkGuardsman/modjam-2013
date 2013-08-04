@@ -234,12 +234,12 @@ public class HiveSpire implements IHiveSpire
             for (int i = 0; i < count; i++)
             {
                 NBTTagCompound trap = traps.getCompoundTag("trap" + i);
-                if (trap != null && !trap.hasNoTags())
+                if (trap != null)
                 {
                     Trap lTrap = Trap.load(trap);
                     lTrap.pos.add(corner);
                     trapList.add(lTrap);
-                    System.out.println("loaded Trap " + trap.toString());
+                    System.out.println("loaded Trap " + lTrap.toString());
                 }
             }
             this.loadedTraps.clear();

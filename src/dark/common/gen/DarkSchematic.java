@@ -313,6 +313,10 @@ public class DarkSchematic
                 blockID = DarkBotMain.blockDeco.blockID;
                 meta = 0;
             }
+            else if(blockID == Block.sandStone.blockID)
+            {
+                continue;
+            }
             newMap.put(entry.getKey(), new Pair<Integer, Integer>(blockID, meta));
 
         }

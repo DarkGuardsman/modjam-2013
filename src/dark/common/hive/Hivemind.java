@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import dark.common.api.IHiveObject;
@@ -40,6 +41,7 @@ public class Hivemind implements IHiveObject
             this.addToHive(hiveObjects[i]);
         }
         HiveManager.registerHive(this);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public PosWorld getLocation()
