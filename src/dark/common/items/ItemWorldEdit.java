@@ -120,7 +120,7 @@ public class ItemWorldEdit extends Item
             else if (stack.getItemDamage() == 1)
             {
                 System.out.println("Calling to build");
-                new DarkSchematic("SpireOne").load().build(new PosWorld(world, x, y, z), true, null);
+                new DarkSchematic("SpireTwo").load().build(new PosWorld(world, x, y - 19, z), false, true, null);
 
             }
             else if (stack.getItemDamage() == 2)

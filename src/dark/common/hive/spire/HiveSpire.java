@@ -9,7 +9,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.world.World;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.DarkSchematic;
 import dark.common.hive.HiveManager;
@@ -136,9 +135,13 @@ public class HiveSpire implements IHiveSpire
             {
                 this.spireSchematic = new DarkSchematic("SpireTwo").load();
             }
-            this.spireSchematic.build(this.getLocation(), false, true, null);
-            this.location = new PosWorld(this.location.world, this.spireSchematic.center);
+            this.location = new PosWorld(this.location.world, new Pos(this.location.xx, this.location.yy - 17, this.location.zz));
         }
+        if (this.spireSchematic != null)
+        {
+            this.spireSchematic.build(this.getLocation(), false, true, null);
+        }
+
     }
 
     @Override
