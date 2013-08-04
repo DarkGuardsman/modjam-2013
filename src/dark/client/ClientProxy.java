@@ -10,6 +10,6 @@ public class ClientProxy extends CommonProxy
 
     public void init()
     {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpire.class, new RenderCore("CoreRender", "Core.Render", 1));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpire.class, new RenderCore());
     }
 }
