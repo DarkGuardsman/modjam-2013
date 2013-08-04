@@ -27,8 +27,10 @@ public class DarkSchematic
     public static final String spireBlock = "B";
     public static final String spireCore = "C";
     public static final String trapID = "D";
-    public static final String wallAID = "AA";
-    public static final String wallBID = "AB";
+    public static boolean mapSet = false;
+    public static HashMap<Integer, Pair<String, Integer>> pathBlockMap = new HashMap<Integer, Pair<String, Integer>>();
+    public static HashMap<String, Integer> blockChangeIDs = new HashMap<String, Integer>();
+
     public Pos center;
     public Pos size;
     public String fileName;
@@ -36,6 +38,11 @@ public class DarkSchematic
     public DarkSchematic(String fileName)
     {
         this.fileName = fileName;
+        if (!mapSet)
+        {
+            pathBlockMap.put(1, new Pair<String, Integer>("AA", Block.oreGold.blockID));
+            pathBlockMap.put(2, new Pair<String, Integer>("AB", Block.oreLapis.blockID));
+        }
     }
 
     public DarkSchematic loadWorldSelection(World world, Pos pos, Pos pos2)
@@ -200,13 +207,22 @@ public class DarkSchematic
 
     public void build(PosWorld posWorld, boolean ignoreAir, List<Pos> ignore)
     {
-        this.build(posWorld, ignoreAir, true, ignore);
+        this.build(posWorld, ignoreAir, true, 0, ignore);
     }
 
     public void build(PosWorld posWorld, boolean ignoreAir, boolean center, int path, List<Pos> ignore)
     {
         System.out.println("Building schematic " + posWorld.toString());
         Pos cen = this.center;
+        int pathMark = 0;
+        if (path == 1)
+        {
+            pathMark = wallBID.getTwo();
+        }
+        if(path == 2)
+        {
+            pathMark = wallAID.getTwo();
+        }
         if (!center)
         {
             cen = new Pos();
@@ -226,7 +242,15 @@ public class DarkSchematic
             {
                 if (setPos.getTileEntity(posWorld.world) == null && !ignore.contains(setPos))
                 {
-                    setPos.setBlock(posWorld.world, entry.getValue().getOne(), entry.getValue().getTwo());
+                    int blockID = entry.getValue().getOne();
+                    if(pathMark != 0)
+                    {
+                        if(blockID == pathMark)
+                        {
+                            blockID = DarkBotMain.blockDeco.blockID;
+                        }else if( blockID == wallAID.getTwo() || blockID == wallAID.ge)
+                    }
+                    setPos.setBlock(posWorld.world, blockID, entry.getValue().getTwo());
                 }
             }
         }
