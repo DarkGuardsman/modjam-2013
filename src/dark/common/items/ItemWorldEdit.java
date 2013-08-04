@@ -18,6 +18,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import dark.common.DarkBotMain;
 import dark.common.gen.DarkSchematic;
+import dark.common.hive.spire.HiveSpire;
+import dark.common.hive.spire.TileEntitySpire;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
@@ -119,9 +121,8 @@ public class ItemWorldEdit extends Item
             }
             else if (stack.getItemDamage() == 1)
             {
-                System.out.println("Calling to build");
-                new DarkSchematic("SpireTwo").load().build(new PosWorld(world, x, y - 19, z), false, true, null);
-
+                player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Building Max Size Spire at " + new Pos(x, y, z).toString()));
+                HiveSpire.buildSpire(new HiveSpire(new TileEntitySpire()), HiveSpire.MAX_SIZE);
             }
             else if (stack.getItemDamage() == 2)
             {

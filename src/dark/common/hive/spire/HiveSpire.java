@@ -27,6 +27,7 @@ public class HiveSpire implements IHiveSpire
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
 
     public static HashMap<Integer, Pair<Integer, Integer>> level_List = new HashMap<Integer, Pair<Integer, Integer>>();
+    public static HashMap<Integer, String> level_Schematic = new HashMap<Integer, String>();
 
     PosWorld location;
     DarkSchematic spireSchematic;
@@ -41,7 +42,9 @@ public class HiveSpire implements IHiveSpire
     static
     {
         level_List.put(1, new Pair<Integer, Integer>(10, 0));
+        level_Schematic.put(1, "SpireOne");
         level_List.put(2, new Pair<Integer, Integer>(30, 18));
+        level_Schematic.put(1, "SpireTwo");
     }
 
     public HiveSpire(TileEntitySpire core)
@@ -105,33 +108,39 @@ public class HiveSpire implements IHiveSpire
         //TODO add one mine timer to suck up all items and store them
         if (this.built = false)
         {
-            this.buildSpire();
+            buildSpire(this,this.size);
             this.built = true;
         }
         System.out.println("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
         HashMap<Pos, Pair<Integer, Integer>> scanList = new HashMap<Pos, Pair<Integer, Integer>>();
 
         int delta = size * 5; //TODO change this to a map of schematics per size
-
-        Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
-        Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 0), getLocation().zz - delta);
-        int x, y, z;
-
-        for (y = start.y(); y <= start.y() && y >= end.y(); y--)
+        if (level_List.containsKey(this.size))
         {
-            for (x = start.x(); x <= start.x() && x >= end.x(); x--)
+            delta = level_List.get(this.size).getOne();
+        }
+        Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
+        Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 6), getLocation().zz - delta);
+
+        for (int y = start.y(); y <= start.y() && y >= end.y(); y--)
+        {
+            for (int x = start.x(); x <= start.x() && x >= end.x(); x--)
             {
-                for (z = start.z(); z <= start.z() && z >= end.z(); z--)
+                for (int z = start.z(); z <= start.z() && z >= end.z(); z--)
                 {
                     Pos pos = new Pos(x, y, z);
+
                     int id = pos.getBlockID(getLocation().world);
                     int meta = pos.getBlockMeta(getLocation().world);
+
                     Block block = Block.blocksList[id];
                     TileEntity entity = pos.getTileEntity(getLocation().world);
+
                     if (entity instanceof TileEntityChest && !inventory.contains(entity))
                     {
                         inventory.add((IInventory) entity);
                     }
+
                     scanList.put(pos, new Pair<Integer, Integer>(id, meta));
                 }
             }
@@ -139,36 +148,34 @@ public class HiveSpire implements IHiveSpire
         //TODO compare schematic to scan list and mark for correction
     }
 
-    public void buildSpire()
+    public static void buildSpire(HiveSpire spire, int level)
     {
-        System.out.println("Spire replicating itself at size " + this.size);
-        int drop = 0;
-        if(this.level_List.containsKey(this.size))
-        {
-            drop = level_List.get(this.size).getTwo();
-        }
-        this.location = new PosWorld(this.location.world, new Pos(this.location.xx, this.location.yy - drop, this.location.zz));
+        System.out.println("Spire replicating itself at size " + level);
 
-        if (this.size == 0)
+        if (level <= MAX_SIZE)
         {
-            this.size = 1;
-            if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireOne"))
+            int drop = 0;
+            String name = "SpireOne";
+            spire.size = level;
+
+            if (level_List.containsKey(level))
             {
-                this.spireSchematic = new DarkSchematic("SpireOne").load();
+                drop = level_List.get(level).getTwo();
             }
-            this.spireSchematic.build(this.getLocation(), false, true, null);
-        }
-        if (this.size == 1)
-        {
-            this.size = 2;
-            if (spireSchematic == null || !spireSchematic.fileName.equalsIgnoreCase("SpireTwo"))
+            if (level_Schematic.containsKey(level))
             {
-                this.spireSchematic = new DarkSchematic("SpireTwo").load();
+                name = level_Schematic.get(level);
             }
-             }
-        if (this.spireSchematic != null)
-        {
-            this.spireSchematic.build(this.getLocation(), false, true, null);
+            if (spire.spireSchematic == null || !spire.spireSchematic.fileName.equalsIgnoreCase(name))
+            {
+                spire.spireSchematic = new DarkSchematic(level_Schematic.get(level)).load();
+            }
+            spire.location = new PosWorld(spire.getLocation().world, new Pos(spire.getLocation().xx, Math.max(spire.getLocation().yy - drop, 6), spire.getLocation().zz));
+
+            if (spire.spireSchematic != null)
+            {
+                spire.spireSchematic.build(spire.getLocation(), false, true, null);
+            }
         }
 
     }
