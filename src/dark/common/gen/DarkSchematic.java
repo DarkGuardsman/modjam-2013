@@ -3,6 +3,8 @@ package dark.common.gen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -205,18 +207,41 @@ public class DarkSchematic
         this.build(posWorld, ignoreAir, true, 0, ignore);
     }
 
+    public static void buildNormal(PosWorld posWorld, Pos offset, boolean replaceAir, HashMap<Pos, Pair<Integer, Integer>> placementMap, Pos...ignoredSpots)
+    {
+        List<Pos> ignore = new ArrayList<Pos>();
+        ignore.addAll(Arrays.asList(ignoredSpots));
+        if (offset == null)
+        {
+            offset = new Pos();
+        }
+        if (placementMap != null && posWorld != null)
+            for (Entry<Pos, Pair<Integer, Integer>> entry : placementMap.entrySet())
+            {
+                Pos setPos = new Pos(posWorld.xx - offset.xx + entry.getKey().xx, posWorld.yy - offset.yy + entry.getKey().yy, posWorld.zz - offset.zz + entry.getKey().zz);
+                if (entry.getValue().getOne() != 0 && !replaceAir || replaceAir)
+                {
+                    if (setPos.getTileEntity(posWorld.world) == null && !ignore.contains(setPos))
+                    {
+                        setPos.setBlock(posWorld.world, entry.getValue().getOne(), entry.getValue().getTwo());
+                    }
+                }
+            }
+    }
+
     public void build(PosWorld posWorld, boolean ignoreAir, boolean center, int path, List<Pos> ignore)
     {
         System.out.println("Building schematic " + posWorld.toString());
         Pos cen = this.center;
         int pathMark = 0;
         List<Integer> replaceIDs = new ArrayList<Integer>();
-        for(Entry<Integer,Pair<String,Integer>> entry : pathBlockMap.entrySet())
+        for (Entry<Integer, Pair<String, Integer>> entry : pathBlockMap.entrySet())
         {
-            if(entry.getKey() == path)
+            if (entry.getKey() == path)
             {
                 pathMark = entry.getValue().getTwo();
-            }else
+            }
+            else
             {
                 replaceIDs.add(entry.getValue().getTwo());
             }
@@ -241,14 +266,21 @@ public class DarkSchematic
                 if (setPos.getTileEntity(posWorld.world) == null && !ignore.contains(setPos))
                 {
                     int blockID = entry.getValue().getOne();
-                    if(pathMark != 0)
+                    int meta = entry.getValue().getTwo();
+                    if (pathMark != 0)
                     {
-                        if(blockID == pathMark)
+                        if (blockID == pathMark)
+                        {
+                            blockID = 0;
+                            meta = 0;
+                        }
+                        else if (replaceIDs.contains(blockID))
                         {
                             blockID = DarkBotMain.blockDeco.blockID;
-                        }else if( blockID == wallAID.getTwo() || blockID == wallAID.ge)
+                            meta = 0;
+                        }
                     }
-                    setPos.setBlock(posWorld.world, blockID, entry.getValue().getTwo());
+                    setPos.setBlock(posWorld.world, blockID, meta);
                 }
             }
         }
