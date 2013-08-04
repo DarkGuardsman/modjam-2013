@@ -5,6 +5,7 @@ import java.io.File;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -15,6 +16,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
+import dark.common.hive.Hivemind;
 import dark.common.hive.spire.BlockSpireCore;
 import dark.common.hive.spire.TileEntitySpire;
 import dark.common.items.ItemBlockMain;
@@ -68,7 +70,7 @@ public class DarkBotMain
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        //TODO reg handlers
+        MinecraftForge.EVENT_BUS.register(Hivemind.class);
         GameRegistry.registerTileEntity(TileEntitySpire.class, "HiveSpire");
         //TODO reg entities
         proxy.init();

@@ -4,11 +4,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent.Save;
 import dark.common.api.IHiveObject;
 import dark.common.api.IHiveSpire;
+import dark.common.gen.NBTFileSaver;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
 
@@ -81,7 +85,7 @@ public class Hivemind implements IHiveObject
         {
             hiveTiles.add((TileEntity) obj);
         }
-        if(obj instanceof IHiveSpire)
+        if (obj instanceof IHiveSpire)
         {
             spires.add((IHiveSpire) obj);
         }
@@ -145,8 +149,6 @@ public class Hivemind implements IHiveObject
             world = ((IHiveSpire) obj).getLocation().world;
         }
 
-
-
         return hive;
     }
 
@@ -157,5 +159,24 @@ public class Hivemind implements IHiveObject
 
         }
 
+    }
+
+    @ForgeSubscribe
+    public void onWorldSave(Save event)
+    {
+        System.out.println("Hivemind has received a save event for dimID " + (event != null && event.world != null ? event.world.provider.dimensionId : "null"));
+        if (event != null && event.world != null && event.world == this.getLocation().world)
+        {
+            for (IHiveSpire spire : this.spires)
+            {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setInteger("xCoord", spire.getLocation().x());
+                tag.setInteger("yCoord", spire.getLocation().y());
+                tag.setInteger("zCoord", spire.getLocation().z());
+                tag.setString("HiveID", this.getHiveID());
+                spire.saveSpire(tag);
+                NBTFileSaver.saveNBTFile("HiveSpire_" + this.getHiveID() + "_" + this.getLocation().world.provider.dimensionId + "_", NBTFileSaver.getSaveFolder(), tag, true);
+            }
+        }
     }
 }
