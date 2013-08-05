@@ -58,7 +58,7 @@ public class HiveSpire implements IHiveSpire
     static
     {
         //Pair.two for level list stacks with its levels before it
-        level_List.put(1, new Pair<Integer, Integer>(10, 0));
+        level_List.put(1, new Pair<Integer, Integer>(30, 18));
         level_Schematic.put(1, "SpireTwo");
         //level_List.put(2, new Pair<Integer, Integer>(20, 18));
         //level_Schematic.put(2, "SpireThree");
@@ -98,10 +98,8 @@ public class HiveSpire implements IHiveSpire
         {
             double distance = Double.MAX_VALUE;
             HiveSpire spire = null;
-            Iterator<HiveSpire> it = staticList.iterator();
-            while (it.hasNext())
+            for (HiveSpire entry : staticList)
             {
-                HiveSpire entry = it.next();
                 double distanceTo = entry.getLocation().getDistanceFrom2D(location);
                 if (entry.getLocation().world == location.world && distanceTo < distance && distanceTo < i)
                 {
