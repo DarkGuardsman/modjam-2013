@@ -1,34 +1,21 @@
 package dark.common.entity;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import dark.common.hive.entity.EntityDefender;
 
-public class EntityBoss extends EntityDefender implements IBossDisplayData
+public class EntityBossGigus extends EntityDefender implements IBossDisplayData
 {
-    private float[] field_82220_d = new float[2];
-    private float[] field_82221_e = new float[2];
-    private int field_82222_j;
 
-    public EntityBoss(World par1World)
+    public EntityBossGigus(World par1World)
     {
         super(par1World);
         this.setEntityHealth(100 + 100 * this.worldObj.difficultySetting);
@@ -46,6 +33,38 @@ public class EntityBoss extends EntityDefender implements IBossDisplayData
         this.dataWatcher.addObject(18, new Integer(0));
         this.dataWatcher.addObject(19, new Integer(0));
         this.dataWatcher.addObject(20, new Integer(0));
+    }
+
+    @Override
+    public String getEntityName()
+    {
+        return "Core Guardian";
+    }
+
+    @Override
+    public void rangedAttack(Entity attackTarget, float range)
+    {
+        double deltaX = attackTarget.posX - this.posX;
+        double deltaY = attackTarget.boundingBox.minY + (double) (attackTarget.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
+        double deltaZ = attackTarget.posZ - this.posZ;
+
+        if (this.attackTime == 0)
+        {
+            this.attackTime = 200;
+            this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
+
+            for (int i = 0; i < 12; ++i)
+            {
+                EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float) (14 - this.worldObj.difficultySetting * 4));
+                entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
+                entitysmallfireball.setDamage((double) (range * 2.0F) + this.rand.nextGaussian() * 0.25D + (double) ((float) this.worldObj.difficultySetting * 0.11F));
+                this.worldObj.spawnEntityInWorld(entitysmallfireball);
+            }
+        }
+
+        this.rotationYaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0D / Math.PI) - 90.0F;
+        this.hasAttacked = true;
+
     }
 
     @Override
@@ -112,12 +131,6 @@ public class EntityBoss extends EntityDefender implements IBossDisplayData
         this.entityAge = 0;
     }
 
-    @SideOnly(Side.CLIENT)
-    public int getBrightnessForRender(float par1)
-    {
-        return 15728880;
-    }
-
     @Override
     public boolean canBeCollidedWith()
     {
@@ -129,24 +142,13 @@ public class EntityBoss extends EntityDefender implements IBossDisplayData
     {
     }
 
+    @Override
     protected void func_110147_ax()
     {
         super.func_110147_ax();
         this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(300.0D);
-        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.6000000238418579D);
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.6000000238418582D);
         this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(40.0D);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public float func_82207_a(int par1)
-    {
-        return this.field_82221_e[par1];
-    }
-
-    @SideOnly(Side.CLIENT)
-    public float func_82210_r(int par1)
-    {
-        return this.field_82220_d[par1];
     }
 
     public int getInvulCounter()
@@ -159,19 +161,7 @@ public class EntityBoss extends EntityDefender implements IBossDisplayData
         this.dataWatcher.updateObject(20, Integer.valueOf(par1));
     }
 
-    /** Returns the target entity ID if present, or -1 if not @param par1 The target offset, should
-     * be from 0-2 */
-    public int getWatchedTargetId(int par1)
-    {
-        return this.dataWatcher.getWatchableObjectInt(17 + par1);
-    }
-
-    public void func_82211_c(int par1, int par2)
-    {
-        this.dataWatcher.updateObject(17 + par1, Integer.valueOf(par2));
-    }
-
-    /** Called when a player mounts an entity. e.g. mounts a pig, mounts a boat. */
+    @Override
     public void mountEntity(Entity par1Entity)
     {
         this.ridingEntity = null;

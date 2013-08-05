@@ -1,4 +1,4 @@
-package dark.common.hive.entity;
+package dark.common.entity;
 
 import java.util.List;
 
@@ -20,7 +20,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
 import dark.common.DarkBotMain;
 import dark.common.api.IHiveObject;
-import dark.common.entity.EntityProj;
 import dark.common.hive.HiveManager;
 import dark.common.hive.spire.HiveSpire;
 import dark.common.prefab.Pos;
@@ -165,6 +164,7 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return false;
     }
 
+
     @Override
     public boolean attackEntityAsMob(Entity entity)
     {
@@ -204,6 +204,31 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return flag;
     }
 
+    public void rangedAttack(Entity attackTarget, float range)
+    {
+        double deltaX = attackTarget.posX - this.posX;
+        double deltaY = attackTarget.boundingBox.minY + (double) (attackTarget.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
+        double deltaZ = attackTarget.posZ - this.posZ;
+
+        if (this.attackTime == 0)
+        {
+            this.attackTime = 20;
+            this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
+
+            for (int i = 0; i < 1; ++i)
+            {
+                EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float)(14 - this.worldObj.difficultySetting * 4));
+                entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
+                entitysmallfireball.setDamage((double)(range * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting * 0.11F));
+                this.worldObj.spawnEntityInWorld(entitysmallfireball);
+            }
+        }
+
+        this.rotationYaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0D / Math.PI) - 90.0F;
+        this.hasAttacked = true;
+
+    }
+
     @Override
     protected void attackEntity(Entity attackTarget, float range)
     {
@@ -216,27 +241,9 @@ public class EntityDefender extends EntityCreature implements IHiveObject
             }
             else if (range < 30.0F)
             {
-                double deltaX = attackTarget.posX - this.posX;
-                double deltaY = attackTarget.boundingBox.minY + (double) (attackTarget.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
-                double deltaZ = attackTarget.posZ - this.posZ;
-
-                if (this.attackTime == 0)
-                {
-                    this.attackTime = 20;
-                    this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
-
-                    for (int i = 0; i < 1; ++i)
-                    {
-                        EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float)(14 - this.worldObj.difficultySetting * 4));
-                        entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
-                        entitysmallfireball.setDamage((double)(range * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting * 0.11F));
-                        this.worldObj.spawnEntityInWorld(entitysmallfireball);
-                    }
-                }
-
-                this.rotationYaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0D / Math.PI) - 90.0F;
-                this.hasAttacked = true;
+                this.rangedAttack(attackTarget, range);
             }
+
         }
     }
 

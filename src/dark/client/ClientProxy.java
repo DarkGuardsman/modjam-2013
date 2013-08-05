@@ -6,8 +6,8 @@ import dark.client.renders.RenderCore;
 import dark.client.renders.RenderDefenderTwo;
 import dark.client.renders.RenderMissile;
 import dark.common.CommonProxy;
+import dark.common.entity.EntityDefender;
 import dark.common.entity.EntityProj;
-import dark.common.hive.entity.EntityDefender;
 import dark.common.hive.spire.TileEntitySpire;
 
 public class ClientProxy extends CommonProxy

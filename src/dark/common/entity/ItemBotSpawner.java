@@ -1,4 +1,4 @@
-package dark.common.hive.entity;
+package dark.common.entity;
 
 import java.util.List;
 
