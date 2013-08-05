@@ -169,7 +169,7 @@ public class HiveSpire implements IHiveSpire
         if (player != null)
         {
             Pos pos = new Pos(player);
-            if (this.getLocation().getDistanceFrom2D(pos) < 100)
+            if (this.getLocation().getDistanceFrom(pos) < 150)
             {
                 if (this.loadedTraps.size() == 0 && this.getSchematic() != null)
                 {
@@ -192,24 +192,20 @@ public class HiveSpire implements IHiveSpire
                         }
                     }
                 }
+                int si = this.getLocation().world.getEntitiesWithinAABB(EntityDefender.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
+                int s2 = this.getLocation().world.getEntitiesWithinAABB(EntityBossGigus.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
 
-                if (this.loadedTraps.size() == 0)
+                if (this.deaths > 50 && s2 < 1)
                 {
-                    int si = this.getLocation().world.getEntitiesWithinAABB(EntityDefender.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
-                    int s2 = this.getLocation().world.getEntitiesWithinAABB(EntityBossGigus.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
-
-                    if (this.deaths > 50 && s2 < 1)
-                    {
-                        EntityDefender entity = new EntityDefender(player.worldObj);
-                        entity.setPosition(player.posX + this.getLocation().world.rand.nextInt(5), player.posY + this.getLocation().world.rand.nextInt(5), player.posZ + this.getLocation().world.rand.nextInt(5));
-                        player.worldObj.spawnEntityInWorld(entity);
-                        entity.playLivingSound();
-                    }
-                    else if (si < 30 && this.getLocation().world.rand.nextInt(this.deaths > 20 ? 2 : 10) == 1)
-                    {
-                        TrapSpawn trap = new TrapSpawn(new Pos(player).add(new Pos(this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(1), this.getLocation().world.rand.nextInt(5))));
-                        trap.triggerTrap(player.worldObj);
-                    }
+                    EntityDefender entity = new EntityDefender(player.worldObj);
+                    entity.setPosition(player.posX + this.getLocation().world.rand.nextInt(5), player.posY + this.getLocation().world.rand.nextInt(5), player.posZ + this.getLocation().world.rand.nextInt(5));
+                    player.worldObj.spawnEntityInWorld(entity);
+                    entity.playLivingSound();
+                }
+                else if (si < 30 && this.getLocation().world.rand.nextInt(this.deaths > 20 ? 2 : 10) == 1)
+                {
+                    TrapSpawn trap = new TrapSpawn(new Pos(player).add(new Pos(this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(1), this.getLocation().world.rand.nextInt(5))));
+                    trap.triggerTrap(player.worldObj);
                 }
             }
         }

@@ -1,12 +1,14 @@
 package dark.common.tiles;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import dark.common.DarkBotMain;
 import dark.common.prefab.BlockMain;
 
@@ -20,6 +22,19 @@ public class BlockDecor extends BlockMain
         this.setHardness(10);
         this.setResistance(100000);
         this.setCreativeTab(CreativeTabs.tabBlock);
+
+    }
+
+    @Override
+    public int getLightValue(IBlockAccess world, int x, int y, int z)
+    {
+        int id = world.getBlockId(x, y, z);
+        int m = world.getBlockMetadata(x, y, z);
+        if (id == this.blockID && m == 1)
+        {
+            return 10;
+        }
+        return super.getLightValue(world, x, y, z);
     }
 
     @Override
