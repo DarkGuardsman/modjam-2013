@@ -21,6 +21,7 @@ import dark.common.entity.EntityBossGigus;
 import dark.common.entity.EntityDefender;
 import dark.common.entity.EntityProj;
 import dark.common.entity.ItemBotSpawner;
+import dark.common.gen.WorldGen;
 import dark.common.hive.Hivemind;
 import dark.common.hive.spire.BlockSpireCore;
 import dark.common.hive.spire.TileEntitySpire;
@@ -83,6 +84,7 @@ public class DarkBotMain
     {
         MinecraftForge.EVENT_BUS.register(Hivemind.class);
         GameRegistry.registerTileEntity(TileEntitySpire.class, "HiveSpire");
+        GameRegistry.registerWorldGenerator(new WorldGen());
 
         EntityRegistry.registerGlobalEntityID(EntityDefender.class, "GSMDefenderII", EntityRegistry.findGlobalUniqueEntityId());
         EntityRegistry.registerModEntity(EntityDefender.class, "GSMDefenderII", EntityRegistry.findGlobalUniqueEntityId(), instance, 60, 1, true);

@@ -222,7 +222,7 @@ public class HiveSpire implements IHiveSpire
             buildSpire(this, this.size);
             this.built = true;
         }
-        System.out.println("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
+        //System.out.println("Spire scanning itself for damage at " + getLocation().x() + "x " + getLocation().y() + "y " + getLocation().z() + "z ");
         HashMap<Pos, Pair<Integer, Integer>> scanList = new HashMap<Pos, Pair<Integer, Integer>>();
 
         int delta = size * 5;
@@ -282,7 +282,7 @@ public class HiveSpire implements IHiveSpire
     /** Called to create the spire for the given level */
     public static void buildSpire(HiveSpire spire, int level)
     {
-        System.out.println("Spire replicating itself at size " + level);
+        //System.out.println("Spire replicating itself at size " + level);
 
         if (level <= MAX_SIZE)
         {

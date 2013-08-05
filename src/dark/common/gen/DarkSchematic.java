@@ -390,7 +390,7 @@ public class DarkSchematic
                 Trap lTrap = Trap.load(trap);
                 lTrap.pos.add(corner);
                 trapList.add(lTrap);
-                System.out.println("loaded Trap " + lTrap.toString());
+                //System.out.println("loaded Trap " + lTrap.toString());
             }
         }
         spire.loadedTraps.clear();

@@ -26,7 +26,7 @@ public class TileEntitySpire extends TileEntityMain
         }
         this.getSpire().init();
         //TODO get dimension id
-        System.out.println("Sleep mode decatived for spire at " + xCoord + "x " + yCoord + "y " + zCoord + "z ");
+        //System.out.println("Sleep mode decatived for spire at " + xCoord + "x " + yCoord + "y " + zCoord + "z ");
     }
 
     @Override
