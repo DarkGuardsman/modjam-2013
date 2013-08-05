@@ -35,15 +35,11 @@ public class ItemBotSpawner extends Item
         {
             if (itemStack.getItemDamage() == 0)
             {
-                par3List.add("Copies then save a schematic");
+                par3List.add("Spire defensive drone");
             }
             if (itemStack.getItemDamage() == 1)
             {
-                par3List.add("Builds a max level spire");
-            }
-            if (itemStack.getItemDamage() == 2)
-            {
-                par3List.add("Pastes the current schematic");
+                par3List.add("Core Boss Drone");
             }
         }
     }
