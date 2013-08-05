@@ -32,8 +32,11 @@ public class TrapFall extends Trap
         return true;
     }
 
-    public void reset()
+    public void reset(World world)
     {
-
+        if(this.resetBlock != null)
+        {
+            this.pos.setBlock(world, resetBlock.getOne(),resetBlock.getTwo());
+        }
     }
 }

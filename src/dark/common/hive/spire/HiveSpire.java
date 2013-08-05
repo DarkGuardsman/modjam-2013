@@ -152,7 +152,7 @@ public class HiveSpire implements IHiveSpire
                 Trap trap = it.next();
                 if (trap.canTrigger(player, pos))
                 {
-                    if (trap.triggerTrap())
+                    if (trap.triggerTrap(this.getLocation().world))
                     {
                         BuildingTickHandler.markTrapReturn(this, trap, 10, new Pair<Integer, Integer>(pos.getBlockID(this.getLocation().world), pos.getBlockMeta(this.getLocation().world)));
                         it.remove();

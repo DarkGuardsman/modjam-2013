@@ -42,6 +42,11 @@ public class Trap
         return false;
     }
 
+    public void reset(World world)
+    {
+
+    }
+
     public void save(NBTTagCompound nbt)
     {
         String s = (String) classMap.get(this.getClass());

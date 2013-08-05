@@ -14,36 +14,36 @@ import dark.common.prefab.Trap;
 public class BuildingTickHandler implements ITickHandler
 {
 
-    static HashMap<Trap, Pair<Integer, Pair<Integer, Integer>>> trapResetList = new HashMap<Trap, Pair<Integer, Pair<Integer, Integer>>>();
+    static HashMap<Trap, Integer> trapResetList = new HashMap<Trap,Integer>();
     static HashMap<Trap, HiveSpire> retrunList = new HashMap<Trap, HiveSpire>();
 
-    public static void markTrapReturn(HiveSpire hive, Trap trap, int ticks, Pair<Integer, Integer> block)
+    public static void markTrapReturn(HiveSpire hive, Trap trap, int ticks)
     {
-        trapResetList.put(trap, new Pair<Integer, Pair<Integer, Integer>>(ticks, block));
+        trapResetList.put(trap, ticks);
         retrunList.put(trap, hive);
     }
 
     @Override
     public void tickStart(EnumSet<TickType> type, Object... tickData)
     {
-        Iterator<Entry<Trap, Pair<Integer, Pair<Integer, Integer>>>> it = trapResetList.entrySet().iterator();
+        Iterator<Entry<Trap, Integer>> it = trapResetList.entrySet().iterator();
         while (it.hasNext())
         {
-            Entry<Trap, Pair<Integer, Pair<Integer, Integer>>> entry = it.next();
-            int tick = entry.getValue().getOne();
+            Entry<Trap, Integer> entry = it.next();
+            int tick = entry.getValue();
             if (tick-- <= 0)
             {
                 HiveSpire hive = retrunList.get(entry.getKey());
                 if (hive != null)
                 {
                     hive.loadedTraps.add(entry.getKey());
-                    entry.getKey().pos.setBlock(hive.getLocation().world, entry.getValue().getTwo().getOne(), entry.getValue().getTwo().getTwo());
+                    entry.getKey().reset(hive.getLocation().world);
                 }
                 trapResetList.remove(entry.getKey());
             }
             else
             {
-                trapResetList.put(entry.getKey(), new Pair<Integer, Pair<Integer, Integer>>(entry.getValue().getOne() - 1, entry.getValue().getTwo()));
+                trapResetList.put(entry.getKey(), entry.getValue() - 1);
             }
 
         }
