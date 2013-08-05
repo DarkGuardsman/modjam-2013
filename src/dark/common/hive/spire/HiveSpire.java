@@ -177,11 +177,9 @@ public class HiveSpire implements IHiveSpire
                 {
 
                     Trap trap = it.next();
-
-                    System.out.println("Testing traps for " + player.username + " at " + pos.toString() + " trap at " + trap.pos);
                     if (trap.canTrigger(player, pos))
                     {
-                        System.out.println("Trap Triggered by " + player.username);
+                        System.out.println("Trap Triggered by " + player.username + " at location " + pos.toString());
                         if (trap.triggerTrap(this.getLocation().world))
                         {
                             BuildingTickHandler.markTrapReturn(this, trap, 10);
