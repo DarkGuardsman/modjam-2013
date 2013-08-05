@@ -15,8 +15,11 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import dark.common.hive.Hivemind;
+import dark.common.hive.entity.EntityDefender;
+import dark.common.hive.entity.ItemBotSpawner;
 import dark.common.hive.spire.BlockSpireCore;
 import dark.common.hive.spire.TileEntitySpire;
 import dark.common.items.ItemBlockMain;
@@ -39,7 +42,8 @@ public class DarkBotMain
     public static final String DOMAIN = "dark";
     public static final String PREFIX = DOMAIN + ":";
 
-    public static Item spawnTool;
+    public static Item worldEditTool;
+    public static Item droneSpawnTool;
     public static Block blockDeco;
     public static Block blockCreep;
     public static Block blockCore;
@@ -57,7 +61,8 @@ public class DarkBotMain
     {
         instance = this;
         config.load();
-        spawnTool = new ItemWorldEdit(12000);
+        worldEditTool = new ItemWorldEdit(12000);
+        droneSpawnTool = new ItemBotSpawner(12001);
         blockDeco = new BlockDecor(2000);
         blockCore = new BlockSpireCore(2001);
         blockCreep = new BlockCreep(2002);
@@ -76,6 +81,9 @@ public class DarkBotMain
     {
         MinecraftForge.EVENT_BUS.register(Hivemind.class);
         GameRegistry.registerTileEntity(TileEntitySpire.class, "HiveSpire");
+
+        EntityRegistry.registerGlobalEntityID(EntityDefender.class, "GSMDefenderII", EntityRegistry.findGlobalUniqueEntityId());
+        EntityRegistry.registerModEntity(EntityDefender.class, "GSMDefenderII", EntityRegistry.findGlobalUniqueEntityId(), instance, 60, 1, true);
         //TODO reg entities
         proxy.init();
     }
