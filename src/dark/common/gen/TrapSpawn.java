@@ -1,6 +1,7 @@
 package dark.common.gen;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 import dark.common.prefab.Pos;
 import dark.common.prefab.Trap;
 
@@ -22,7 +23,12 @@ public class TrapSpawn extends Trap
         return false;
     }
 
-    public void triggerTrap()
+    public boolean triggerTrap(World world)
+    {
+        return false;
+    }
+
+    public void reset(World world)
     {
 
     }

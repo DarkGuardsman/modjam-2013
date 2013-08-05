@@ -8,13 +8,12 @@ import java.util.Map.Entry;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import dark.common.hive.spire.HiveSpire;
-import dark.common.prefab.Pair;
 import dark.common.prefab.Trap;
 
 public class BuildingTickHandler implements ITickHandler
 {
 
-    static HashMap<Trap, Integer> trapResetList = new HashMap<Trap,Integer>();
+    static HashMap<Trap, Integer> trapResetList = new HashMap<Trap, Integer>();
     static HashMap<Trap, HiveSpire> retrunList = new HashMap<Trap, HiveSpire>();
 
     public static void markTrapReturn(HiveSpire hive, Trap trap, int ticks)

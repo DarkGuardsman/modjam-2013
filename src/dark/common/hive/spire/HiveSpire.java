@@ -44,7 +44,6 @@ public class HiveSpire implements IHiveSpire
     public List<Trap> loadedTraps = new ArrayList<Trap>();
     private int size = 1;
     private boolean built = false;
-    private boolean loaded = false;
 
     List<IInventory> inventory = new ArrayList<IInventory>();
 
@@ -101,11 +100,6 @@ public class HiveSpire implements IHiveSpire
         if (chunk != null && chunk.isChunkLoaded)
         {
             this.scanArea();
-            int blockID = this.getLocation().getBlockID();
-            if (blockID != DarkBotMain.blockCore.blockID)
-            {
-                this.setInvalid();
-            }
         }
     }
 
@@ -154,7 +148,7 @@ public class HiveSpire implements IHiveSpire
                 {
                     if (trap.triggerTrap(this.getLocation().world))
                     {
-                        BuildingTickHandler.markTrapReturn(this, trap, 10, new Pair<Integer, Integer>(pos.getBlockID(this.getLocation().world), pos.getBlockMeta(this.getLocation().world)));
+                        BuildingTickHandler.markTrapReturn(this, trap, 10);
                         it.remove();
                     }
                 }

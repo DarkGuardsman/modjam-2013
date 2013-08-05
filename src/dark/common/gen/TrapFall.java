@@ -28,7 +28,9 @@ public class TrapFall extends Trap
     public boolean triggerTrap(World world)
     {
         System.out.println("Trap triggered " + type);
+        resetBlock = pos.getBlockPair(world);
         pos.setBlock(world, 0);
+
         return true;
     }
 

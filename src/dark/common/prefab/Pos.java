@@ -82,6 +82,11 @@ public class Pos implements Cloneable
         return world.getBlockId(this.x(), this.y(), this.z());
     }
 
+    public Pair<Integer, Integer> getBlockPair(World world)
+    {
+        return new Pair<Integer, Integer>(this.getBlockID(world), this.getBlockMeta(world));
+    }
+
     public void setBlock(World world, int blockID)
     {
         this.setBlock(world, blockID, 0);
