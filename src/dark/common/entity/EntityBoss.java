@@ -1,4 +1,4 @@
-package net.minecraft.entity.boss;
+package dark.common.entity;
 
 import java.util.List;
 
@@ -58,9 +58,10 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, false, false, attackEntitySelector));
-        this.experienceValue = 50;
+        this.experienceValue = 200;
     }
 
+    @Override
     protected void entityInit()
     {
         super.entityInit();
@@ -70,18 +71,18 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
         this.dataWatcher.addObject(20, new Integer(0));
     }
 
-    /** (abstract) Protected helper method to write subclass entity data to NBT. */
-    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+    @Override
+    public void writeEntityToNBT(NBTTagCompound bt)
     {
-        super.writeEntityToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setInteger("Invul", this.func_82212_n());
+        super.writeEntityToNBT(bt);
+        bt.setInteger("Invul", this.getInvulCounter());
     }
 
-    /** (abstract) Protected helper method to read subclass entity data from NBT. */
-    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+    @Override
+    public void readEntityFromNBT(NBTTagCompound nbt)
     {
-        super.readEntityFromNBT(par1NBTTagCompound);
-        this.func_82215_s(par1NBTTagCompound.getInteger("Invul"));
+        super.readEntityFromNBT(nbt);
+        this.setInvulCounter(nbt.getInteger("Invul"));
     }
 
     @SideOnly(Side.CLIENT)
@@ -108,8 +109,7 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
         return "mob.wither.death";
     }
 
-    /** Called frequently so the entity can update its state every tick as required. For example,
-     * zombies and skeletons use this to react to sunlight and start to burn. */
+    @Override
     public void onLivingUpdate()
     {
         this.motionY *= 0.6000000238418579D;
@@ -207,7 +207,7 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
             }
         }
 
-        if (this.func_82212_n() > 0)
+        if (this.getInvulCounter() > 0)
         {
             for (j = 0; j < 3; ++j)
             {
@@ -220,9 +220,9 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
     {
         int i;
 
-        if (this.func_82212_n() > 0)
+        if (this.getInvulCounter() > 0)
         {
-            i = this.func_82212_n() - 1;
+            i = this.getInvulCounter() - 1;
 
             if (i <= 0)
             {
@@ -230,7 +230,7 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
                 this.worldObj.func_82739_e(1013, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
             }
 
-            this.func_82215_s(i);
+            this.setInvulCounter(i);
 
             if (this.ticksExisted % 10 == 0)
             {
@@ -370,7 +370,7 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
 
     public void func_82206_m()
     {
-        this.func_82215_s(220);
+        this.setInvulCounter(220);
         this.setEntityHealth(this.func_110138_aP() / 3.0F);
     }
 
@@ -479,7 +479,7 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
         {
             return false;
         }
-        else if (this.func_82212_n() > 0)
+        else if (this.getInvulCounter() > 0)
         {
             return false;
         }
@@ -524,7 +524,10 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
      * by a player. @param par2 - Level of Looting used to kill this mob. */
     protected void dropFewItems(boolean par1, int par2)
     {
-        this.dropItem(Item.netherStar.itemID, 1);
+        for (int i = 0; i < this.worldObj.rand.nextInt(100); i++)
+        {
+            this.dropItem(Item.ingotIron.itemID, 1);
+        }
     }
 
     /** Makes the entity despawn if requirements are reached */
@@ -543,11 +546,6 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
     public boolean canBeCollidedWith()
     {
         return !this.isDead;
-    }
-
-    /** Called when the mob is falling. Calculates and applies fall damage. */
-    protected void fall(float par1)
-    {
     }
 
     /** adds a PotionEffect to the entity */
@@ -581,12 +579,12 @@ public class EntityBoss extends EntityMob implements IBossDisplayData, IRangedAt
         return this.field_82220_d[par1];
     }
 
-    public int func_82212_n()
+    public int getInvulCounter()
     {
         return this.dataWatcher.getWatchableObjectInt(20);
     }
 
-    public void func_82215_s(int par1)
+    public void setInvulCounter(int par1)
     {
         this.dataWatcher.updateObject(20, Integer.valueOf(par1));
     }
