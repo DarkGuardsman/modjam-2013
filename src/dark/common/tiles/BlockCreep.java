@@ -33,6 +33,7 @@ public class BlockCreep extends BlockMain
         //or water into acid pool
         ignoreList.add(DarkBotMain.blockCore);
         ignoreList.add(DarkBotMain.blockDeco);
+        ignoreList.add(DarkBotMain.blockCreep);
         ignoreList.add(Block.blockIron);
         ignoreList.add(Block.blockGold);
         ignoreList.add(Block.blockDiamond);
@@ -80,7 +81,7 @@ public class BlockCreep extends BlockMain
                     int id2 = pos2.getBlockID();
                     Block two = Block.blocksList[id2];
 
-                    if (entity == null && id != this.blockID && two != null && !ignoreList.contains(one))
+                    if (entity == null && id != this.blockID && id2 != this.blockID && two != null && !ignoreList.contains(one))
                     {
                         world.setBlock(i1, j1, k1, this.blockID, meta, 3);
                         System.out.println("Creep spread to " + pos.toString());

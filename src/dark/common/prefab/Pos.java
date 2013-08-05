@@ -121,7 +121,7 @@ public class Pos implements Cloneable
         double deltaX = xx - pos.xx;
         double deltaY = yy - pos.yy;
         double deltaZ = zz - pos.zz;
-        return Math.sqrt(Math.sqrt(deltaX * deltaX + deltaY * deltaY) + deltaZ * deltaZ);
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
     }
 
     public double getDistanceFrom2D(Pos pos)
