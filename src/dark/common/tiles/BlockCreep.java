@@ -50,6 +50,8 @@ public class BlockCreep extends BlockMain
         super(par1, "CreepingMetal", Material.iron);
         this.setTickRandomly(true);
         this.setCreativeTab(CreativeTabs.tabBlock);
+        this.setResistance(10000);
+        this.setHardness(100);
     }
 
     @Override
