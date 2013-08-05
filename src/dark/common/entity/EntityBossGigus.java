@@ -36,7 +36,10 @@ public class EntityBossGigus extends EntityDefender implements IBossDisplayData
         this.dataWatcher.addObject(19, new Integer(0));
         this.dataWatcher.addObject(20, new Integer(0));
     }
+    public void onLivingUpdate()
+    {
 
+    }
     @Override
     public String getEntityName()
     {
