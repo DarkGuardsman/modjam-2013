@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -30,7 +31,7 @@ import dark.common.prefab.Trap;
 /** Hive node that handles most of the work for the hive without getting in the main hives way */
 public class HiveSpire implements IHiveSpire
 {
-    public static final int MAX_SIZE = 2;
+    public static final int MAX_SIZE = 3;
 
     /** Static list of spire since they run outside the map */
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
@@ -54,6 +55,8 @@ public class HiveSpire implements IHiveSpire
         level_Schematic.put(1, "SpireOne");
         level_List.put(2, new Pair<Integer, Integer>(20, 18));
         level_Schematic.put(2, "SpireTwo");
+        level_List.put(2, new Pair<Integer, Integer>(30, 0));
+        level_Schematic.put(3, "SpireThree");
     }
 
     public HiveSpire(TileEntitySpire core)
@@ -229,6 +232,10 @@ public class HiveSpire implements IHiveSpire
         if (level <= MAX_SIZE)
         {
             int drop = 0;
+            for(Entry<Integer, Pair<Integer,Integer>> entry : level_List.entrySet())
+            {
+
+            }
             String name = "SpireOne";
             spire.size = level;
 

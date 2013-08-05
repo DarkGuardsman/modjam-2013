@@ -22,7 +22,9 @@ public class Trap
     static
     {
         trapMap.put("fall", TrapFall.class);
+        classMap.put(TrapFall.class, "fall");
         trapMap.put("spawn", TrapSpawn.class);
+        classMap.put(TrapSpawn.class, "spawn");
     }
 
     public Trap(Pos pos, String type, int resetTime)
