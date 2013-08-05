@@ -145,7 +145,7 @@ public class DarkSchematic
         Pos pos = new Pos().load(this.extraData.getCompoundTag("Spawn"));
         if (player != null && !pos.equals(new Pos()))
         {
-            pos.add(spire.getLocation().sub(spire.getSchematic().getCenter()));
+            pos = spire.getLocation().clone().add(pos);
             player.setPositionAndUpdate(pos.xx + 0.5, pos.yy + 0.5, pos.zz + 0.5);
         }
     }

@@ -169,45 +169,47 @@ public class HiveSpire implements IHiveSpire
         if (player != null)
         {
             Pos pos = new Pos(player);
-            if (this.loadedTraps.size() == 0 && this.getSchematic() != null)
+            if (this.getLocation().getDistanceFrom2D(pos) < 100)
             {
-                this.getSchematic().loadTraps(this);
-            }
-            Iterator<Trap> it = this.loadedTraps.iterator();
-            System.out.println("Trap list size " + this.loadedTraps.size());
-            while (it.hasNext())
-            {
-
-                Trap trap = it.next();
-
-                System.out.println("Testing traps for " + player.username + " at " + pos.toString() + " trap at " + trap.pos);
-                if (trap.canTrigger(player, pos))
+                if (this.loadedTraps.size() == 0 && this.getSchematic() != null)
                 {
-                    System.out.println("Trap Triggered by " + player.username);
-                    if (trap.triggerTrap(this.getLocation().world))
+                    this.getSchematic().loadTraps(this);
+                }
+                Iterator<Trap> it = this.loadedTraps.iterator();
+                while (it.hasNext())
+                {
+
+                    Trap trap = it.next();
+
+                    System.out.println("Testing traps for " + player.username + " at " + pos.toString() + " trap at " + trap.pos);
+                    if (trap.canTrigger(player, pos))
                     {
-                        BuildingTickHandler.markTrapReturn(this, trap, 10);
-                        it.remove();
+                        System.out.println("Trap Triggered by " + player.username);
+                        if (trap.triggerTrap(this.getLocation().world))
+                        {
+                            BuildingTickHandler.markTrapReturn(this, trap, 10);
+                            it.remove();
+                        }
                     }
                 }
-            }
 
-            if (this.loadedTraps.size() == 0)
-            {
-                int si = this.getLocation().world.getEntitiesWithinAABB(EntityDefender.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
-                int s2 = this.getLocation().world.getEntitiesWithinAABB(EntityBossGigus.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
+                if (this.loadedTraps.size() == 0)
+                {
+                    int si = this.getLocation().world.getEntitiesWithinAABB(EntityDefender.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
+                    int s2 = this.getLocation().world.getEntitiesWithinAABB(EntityBossGigus.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
 
-                if (this.deaths > 50 && s2 < 1)
-                {
-                    EntityDefender entity = new EntityDefender(player.worldObj);
-                    entity.setPosition(player.posX + this.getLocation().world.rand.nextInt(5), player.posY + this.getLocation().world.rand.nextInt(5), player.posZ + this.getLocation().world.rand.nextInt(5));
-                    player.worldObj.spawnEntityInWorld(entity);
-                    entity.playLivingSound();
-                }
-                else if (si < 30 && this.getLocation().world.rand.nextInt(this.deaths > 20 ? 2 : 10) == 1)
-                {
-                    TrapSpawn trap = new TrapSpawn(new Pos(player).add(new Pos(this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(1), this.getLocation().world.rand.nextInt(5))));
-                    trap.triggerTrap(player.worldObj);
+                    if (this.deaths > 50 && s2 < 1)
+                    {
+                        EntityDefender entity = new EntityDefender(player.worldObj);
+                        entity.setPosition(player.posX + this.getLocation().world.rand.nextInt(5), player.posY + this.getLocation().world.rand.nextInt(5), player.posZ + this.getLocation().world.rand.nextInt(5));
+                        player.worldObj.spawnEntityInWorld(entity);
+                        entity.playLivingSound();
+                    }
+                    else if (si < 30 && this.getLocation().world.rand.nextInt(this.deaths > 20 ? 2 : 10) == 1)
+                    {
+                        TrapSpawn trap = new TrapSpawn(new Pos(player).add(new Pos(this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(1), this.getLocation().world.rand.nextInt(5))));
+                        trap.triggerTrap(player.worldObj);
+                    }
                 }
             }
         }

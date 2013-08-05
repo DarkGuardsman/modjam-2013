@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -166,6 +167,11 @@ public class EntityDefender extends EntityCreature implements IHiveObject
             }
         }
         return false;
+    }
+
+    @Override
+    public void addPotionEffect(PotionEffect par1PotionEffect)
+    {
     }
 
     @Override

@@ -30,7 +30,7 @@ public class TrapSpawn extends Trap
     public boolean triggerTrap(World world)
     {
         canTrigger = false;
-        for (int i = 0; i < 1 + world.rand.nextInt(5); i++)
+        for (int i = 0; i < 1 + world.rand.nextInt(3); i++)
         {
 
             double xx = pos.xx + world.rand.nextInt(5);
