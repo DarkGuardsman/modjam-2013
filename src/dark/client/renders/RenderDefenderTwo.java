@@ -41,16 +41,14 @@ public class RenderDefenderTwo extends Render
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(wheel);
         modelWheel.renderAll();
 
-       // GL11.glTranslated(0, 1, 0);
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(body);
         modelBody.renderAll();
 
         if (entity instanceof EntityLiving)
         {
-            GL11.glRotatef(rotation - ((EntityLiving)entity).rotationYawHead, 0F, 1F, 0F);
+            GL11.glRotatef(-rotation + ((EntityLiving)entity).rotationYawHead, 0F, 1F, 0F);
         }
 
-        //GL11.glTranslated(0, -.5, 0);
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(track);
         modelTrack.renderAll();
 
