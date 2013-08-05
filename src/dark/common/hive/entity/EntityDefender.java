@@ -30,10 +30,19 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     private String hiveID = "world";
     private HiveSpire spire = null;
 
+    private int field_70846_g;
+
     public EntityDefender(World par1World)
     {
         super(par1World);
-        this.experienceValue = 20;
+        this.isImmuneToFire = true;
+        this.experienceValue = 30;
+    }
+
+    protected void entityInit()
+    {
+        super.entityInit();
+        this.dataWatcher.addObject(16, new Byte((byte) 0));
     }
 
     public void onLivingUpdate()
@@ -206,9 +215,9 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         }
         else if (range < 30.0F)
         {
-            double d0 = attackTarget.posX - this.posX;
-            double d1 = attackTarget.boundingBox.minY + (double)(attackTarget.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
-            double d2 = attackTarget.posZ - this.posZ;
+            double deltaX = attackTarget.posX - this.posX;
+            double deltaY = attackTarget.boundingBox.minY + (double) (attackTarget.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
+            double deltaZ = attackTarget.posZ - this.posZ;
 
             if (this.attackTime == 0)
             {
@@ -233,18 +242,18 @@ public class EntityDefender extends EntityCreature implements IHiveObject
                 if (this.field_70846_g > 1)
                 {
                     float f1 = MathHelper.sqrt_float(range) * 0.5F;
-                    this.worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1009, (int)this.posX, (int)this.posY, (int)this.posZ, 0);
+                    this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
 
                     for (int i = 0; i < 1; ++i)
                     {
-                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.worldObj, this, d0 + this.rand.nextGaussian() * (double)f1, d1, d2 + this.rand.nextGaussian() * (double)f1);
-                        entitysmallfireball.posY = this.posY + (double)(this.height / 2.0F) + 0.5D;
+                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.worldObj, this, deltaX + this.rand.nextGaussian() * (double) f1, deltaY, deltaZ + this.rand.nextGaussian() * (double) f1);
+                        entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
                         this.worldObj.spawnEntityInWorld(entitysmallfireball);
                     }
                 }
             }
 
-            this.rotationYaw = (float)(Math.atan2(d2, d0) * 180.0D / Math.PI) - 90.0F;
+            this.rotationYaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0D / Math.PI) - 90.0F;
             this.hasAttacked = true;
         }
     }
@@ -280,6 +289,27 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     {
         super.func_110147_ax();
         this.func_110140_aT().func_111150_b(SharedMonsterAttributes.field_111264_e);
+    }
+
+    public boolean func_70845_n()
+    {
+        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
+    }
+
+    public void func_70844_e(boolean par1)
+    {
+        byte b0 = this.dataWatcher.getWatchableObjectByte(16);
+
+        if (par1)
+        {
+            b0 = (byte) (b0 | 1);
+        }
+        else
+        {
+            b0 &= -2;
+        }
+
+        this.dataWatcher.updateObject(16, Byte.valueOf(b0));
     }
 
 }
