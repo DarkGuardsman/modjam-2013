@@ -20,7 +20,7 @@ public class WorldGen implements IWorldGenerator
         if (random.nextInt(30) == 1 && HiveSpire.getSpire(pos, 400) == null)
         {
             HiveSpire spire = new HiveSpire(pos);
-            HiveSpire.buildSpire(spire, 1 + random.nextInt(HiveSpire.MAX_SIZE - 1));
+            HiveSpire.buildSpire(spire, 1);
         }
 
     }
