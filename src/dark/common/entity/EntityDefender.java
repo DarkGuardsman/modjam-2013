@@ -27,6 +27,7 @@ public class EntityDefender extends EntityCreature implements IHiveObject
 {
     private String hiveID = "world";
     private HiveSpire spire = null;
+    private boolean reported = false;
 
     public EntityDefender(World par1World)
     {
@@ -46,6 +47,13 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     {
         this.updateArmSwingProgress();
         super.onLivingUpdate();
+        if (!this.worldObj.isRemote && !reported)
+        {
+            if (this.getSpire() != null)
+            {
+                this.getSpire().reportIn(this);
+            }
+        }
     }
 
     @Override
@@ -53,6 +61,16 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     {
         this.hiveID = id;
 
+    }
+
+    @Override
+    public void setDead()
+    {
+        super.setDead();
+        if (this.getSpire() != null)
+        {
+            this.getSpire().reportDeath(this);
+        }
     }
 
     @Override
