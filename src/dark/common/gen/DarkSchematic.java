@@ -119,7 +119,7 @@ public class DarkSchematic
                     }
                     if (blockID == Block.blockGold.blockID)
                     {
-                        blockID = DarkBotMain.blockDeco.blockID;
+                        blockID = 0;
                         blockMeta = 0;
                         this.defineTrap(1, new Pos(x, y, z));
                     }
