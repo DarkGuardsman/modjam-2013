@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.chunk.Chunk;
 import dark.common.api.IHiveSpire;
+import dark.common.entity.EntityBossGigus;
 import dark.common.entity.EntityDefender;
 import dark.common.gen.BuildingTickHandler;
 import dark.common.gen.DarkSchematic;
@@ -53,6 +54,7 @@ public class HiveSpire implements IHiveSpire
     /** List of inventories the spire can use to store items */
     List<IInventory> inventory = new ArrayList<IInventory>();
 
+    private int deaths = 0;
     static
     {
         //Pair.two for level list stacks with its levels before it
@@ -80,7 +82,7 @@ public class HiveSpire implements IHiveSpire
     public DarkSchematic getSchematic()
     {
         String name = level_Schematic.get(this.size);
-        if(this.schematic == null || !this.schematic.fileName.equalsIgnoreCase(name))
+        if (this.schematic == null || !this.schematic.fileName.equalsIgnoreCase(name))
         {
             this.schematic = new DarkSchematic(name).load();
         }
@@ -193,9 +195,18 @@ public class HiveSpire implements IHiveSpire
             if (this.loadedTraps.size() == 0)
             {
                 int si = this.getLocation().world.getEntitiesWithinAABB(EntityDefender.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
-                if (si < 30 && this.getLocation().world.rand.nextInt(20) == 1)
+                int s2 = this.getLocation().world.getEntitiesWithinAABB(EntityBossGigus.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
+
+                if (this.deaths > 50 && s2 < 1)
                 {
-                    TrapSpawn trap = new TrapSpawn(new Pos(player).add(new Pos(this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(5))));
+                    EntityDefender entity = new EntityDefender(player.worldObj);
+                    entity.setPosition(player.posX + this.getLocation().world.rand.nextInt(5), player.posY + this.getLocation().world.rand.nextInt(5), player.posZ + this.getLocation().world.rand.nextInt(5));
+                    player.worldObj.spawnEntityInWorld(entity);
+                    entity.playLivingSound();
+                }
+                else if (si < 30 && this.getLocation().world.rand.nextInt(this.deaths > 20 ? 2 : 10) == 1)
+                {
+                    TrapSpawn trap = new TrapSpawn(new Pos(player).add(new Pos(this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(1), this.getLocation().world.rand.nextInt(5))));
                     trap.triggerTrap(player.worldObj);
                 }
             }
@@ -352,6 +363,7 @@ public class HiveSpire implements IHiveSpire
             {
                 this.getHive().hiveBots.remove((Entity) obj);
             }
+            this.deaths++;
         }
         if (obj instanceof BlockWrapper)
         {
