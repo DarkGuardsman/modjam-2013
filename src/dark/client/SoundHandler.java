@@ -7,7 +7,7 @@ public class SoundHandler
 {
     public static final SoundHandler INSTANCE = new SoundHandler();
 
-    public static final String[] SOUND_FILES = { "metal.ogg" };
+    public static final String[] SOUND_FILES = { "fire.ogg" };
 
     @ForgeSubscribe
     public void loadSoundEvents(SoundLoadEvent event)

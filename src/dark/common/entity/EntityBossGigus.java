@@ -114,7 +114,7 @@ public class EntityBossGigus extends EntityDefender implements IBossDisplayData
     /** Returns the sound this mob makes on death. */
     protected String getDeathSound()
     {
-        return "mob.wither.death";
+        return "mods.DarkBots.Fire";
     }
 
     /** Sets the Entity inside a web block. */
