@@ -83,6 +83,7 @@ public class BlockCreep extends BlockMain
                     if (entity == null && id != this.blockID && two != null && !ignoreList.contains(one))
                     {
                         world.setBlock(i1, j1, k1, this.blockID, meta, 3);
+                        System.out.println("Creep spread to " + pos.toString());
                     }
                 }
             }
