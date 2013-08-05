@@ -63,7 +63,11 @@ public class TileEntitySpire extends TileEntityMain
         if (spire == null)
         {
             spire = HiveSpire.getSpire(new PosWorld(this.worldObj, new Pos(this)), 3);
-            spire = new HiveSpire(this);
+            if (spire == null)
+            {
+                spire = new HiveSpire(this);
+                spire.init();
+            }
         }
         return spire;
     }
@@ -78,7 +82,7 @@ public class TileEntitySpire extends TileEntityMain
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
-        if(this.getSpire() != null)
+        if (this.getSpire() != null)
         {
             this.getSpire().loadSpire(nbt);
         }
@@ -88,7 +92,7 @@ public class TileEntitySpire extends TileEntityMain
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-        if(this.getSpire() != null)
+        if (this.getSpire() != null)
         {
             this.getSpire().saveSpire(nbt);
         }

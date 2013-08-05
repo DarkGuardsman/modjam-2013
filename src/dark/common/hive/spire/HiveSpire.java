@@ -272,7 +272,7 @@ public class HiveSpire implements IHiveSpire
             {
                 spire.spireSchematic = new DarkSchematic(level_Schematic.get(level)).load();
             }
-            spire.location.sub(new Pos(0, -drop, 0));
+            spire.location.sub(new Pos(0, drop, 0));
 
             if (spire.spireSchematic != null)
             {
