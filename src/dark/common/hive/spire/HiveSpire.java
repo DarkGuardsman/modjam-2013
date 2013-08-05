@@ -8,6 +8,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -44,6 +45,7 @@ public class HiveSpire implements IHiveSpire
     private String hiveName = "world";
     private int size = 1;
     private boolean built = false;
+    private boolean loaded = false;
     /** List of traps loaded from the last schematic built with */
     public List<Trap> loadedTraps = new ArrayList<Trap>();
     /** List of inventories the spire can use to store items */
@@ -56,7 +58,7 @@ public class HiveSpire implements IHiveSpire
         level_Schematic.put(1, "SpireOne");
         level_List.put(2, new Pair<Integer, Integer>(20, 18));
         level_Schematic.put(2, "SpireTwo");
-        level_List.put(2, new Pair<Integer, Integer>(30, 0));
+        level_List.put(3, new Pair<Integer, Integer>(30, 0));
         level_Schematic.put(3, "SpireThree");
     }
 
@@ -121,7 +123,10 @@ public class HiveSpire implements IHiveSpire
     @Override
     public void loadSpire(NBTTagCompound nbt)
     {
-        this.size = nbt.getInteger("Size");
+        if (!this.loaded)
+        {
+            this.size = nbt.getInteger("Size");
+        }
     }
 
     @Override
@@ -139,7 +144,7 @@ public class HiveSpire implements IHiveSpire
         {
             delta = level_List.get(this.size).getOne();
         }
-        entityList.addAll(this.getLocation().world.getEntitiesWithinAABB(Entity.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(delta, delta + 50, delta))));
+        entityList.addAll(this.getLocation().world.getEntitiesWithinAABB(EntityLiving.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(delta, delta + 50, delta))));
         return entityList;
     }
 
@@ -152,9 +157,13 @@ public class HiveSpire implements IHiveSpire
             Iterator<Trap> it = this.loadedTraps.iterator();
             while (it.hasNext())
             {
+
                 Trap trap = it.next();
+
+                System.out.println("Testing traps for " + player.username + " at " + pos.toString() + " trap at " + trap.pos);
                 if (trap.canTrigger(player, pos))
                 {
+                    System.out.println("Trap Triggered by " + player.username);
                     if (trap.triggerTrap(this.getLocation().world))
                     {
                         BuildingTickHandler.markTrapReturn(this, trap, 10);
@@ -314,6 +323,10 @@ public class HiveSpire implements IHiveSpire
     @Override
     public PosWorld getLocation()
     {
+        if(this.location == null)
+        {
+            this.location = new PosWorld();
+        }
         return location;
     }
 

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -44,10 +45,8 @@ public class TileEntitySpire extends TileEntityMain
                 List<Entity> list = this.getSpire().getEntitiesInRange();
                 if (list != null)
                 {
-                    System.out.println("Entity Count in range of spire " + list.size());
                     for (Entity entity : list)
                     {
-                        Pos pos = new Pos(entity);
                         if (entity instanceof EntityPlayer)
                         {
                             this.getSpire().triggerTrapIfNear(this, (EntityPlayer) entity);
@@ -58,8 +57,6 @@ public class TileEntitySpire extends TileEntityMain
         }
 
     }
-
-
 
     public HiveSpire getSpire()
     {
@@ -75,6 +72,26 @@ public class TileEntitySpire extends TileEntityMain
     public AxisAlignedBB getRenderBoundingBox()
     {
         return AxisAlignedBB.getAABBPool().getAABB(this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 1, this.yCoord + 4, this.zCoord + 1);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+        if(this.getSpire() != null)
+        {
+            this.getSpire().loadSpire(nbt);
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        if(this.getSpire() != null)
+        {
+            this.getSpire().saveSpire(nbt);
+        }
     }
 
 }

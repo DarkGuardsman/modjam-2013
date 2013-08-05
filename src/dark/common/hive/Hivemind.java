@@ -174,13 +174,19 @@ public class Hivemind implements IHiveObject
         System.out.println("Hivemind has received a save event for dimID " + (event != null && event.world != null ? event.world.provider.dimensionId : "null"));
         if (event != null && event.world != null && event.world == this.getLocation().world)
         {
-            for (IHiveSpire spire : this.spires)
+            if (this.spires != null && !this.spires.isEmpty())
             {
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setCompoundTag("location", spire.getLocation().save(new NBTTagCompound()));
-                tag.setString("HiveID", this.getHiveID());
-                spire.saveSpire(tag);
-                NBTFileSaver.saveNBTFile("HiveSpire_" + spire.getHiveID() + "_" + spire.getLocation().toString().replace(" ", "") + ".dat", NBTFileSaver.getSaveFolder(), tag, true);
+                for (IHiveSpire spire : this.spires)
+                {
+                    if (spire != null && spire.getLocation() != null)
+                    {
+                        NBTTagCompound tag = new NBTTagCompound();
+                        tag.setCompoundTag("location", spire.getLocation().save(new NBTTagCompound()));
+                        tag.setString("HiveID", this.getHiveID());
+                        spire.saveSpire(tag);
+                        NBTFileSaver.saveNBTFile("HiveSpire_" + spire.getHiveID() + "_" + spire.getLocation().toString().replace(" ", "") + ".dat", NBTFileSaver.getSaveFolder(), tag, true);
+                    }
+                }
             }
         }
     }
@@ -202,6 +208,7 @@ public class Hivemind implements IHiveObject
                         NBTTagCompound tag = CompressedStreamTools.readCompressed(new FileInputStream(saveFile));
                         if (tag.hasKey("HiveID") && tag.hasKey("location"))
                         {
+                            System.out.println("Hive has loaded a spire from save");
                             HiveSpire spire = new HiveSpire(new PosWorld().load(tag.getCompoundTag("location")));
                             spire.setHiveID(tag.getString("HiveID"));
                         }
