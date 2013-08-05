@@ -117,6 +117,12 @@ public class DarkSchematic
                         blockMeta = 0;
                         this.defineTrap(0, new Pos(x, y, z));
                     }
+                    if (blockID == Block.blockGold.blockID)
+                    {
+                        blockID = DarkBotMain.blockDeco.blockID;
+                        blockMeta = 0;
+                        this.defineTrap(1, new Pos(x, y, z));
+                    }
                     if (blockID == Block.oreCoal.blockID)
                     {
                         this.extraData.setCompoundTag("Spawn", new Pos(x, y, z).save(new NBTTagCompound()));

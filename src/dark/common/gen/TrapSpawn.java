@@ -44,6 +44,8 @@ public class TrapSpawn extends Trap
             {
                 EntityZombie entity = new EntityZombie(world);
                 entity.setPosition(xx, yy, zz);
+                world.spawnEntityInWorld(entity);
+                entity.playLivingSound();
             }
 
         }
