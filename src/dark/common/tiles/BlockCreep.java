@@ -10,13 +10,11 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import dark.common.DarkBotMain;
@@ -52,7 +50,6 @@ public class BlockCreep extends BlockMain
         super(par1, "CreepingMetal", Material.iron);
         this.setTickRandomly(true);
         this.setCreativeTab(CreativeTabs.tabBlock);
-        this.setBlockBounds(0, 0, 0, 1f, .2f, 1f);
     }
 
     @Override
@@ -102,22 +99,16 @@ public class BlockCreep extends BlockMain
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean canBlockStay(World world, int x, int y, int z)
     {
+        PosWorld pos = new PosWorld(world, x, y, z);
+        HiveSpire spire = HiveSpire.getSpire(pos, 100);
+        /* Limit spread distance to around the tower */
+        if (spire != null && spire.getLocation().getDistanceFrom(pos) < 300)
+        {
+            return true;
+        }
         return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
-    {
-        return true;
     }
 
     @Override
@@ -125,15 +116,7 @@ public class BlockCreep extends BlockMain
     {
         if (random.nextInt(10) == 1)
         {
-            if (OreDictionary.getOres("copperWire").size() > 0)
-            {
-                ItemStack stack = OreDictionary.getOres("copperWire").get(0);
-                return stack != null ? stack.itemID : 0;
-            }
-            else
-            {
-                return Item.ingotIron.itemID;
-            }
+            return Item.ingotIron.itemID;
         }
         return 0;
     }
@@ -142,14 +125,7 @@ public class BlockCreep extends BlockMain
     @Override
     public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
-        if (side == 1)
-        {
-            return this.blockIcon;
-        }
-        else
-        {
-            return Block.blockIron.getIcon(side, 0);
-        }
+        return this.blockIcon;
     }
 
     @SideOnly(Side.CLIENT)
