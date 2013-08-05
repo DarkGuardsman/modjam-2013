@@ -20,11 +20,11 @@ public class EntityBossGigus extends EntityDefender implements IBossDisplayData
     {
         super(par1World);
         this.setEntityHealth(100 + 100 * this.worldObj.difficultySetting);
-        this.setSize(0.9F, 4.0F);
         this.isImmuneToFire = true;
         this.getNavigator().setCanSwim(true);
         this.experienceValue = 200;
         this.setSize(20, 15);
+        this.jumpMovementFactor = 4;
     }
 
     @Override
@@ -36,20 +36,29 @@ public class EntityBossGigus extends EntityDefender implements IBossDisplayData
         this.dataWatcher.addObject(19, new Integer(0));
         this.dataWatcher.addObject(20, new Integer(0));
     }
+
     public void onLivingUpdate()
     {
+        super.onLivingUpdate();
+        if (this.worldObj.isRemote)
+        {
+            this.worldObj.spawnParticle("mobSpell", this.posX, this.posY, this.posZ, 0, 0, 0);
 
+        }
     }
+
     @Override
     public String getEntityName()
     {
         return "Core Guardian";
     }
+
     @Override
     public AxisAlignedBB getBoundingBox()
     {
-        return AxisAlignedBB.getBoundingBox(posX-8, posY-1, posZ-8, posX + 10, posY + 8, posZ + 8);
+        return AxisAlignedBB.getBoundingBox(posX - 0.5, posY - 0.5, posZ - 0.5, posX + 0.5, posY + 0.5, posZ + 0.5);
     }
+
     @Override
     public void rangedAttack(Entity attackTarget, float range)
     {
