@@ -218,10 +218,10 @@ public class EntityProj extends Entity implements IProjectile
             {
                 ++this.ticksInGround;
 
-                if (this.ticksInGround == 5)
+                if (this.ticksInGround == 40)
                 {
                     this.setDead();
-                    this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 11 - this.worldObj.rand.nextInt(10), false);
+                    this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 5 - this.worldObj.rand.nextInt(4), false);
                 }
             }
             else
