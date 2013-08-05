@@ -77,16 +77,25 @@ public class BlockCreep extends BlockMain
                 int i1 = x + random.nextInt(3) - 1;
                 int j1 = y + random.nextInt(5) - 3;
                 int k1 = z + random.nextInt(3) - 1;
+
                 PosWorld pos = new PosWorld(world, i1, j1, k1);
-                PosWorld pos2 = new PosWorld(world, i1, j1 - 1, k1);
-                TileEntity entity = pos.getTileEntity();
-                int id = pos.getBlockID();
-                Block one = Block.blocksList[id];
-                int id2 = pos2.getBlockID();
-                Block two = Block.blocksList[id2];
-                if (entity == null && id != this.blockID && two != null && !ignoreList.contains(one))
+                HiveSpire spire = HiveSpire.getSpire(pos, 100);
+                /* Limit spread distance to around the tower */
+                if (spire != null && spire.getLocation().getDistanceFrom(pos) < 300)
                 {
-                    world.setBlock(i1, j1, k1, this.blockID, meta, 3);
+                    PosWorld pos2 = new PosWorld(world, i1, j1 - 1, k1);
+                    TileEntity entity = pos.getTileEntity();
+
+                    int id = pos.getBlockID();
+                    Block one = Block.blocksList[id];
+
+                    int id2 = pos2.getBlockID();
+                    Block two = Block.blocksList[id2];
+
+                    if (entity == null && id != this.blockID && two != null && !ignoreList.contains(one))
+                    {
+                        world.setBlock(i1, j1, k1, this.blockID, meta, 3);
+                    }
                 }
             }
         }
