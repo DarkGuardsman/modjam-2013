@@ -69,7 +69,7 @@ public class DarkSchematic
     {
         int deltaX, deltaY, deltaZ;
         Pos start = new Pos(pos.xx > pos2.xx ? pos2.xx : pos.xx, pos.yy > pos2.yy ? pos2.yy : pos.yy, pos.zz > pos2.zz ? pos2.zz : pos.zz);
-       if (pos.xx < pos2.xx)
+        if (pos.xx < pos2.xx)
         {
             deltaX = pos2.x() - pos.x() + 1;
         }
@@ -232,9 +232,9 @@ public class DarkSchematic
             nbt.setInteger("sizeX", size.x());
             nbt.setInteger("sizeY", size.y());
             nbt.setInteger("sizeZ", size.z());
-            nbt.setInteger("centerX", center.x());
-            nbt.setInteger("centerY", center.y());
-            nbt.setInteger("centerZ", center.z());
+            nbt.setInteger("centerX", this.getCenter().x());
+            nbt.setInteger("centerY", this.getCenter().y());
+            nbt.setInteger("centerZ", this.getCenter().z());
             int i = 0;
 
             for (Entry<Pos, Pair<Integer, Integer>> entry : blocks.entrySet())
@@ -358,7 +358,7 @@ public class DarkSchematic
         {
             trap = new TrapFall(start);
         }
-        if(type == 1)
+        if (type == 1)
         {
             trap = new TrapSpawn(start);
         }
