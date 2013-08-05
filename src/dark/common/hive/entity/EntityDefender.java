@@ -1,16 +1,21 @@
 package dark.common.hive.entity;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentThorns;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.IFluidBlock;
+import dark.common.DarkBotMain;
 import dark.common.api.IHiveObject;
 import dark.common.hive.HiveManager;
 import dark.common.hive.spire.HiveSpire;
@@ -74,13 +79,41 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return spire;
     }
 
+    @Override
     protected Entity findPlayerToAttack()
     {
-        EntityPlayer entityplayer = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
-        return entityplayer != null && this.canEntityBeSeen(entityplayer) ? entityplayer : null;
+        return this.getClosetEntityForAttack(20);
     }
 
-    /** Called when the entity is attacked. */
+    public EntityLiving getClosetEntityForAttack(double range)
+    {
+        EntityLiving entity = null;
+        Pos pos = new Pos(this);
+        double distance = range * range;
+
+        List<EntityLiving> entityList = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, this.getBoundingBox().expand(range, 4, range));
+        for (EntityLiving currentEntity : entityList)
+        {
+            if (currentEntity instanceof IHiveObject && ((IHiveObject) currentEntity).getHiveID().equalsIgnoreCase(this.getHiveID()))
+            {
+
+            }
+            else if (this.canEntityBeSeen(currentEntity) && !currentEntity.isInvisible() && currentEntity.isEntityAlive())
+            {
+                double distanceTo = pos.getDistanceFrom(new Pos(currentEntity));
+                if (distanceTo < distance)
+                {
+                    distance = distanceTo;
+                    entity = currentEntity;
+                }
+            }
+        }
+
+        return entity;
+    }
+
+    @Override
+    // called when this is attacked
     public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
     {
         if (this.isEntityInvulnerable())
@@ -111,6 +144,7 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         }
     }
 
+    @Override
     public boolean attackEntityAsMob(Entity par1Entity)
     {
         float f = (float) this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111126_e();
@@ -149,10 +183,10 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return flag;
     }
 
-    /** Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to
-     * define their attack. */
+    @Override
     protected void attackEntity(Entity par1Entity, float par2)
     {
+        //TODO add ranged attack
         if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
         {
             this.attackTime = 20;
@@ -160,13 +194,25 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         }
     }
 
-    /** Takes a coordinate in and returns a weight to determine how likely this creature will try to
-     * path to the block. Args: x, y, z */
-    public float getBlockPathWeight(int par1, int par2, int par3)
+    @Override
+    public float getBlockPathWeight(int x, int y, int z)
     {
-        return 0.5F - this.worldObj.getLightBrightness(par1, par2, par3);
+        PosWorld pos = new PosWorld(this.worldObj, x, y, z);
+        int blockID = pos.getBlockID();
+        Block block = Block.blocksList[blockID];
+        if (blockID == DarkBotMain.blockCreep.blockID || blockID == DarkBotMain.blockDeco.blockID)
+        {
+            return 100;
+        }
+        else if (block != null)
+        {
+            if (block instanceof BlockFluid || block instanceof IFluidBlock)
+            {
+                return -1000;
+            }
+        }
+        return 0.5F + this.worldObj.getLightBrightness(x, y, z);
     }
-
 
     @Override
     public boolean getCanSpawnHere()
