@@ -30,8 +30,6 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     private String hiveID = "world";
     private HiveSpire spire = null;
 
-    private int field_70846_g;
-
     public EntityDefender(World par1World)
     {
         super(par1World);
