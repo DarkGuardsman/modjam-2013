@@ -106,27 +106,33 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return this.getClosetEntityForAttack(20);
     }
 
-    /** Gets the closest entity to this entity for attack */
-    public EntityLiving getClosetEntityForAttack(double range)
+    @Override
+    public EntityLivingBase getClosetEntityForAttack(double range)
     {
-        EntityLiving entity = null;
+        EntityLivingBase entity = null;
         Pos pos = new Pos(this);
         double distance = range * range;
         this.getBoundingBox();
-        List<EntityLiving> entityList = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, this.boundingBox.expand(range, 4, range));
-        for (EntityLiving currentEntity : entityList)
+        List<Entity> entityList = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, this.boundingBox.expand(range, 4, range));
+        entityList.addAll(this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.boundingBox.expand(range, 4, range)));
+
+        for (Entity currentEntity : entityList)
         {
-            if (currentEntity instanceof IHiveObject && ((IHiveObject) currentEntity).getHiveID().equalsIgnoreCase(this.getHiveID()))
+            if (currentEntity instanceof EntityPlayer && ((EntityPlayer) currentEntity).capabilities.isCreativeMode)
+            {
+
+            }
+            else if (currentEntity instanceof IHiveObject && ((IHiveObject) currentEntity).getHiveID().equalsIgnoreCase(this.getHiveID()))
             {
 
             }
             else if (this.canEntityBeSeen(currentEntity) && !currentEntity.isInvisible() && currentEntity.isEntityAlive())
             {
                 double distanceTo = pos.getDistanceFrom(new Pos(currentEntity));
-                if (distanceTo < distance)
+                if (distanceTo < distance && entity instanceof EntityLiving)
                 {
                     distance = distanceTo;
-                    entity = currentEntity;
+                    entity = (EntityLivingBase) currentEntity;
                 }
             }
         }
