@@ -140,7 +140,7 @@ public class DarkSchematic
      *
      * @param corner - needs to be the corner of the schematic
      * @param player */
-    public void movePlayerToSpawn(Pos corner, EntityPlayer player)
+    public void movePlayerToSpawn(HiveSpire spire, EntityPlayer player)
     {
         Pos pos = new Pos().load(this.extraData.getCompoundTag("Spawn"));
         if (player != null && !pos.equals(new Pos()))
