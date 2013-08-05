@@ -21,6 +21,7 @@ import dark.common.hive.spire.BlockSpireCore;
 import dark.common.hive.spire.TileEntitySpire;
 import dark.common.items.ItemBlockMain;
 import dark.common.items.ItemWorldEdit;
+import dark.common.tiles.BlockCreep;
 import dark.common.tiles.BlockDecor;
 
 @Mod(modid = DarkBotMain.MOD_ID, name = DarkBotMain.MOD_NAME, version = DarkBotMain.VERSION)
@@ -40,6 +41,7 @@ public class DarkBotMain
 
     public static Item spawnTool;
     public static Block blockDeco;
+    public static Block blockCreep;
     public static Block blockCore;
 
     public static Configuration config = new Configuration(new File(Loader.instance().getConfigDir(), "Dark/BotMain.cfg"));
@@ -58,12 +60,14 @@ public class DarkBotMain
         spawnTool = new ItemWorldEdit(12000);
         blockDeco = new BlockDecor(2000);
         blockCore = new BlockSpireCore(2001);
+        blockCreep = new BlockCreep(2002);
         config.save();
         //TODO reg blocks
         //TODO reg oreNames
 
         GameRegistry.registerBlock(blockDeco, ItemBlockMain.class, "SpireDecoBlock");
         GameRegistry.registerBlock(blockCore, ItemBlockMain.class, "SpireCoreBlock");
+        GameRegistry.registerBlock(blockCreep, ItemBlockMain.class, "SpireCreepBlock");
         proxy.preInit();
     }
 
