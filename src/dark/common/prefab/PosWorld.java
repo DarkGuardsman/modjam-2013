@@ -29,7 +29,7 @@ public class PosWorld extends Pos
     @Override
     public NBTTagCompound save(NBTTagCompound tag)
     {
-        tag.setInteger("dim", this.world.provider.dimensionId);
+        tag.setInteger("dim", this.world != null && this.world.provider != null ? this.world.provider.dimensionId : 0);
         return super.save(tag);
     }
 
@@ -44,7 +44,7 @@ public class PosWorld extends Pos
     @Override
     public String toString()
     {
-        return world.provider.dimensionId + "D " + x() + "X " + y() + "Y " + z() + "Z ";
+        return (this.world != null && this.world.provider != null ? world.provider.dimensionId : 0) + "D " + x() + "X " + y() + "Y " + z() + "Z ";
     }
 
     @Override
