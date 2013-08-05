@@ -33,7 +33,7 @@ import dark.common.prefab.Trap;
 /** Hive node that handles most of the work for the hive without getting in the main hives way */
 public class HiveSpire implements IHiveSpire
 {
-    public static final int MAX_SIZE = 3;
+    public static final int MAX_SIZE = 2;
 
     /** Static list of spire since they run outside the map */
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
@@ -59,11 +59,9 @@ public class HiveSpire implements IHiveSpire
     {
         //Pair.two for level list stacks with its levels before it
         level_List.put(1, new Pair<Integer, Integer>(10, 0));
-        level_Schematic.put(1, "SpireOne");
+        level_Schematic.put(1, "SpireTwo");
         level_List.put(2, new Pair<Integer, Integer>(20, 18));
-        level_Schematic.put(2, "SpireTwo");
-        level_List.put(3, new Pair<Integer, Integer>(30, 0));
-        level_Schematic.put(3, "SpireThree");
+        level_Schematic.put(2, "SpireThree");
     }
 
     public HiveSpire(TileEntitySpire core)
@@ -76,7 +74,6 @@ public class HiveSpire implements IHiveSpire
         location = pos;
         staticList.add(this);
         this.getHive().addToHive(this);
-        this.init();
     }
 
     public DarkSchematic getSchematic()
