@@ -221,35 +221,16 @@ public class EntityDefender extends EntityCreature implements IHiveObject
 
             if (this.attackTime == 0)
             {
-                ++this.field_70846_g;
+                this.attackTime = 20;
 
-                if (this.field_70846_g == 1)
-                {
-                    this.attackTime = 60;
-                    this.func_70844_e(true);
-                }
-                else if (this.field_70846_g <= 4)
-                {
-                    this.attackTime = 6;
-                }
-                else
-                {
-                    this.attackTime = 100;
-                    this.field_70846_g = 0;
-                    this.func_70844_e(false);
-                }
+                float f1 = MathHelper.sqrt_float(range) * 0.5F;
+                this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
 
-                if (this.field_70846_g > 1)
+                for (int i = 0; i < 1; ++i)
                 {
-                    float f1 = MathHelper.sqrt_float(range) * 0.5F;
-                    this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
-
-                    for (int i = 0; i < 1; ++i)
-                    {
-                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.worldObj, this, deltaX + this.rand.nextGaussian() * (double) f1, deltaY, deltaZ + this.rand.nextGaussian() * (double) f1);
-                        entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
-                        this.worldObj.spawnEntityInWorld(entitysmallfireball);
-                    }
+                    EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.worldObj, this, deltaX + this.rand.nextGaussian() * (double) f1, deltaY, deltaZ + this.rand.nextGaussian() * (double) f1);
+                    entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
+                    this.worldObj.spawnEntityInWorld(entitysmallfireball);
                 }
             }
 
