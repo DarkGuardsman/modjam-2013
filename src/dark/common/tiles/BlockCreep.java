@@ -31,8 +31,20 @@ public class BlockCreep extends BlockMain
 
     static
     {
+        //TODO add special conversion cases like tree to metal tree
+        //or water into acid pool
         ignoreList.add(DarkBotMain.blockCore);
         ignoreList.add(DarkBotMain.blockDeco);
+        ignoreList.add(Block.blockIron);
+        ignoreList.add(Block.blockGold);
+        ignoreList.add(Block.blockDiamond);
+        ignoreList.add(Block.oreCoal);
+        ignoreList.add(Block.oreGold);
+        ignoreList.add(Block.oreIron);
+        ignoreList.add(Block.oreDiamond);
+        ignoreList.add(Block.ladder);
+        ignoreList.add(Block.redstoneWire);
+        ignoreList.add(Block.lever);
     }
 
     public BlockCreep(int par1)
