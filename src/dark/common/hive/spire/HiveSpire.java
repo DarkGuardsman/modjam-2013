@@ -43,7 +43,7 @@ public class HiveSpire implements IHiveSpire
     public DarkSchematic spireSchematic;
     private Hivemind hivemind;
     private String hiveName = "world";
-    private int size = 1;
+    int size = 1;
     private boolean built = false;
     private boolean loaded = false;
     /** List of traps loaded from the last schematic built with */
@@ -136,6 +136,7 @@ public class HiveSpire implements IHiveSpire
     }
 
     /** Gets a list of entities within the spires scan range */
+    @SuppressWarnings("unchecked")
     public List<Entity> getEntitiesInRange()
     {
         List<Entity> entityList = new ArrayList<Entity>();
@@ -154,7 +155,12 @@ public class HiveSpire implements IHiveSpire
         if (player != null)
         {
             Pos pos = new Pos(player);
+            if(this.loadedTraps.size() == 0)
+            {
+                this.loadTraps();
+            }
             Iterator<Trap> it = this.loadedTraps.iterator();
+            System.out.println("Trap list size " + this.loadedTraps.size());
             while (it.hasNext())
             {
 
@@ -288,6 +294,10 @@ public class HiveSpire implements IHiveSpire
     /** Called to load traps from the current build schematic */
     private void loadTraps()
     {
+        if(this.spireSchematic == null)
+        {
+            this.spireSchematic = new DarkSchematic(level_Schematic.get(this.size)).load();
+        }
         if (this.spireSchematic != null)
         {
             NBTTagCompound traps = this.spireSchematic.extraData.getCompoundTag("traps");
@@ -323,7 +333,7 @@ public class HiveSpire implements IHiveSpire
     @Override
     public PosWorld getLocation()
     {
-        if(this.location == null)
+        if (this.location == null)
         {
             this.location = new PosWorld();
         }
