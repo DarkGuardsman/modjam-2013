@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,7 +41,11 @@ public class EntityBossGigus extends EntityDefender implements IBossDisplayData
     {
         return "Core Guardian";
     }
-
+    @Override
+    public AxisAlignedBB getBoundingBox()
+    {
+        return AxisAlignedBB.getBoundingBox(posX-8, posY-2, posZ-8, posX + 8, posY + 8, posZ + 8);
+    }
     @Override
     public void rangedAttack(Entity attackTarget, float range)
     {
