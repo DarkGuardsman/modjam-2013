@@ -25,7 +25,7 @@ public class RenderDefenderTwo extends Render
         GL11.glTranslated(xx, yy, zz);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(1.5f, 1.5f, 1.5f);
-        GL11.glRotatef(entity.rotationYaw, 0F, 1F, 0F);
+        GL11.glRotatef(entity.rotationYaw - 90, 0F, 1F, 0F);
 
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(this.func_110775_a(entity));
         model.renderAll();
