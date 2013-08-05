@@ -3,6 +3,7 @@ package dark.common.gen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.world.World;
+import dark.common.entity.EntityDefender;
 import dark.common.prefab.Pos;
 import dark.common.prefab.Trap;
 
@@ -29,7 +30,7 @@ public class TrapSpawn extends Trap
     public boolean triggerTrap(World world)
     {
         canTrigger = false;
-        for (int i = 0; i < world.rand.nextInt(4); i++)
+        for (int i = 0; i < 1 + world.rand.nextInt(3); i++)
         {
             double xx = pos.xx + world.rand.nextFloat();
             double yy = pos.yy + world.rand.nextFloat();
@@ -42,7 +43,7 @@ public class TrapSpawn extends Trap
             }
             else
             {
-                EntityZombie entity = new EntityZombie(world);
+                EntityDefender entity = new EntityDefender(world);
                 entity.setPosition(xx, yy, zz);
                 world.spawnEntityInWorld(entity);
                 entity.playLivingSound();
