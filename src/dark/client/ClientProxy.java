@@ -1,5 +1,6 @@
 package dark.client;
 
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import dark.client.renders.RenderBossGigus;
@@ -22,5 +23,7 @@ public class ClientProxy extends CommonProxy
         RenderingRegistry.registerEntityRenderingHandler(EntityDefender.class, new RenderDefenderTwo());
         RenderingRegistry.registerEntityRenderingHandler(EntityProj.class, new RenderMissile());
         RenderingRegistry.registerEntityRenderingHandler(EntityBossGigus.class, new RenderBossGigus());
+
+        MinecraftForge.EVENT_BUS.register(SoundHandler.INSTANCE);
     }
 }
