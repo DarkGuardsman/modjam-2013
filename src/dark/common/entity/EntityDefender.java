@@ -103,20 +103,19 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     @Override
     protected Entity findPlayerToAttack()
     {
-        return this.getClosetEntityForAttack(20);
+        return this.getClosetEntityForAttack(30);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
     public EntityLivingBase getClosetEntityForAttack(double range)
     {
         EntityLivingBase entity = null;
         Pos pos = new Pos(this);
         double distance = range * range;
         this.getBoundingBox();
-        List<Entity> entityList = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, this.boundingBox.expand(range, 4, range));
-        entityList.addAll(this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.boundingBox.expand(range, 4, range)));
+        List<EntityLivingBase> entityList = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(range, 4, range));
 
-        for (Entity currentEntity : entityList)
+        for (EntityLivingBase currentEntity : entityList)
         {
             if (currentEntity instanceof EntityPlayer && ((EntityPlayer) currentEntity).capabilities.isCreativeMode)
             {
@@ -129,10 +128,10 @@ public class EntityDefender extends EntityCreature implements IHiveObject
             else if (this.canEntityBeSeen(currentEntity) && !currentEntity.isInvisible() && currentEntity.isEntityAlive())
             {
                 double distanceTo = pos.getDistanceFrom(new Pos(currentEntity));
-                if (distanceTo < distance && entity instanceof EntityLiving)
+                if (distanceTo < distance)
                 {
                     distance = distanceTo;
-                    entity = (EntityLivingBase) currentEntity;
+                    entity = currentEntity;
                 }
             }
         }
