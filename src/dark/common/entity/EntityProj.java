@@ -1,4 +1,4 @@
-package net.minecraft.entity.projectile;
+package dark.common.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
