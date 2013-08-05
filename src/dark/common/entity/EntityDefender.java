@@ -48,13 +48,6 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     {
         this.updateArmSwingProgress();
         super.onLivingUpdate();
-        if (!this.worldObj.isRemote && !reported)
-        {
-            if (this.getSpire() != null)
-            {
-                this.getSpire().reportIn(this);
-            }
-        }
     }
 
     @Override
@@ -65,39 +58,13 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     }
 
     @Override
-    public void setDead()
-    {
-        super.setDead();
-        if (this.getSpire() != null)
-        {
-            this.getSpire().reportDeath(this);
-        }
-    }
-
-    @Override
     public String getHiveID()
     {
         if (this.hiveID.equalsIgnoreCase("world") || this.hiveID.equalsIgnoreCase(HiveManager.NEUTRIAL))
         {
-            if (this.getSpire() != null)
-            {
-                this.hiveID = this.getSpire().getHiveID();
-            }
-            else
-            {
-                this.hiveID = HiveManager.getHiveID(this);
-            }
+            this.hiveID = HiveManager.getHiveID(this);
         }
         return this.hiveID;
-    }
-
-    public HiveSpire getSpire()
-    {
-        if (spire == null)
-        {
-            spire = HiveSpire.getSpire(new PosWorld(this.worldObj, new Pos(this)), 3);
-        }
-        return spire;
     }
 
     @Override
@@ -279,12 +246,6 @@ public class EntityDefender extends EntityCreature implements IHiveObject
             }
         }
         return 0.5F + this.worldObj.getLightBrightness(x, y, z);
-    }
-
-    @Override
-    public boolean getCanSpawnHere()
-    {
-        return this.getSpire() != null && this.getSpire().getLocation().getDistanceFrom2D(new Pos(this)) < 200;
     }
 
     @Override

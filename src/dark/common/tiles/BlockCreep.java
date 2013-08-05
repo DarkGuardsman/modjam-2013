@@ -8,10 +8,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -68,23 +66,19 @@ public class BlockCreep extends BlockMain
                 int k1 = z + random.nextInt(3) - 1;
 
                 PosWorld pos = new PosWorld(world, i1, j1, k1);
-                HiveSpire spire = HiveSpire.getSpire(pos, 100);
-                /* Limit spread distance to around the tower */
-                if (spire != null && spire.getLocation().getDistanceFrom2D(pos) < 300)
+
+                PosWorld pos2 = new PosWorld(world, i1, j1 - 1, k1);
+                TileEntity entity = pos.getTileEntity();
+
+                int id = pos.getBlockID();
+                Block one = Block.blocksList[id];
+
+                int id2 = pos2.getBlockID();
+                Block two = Block.blocksList[id2];
+
+                if (entity == null && id != this.blockID && id2 != this.blockID && two != null && !ignoreList.contains(one))
                 {
-                    PosWorld pos2 = new PosWorld(world, i1, j1 - 1, k1);
-                    TileEntity entity = pos.getTileEntity();
-
-                    int id = pos.getBlockID();
-                    Block one = Block.blocksList[id];
-
-                    int id2 = pos2.getBlockID();
-                    Block two = Block.blocksList[id2];
-
-                    if (entity == null && id != this.blockID && id2 != this.blockID && two != null && !ignoreList.contains(one))
-                    {
-                        world.setBlock(i1, j1, k1, this.blockID, meta, 3);
-                    }
+                    world.setBlock(i1, j1, k1, this.blockID, meta, 3);
                 }
             }
         }

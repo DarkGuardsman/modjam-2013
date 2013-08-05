@@ -2,6 +2,7 @@ package dark.common.gen;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -154,8 +155,9 @@ public class DarkSchematic
     {
         try
         {
-            File file = new File(McEditSchematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
-            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(new FileInputStream(new File(file, fileName + ".dat")));
+            URL url = DarkSchematic.class.getResource("/assets/dark/schematics/" + fileName + ".dat");
+            //File file = new File(McEditSchematic.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+            NBTTagCompound nbtdata = CompressedStreamTools.readCompressed(url.openStream());
             size = new Pos(nbtdata.getInteger("sizeX"), nbtdata.getInteger("sizeY"), nbtdata.getInteger("sizeZ"));
             center = new Pos(nbtdata.getInteger("centerX"), nbtdata.getInteger("centerY"), nbtdata.getInteger("centerZ"));
             this.extraData = nbtdata.getCompoundTag("extradata");
