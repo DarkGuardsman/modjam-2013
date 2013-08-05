@@ -46,7 +46,7 @@ public class ItemWorldEdit extends Item
         {
             if (itemStack.getItemDamage() == 0)
             {
-               par3List.add("Copies then save a schematic");
+                par3List.add("Copies then save a schematic");
             }
             if (itemStack.getItemDamage() == 1)
             {
@@ -58,6 +58,7 @@ public class ItemWorldEdit extends Item
             }
         }
     }
+
     @Override
     public String getItemDisplayName(ItemStack par1ItemStack)
     {
@@ -172,7 +173,7 @@ public class ItemWorldEdit extends Item
                 HiveSpire.buildSpire(hiveSpire, HiveSpire.MAX_SIZE);
                 if (hiveSpire.getSchematic() != null)
                 {
-                    hiveSpire.getSchematic().movePlayerToSpawn(player);
+                    hiveSpire.getSchematic().movePlayerToSpawn(hiveSpire, player);
                 }
             }
             else if (stack.getItemDamage() == 2)
