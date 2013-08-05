@@ -1,12 +1,17 @@
 package dark.common.prefab;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+
+import cpw.mods.fml.common.FMLLog;
 
 import dark.common.gen.TrapFall;
 import dark.common.gen.TrapSpawn;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 
 public class Trap
 {
@@ -60,6 +65,47 @@ public class Trap
         return new Trap(new Pos().load(nbt.getCompoundTag("start")), nbt.getString("type"), nbt.getInteger("reset"));
     }
 
+    public static Trap createAndLoadEntity(NBTTagCompound par0NBTTagCompound)
+    {
+        Trap trap = null;
+
+        Class oclass = null;
+
+        try
+        {
+            oclass = (Class)trapMap.get(par0NBTTagCompound.getString("id"));
+
+            if (oclass != null)
+            {
+                trap = (Trap)oclass.newInstance();
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+
+        if (trap != null)
+        {
+            try
+            {
+                trap.load(par0NBTTagCompound);
+            }
+            catch (Exception e)
+            {
+                FMLLog.log(Level.SEVERE, e,
+                        "A Trap %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author",
+                        par0NBTTagCompound.getString("id"), oclass.getName());
+                trap = null;
+            }
+        }
+        else
+        {
+            MinecraftServer.getServer().getLogAgent().logWarning("Skipping Trap with id " + par0NBTTagCompound.getString("id"));
+        }
+
+        return trap;
+    }
     @Override
     public String toString()
     {
