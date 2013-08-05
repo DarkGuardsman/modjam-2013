@@ -24,7 +24,7 @@ public class EntityProj extends EntityArrow
         super(par1World, par2, par4, par6);
     }
 
-    /** Called when this EntityFireball hits a block or entity. */
+
     protected void onImpact(MovingObjectPosition vec)
     {
         if (!this.worldObj.isRemote)

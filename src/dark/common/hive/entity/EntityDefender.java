@@ -223,14 +223,13 @@ public class EntityDefender extends EntityCreature implements IHiveObject
                 if (this.attackTime == 0)
                 {
                     this.attackTime = 20;
-
-                    float f1 = MathHelper.sqrt_float(range) * 0.5F;
                     this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
 
                     for (int i = 0; i < 1; ++i)
                     {
                         EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float)(14 - this.worldObj.difficultySetting * 4));
                         entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
+                        entitysmallfireball.setDamage((double)(range * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting * 0.11F));
                         this.worldObj.spawnEntityInWorld(entitysmallfireball);
                     }
                 }
