@@ -85,6 +85,7 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return this.getClosetEntityForAttack(20);
     }
 
+    /** Gets the closest entity to this entity for attack */
     public EntityLiving getClosetEntityForAttack(double range)
     {
         EntityLiving entity = null;
@@ -114,55 +115,58 @@ public class EntityDefender extends EntityCreature implements IHiveObject
 
     @Override
     // called when this is attacked
-    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+    public boolean attackEntityFrom(DamageSource source, float damage)
     {
         if (this.isEntityInvulnerable())
         {
             return false;
         }
-        else if (super.attackEntityFrom(par1DamageSource, par2))
+        else if (source != null)
         {
-            Entity entity = par1DamageSource.getEntity();
-
-            if (this.riddenByEntity != entity && this.ridingEntity != entity)
+            Entity entity = source.getEntity();
+            if (entity != null && entity instanceof IHiveObject && ((IHiveObject) entity).getHiveID().equalsIgnoreCase(this.getHiveID()))
             {
-                if (entity != this)
+                return false;
+            }
+            else if (super.attackEntityFrom(source, damage))
+            {
+                if (this.riddenByEntity != entity && this.ridingEntity != entity)
                 {
-                    this.entityToAttack = entity;
-                }
+                    if (entity != this)
+                    {
+                        this.entityToAttack = entity;
+                    }
 
-                return true;
-            }
-            else
-            {
-                return true;
+                    return true;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity par1Entity)
+    public boolean attackEntityAsMob(Entity entity)
     {
-        float f = (float) this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111126_e();
-        int i = 0;
+        float damage = (float) this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111126_e();
+        int knockBack = 0;
 
-        if (par1Entity instanceof EntityLivingBase)
+        if (entity instanceof EntityLivingBase)
         {
-            f += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase) par1Entity);
-            i += EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase) par1Entity);
+            damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase) entity);
+            knockBack += EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase) entity);
         }
 
-        boolean flag = par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), f);
+        boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 
         if (flag)
         {
-            if (i > 0)
+            if (knockBack > 0)
             {
-                par1Entity.addVelocity((double) (-MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F) * (float) i * 0.5F), 0.1D, (double) (MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F) * (float) i * 0.5F));
+                entity.addVelocity((double) (-MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F) * (float) knockBack * 0.5F), 0.1D, (double) (MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F) * (float) knockBack * 0.5F));
                 this.motionX *= 0.6D;
                 this.motionZ *= 0.6D;
             }
@@ -171,12 +175,12 @@ public class EntityDefender extends EntityCreature implements IHiveObject
 
             if (j > 0)
             {
-                par1Entity.setFire(j * 4);
+                entity.setFire(j * 4);
             }
 
-            if (par1Entity instanceof EntityLivingBase)
+            if (entity instanceof EntityLivingBase)
             {
-                EnchantmentThorns.func_92096_a(this, (EntityLivingBase) par1Entity, this.rand);
+                EnchantmentThorns.func_92096_a(this, (EntityLivingBase) entity, this.rand);
             }
         }
 
