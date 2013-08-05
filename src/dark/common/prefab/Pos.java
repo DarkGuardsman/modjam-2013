@@ -123,6 +123,12 @@ public class Pos implements Cloneable
         double deltaZ = zz - pos.zz;
         return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
     }
+    public double getDistanceFrom2D(Pos pos)
+    {
+        double deltaX = xx - pos.xx;
+        double deltaZ = zz - pos.zz;
+        return deltaX * deltaX  + deltaZ * deltaZ;
+    }
 
     public TileEntity getTileEntity(World world)
     {

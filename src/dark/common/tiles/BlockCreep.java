@@ -55,17 +55,6 @@ public class BlockCreep extends BlockMain
     }
 
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity)
-    {
-        AxisAlignedBB newBounds = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1, y + 0.2, z + 1);
-
-        if (newBounds != null && par5AxisAlignedBB.intersectsWith(newBounds))
-        {
-            par6List.add(newBounds);
-        }
-    }
-
-    @Override
     public void updateTick(World world, int x, int y, int z, Random random)
     {
         if (!world.isRemote)
@@ -80,7 +69,7 @@ public class BlockCreep extends BlockMain
                 PosWorld pos = new PosWorld(world, i1, j1, k1);
                 HiveSpire spire = HiveSpire.getSpire(pos, 100);
                 /* Limit spread distance to around the tower */
-                if (spire != null && spire.getLocation().getDistanceFrom(pos) < 300)
+                if (spire != null && spire.getLocation().getDistanceFrom2D(pos) < 300)
                 {
                     PosWorld pos2 = new PosWorld(world, i1, j1 - 1, k1);
                     TileEntity entity = pos.getTileEntity();
