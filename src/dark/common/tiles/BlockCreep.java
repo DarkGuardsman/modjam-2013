@@ -1,5 +1,6 @@
 package dark.common.tiles;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
@@ -25,6 +27,13 @@ import dark.common.prefab.PosWorld;
 
 public class BlockCreep extends BlockMain
 {
+    public static List<Block> ignoreList = new ArrayList<Block>();
+
+    static
+    {
+        ignoreList.add(DarkBotMain.blockCore);
+        ignoreList.add(DarkBotMain.blockDeco);
+    }
 
     public BlockCreep(int par1)
     {
@@ -56,9 +65,14 @@ public class BlockCreep extends BlockMain
                 int i1 = x + random.nextInt(3) - 1;
                 int j1 = y + random.nextInt(5) - 3;
                 int k1 = z + random.nextInt(3) - 1;
-                int blockID = world.getBlockId(i1, j1, k1);
-                int blockIDB = world.getBlockId(i1, j1 - 1, k1);
-                if (blockID == 0 && blockIDB != 0 && blockIDB != this.blockID)
+                PosWorld pos = new PosWorld(world, i1, j1, k1);
+                PosWorld pos2 = new PosWorld(world, i1, j1 - 1, k1);
+                TileEntity entity = pos.getTileEntity();
+                int id = pos.getBlockID();
+                Block one = Block.blocksList[id];
+                int id2 = pos2.getBlockID();
+                Block two = Block.blocksList[id2];
+                if (entity == null && id != this.blockID && two != null && !ignoreList.contains(one))
                 {
                     world.setBlock(i1, j1, k1, this.blockID, meta, 3);
                 }
@@ -128,17 +142,18 @@ public class BlockCreep extends BlockMain
     @Override
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(DarkBotMain.PREFIX + "wireCreep");
+        super.registerIcons(par1IconRegister);
+        this.blockIcon = par1IconRegister.registerIcon(DarkBotMain.PREFIX + "MetalCreep");
     }
 
     @Override
     public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
     {
-        PosWorld pos = new PosWorld(world,x,y,z);
-       HiveSpire spire =  HiveSpire.getSpire(pos, 100);
-       if(spire != null)
-       {
-           spire.reportDeath(new BlockWrapper(this, pos));
-       }
+        PosWorld pos = new PosWorld(world, x, y, z);
+        HiveSpire spire = HiveSpire.getSpire(pos, 100);
+        if (spire != null)
+        {
+            spire.reportDeath(new BlockWrapper(this, pos));
+        }
     }
 }

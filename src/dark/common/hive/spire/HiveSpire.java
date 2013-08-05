@@ -322,7 +322,12 @@ public class HiveSpire implements IHiveSpire
         }
         if (obj instanceof BlockWrapper)
         {
-
+            Block block = ((BlockWrapper)obj).block;
+            PosWorld pos = ((BlockWrapper)obj).pos;
+            if(pos != null && pos.world == this.getLocation().world && block != null)
+            {
+                //TODO call some event or drones to this location
+            }
         }
 
     }

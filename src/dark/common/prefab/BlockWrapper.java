@@ -4,8 +4,8 @@ import net.minecraft.block.Block;
 
 public class BlockWrapper
 {
-    Block block;
-    PosWorld pos;
+    public Block block;
+    public PosWorld pos;
 
     public BlockWrapper(Block block, PosWorld pos)
     {

@@ -1,6 +1,7 @@
 package dark.common.prefab;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -65,6 +66,11 @@ public class PosWorld extends Pos
     public int getBlockMeta()
     {
         return this.getBlockMeta(this.world);
+    }
+
+    public TileEntity getTileEntity()
+    {
+        return this.getTileEntity(this.world);
     }
 
 }
