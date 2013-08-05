@@ -17,6 +17,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import dark.common.entity.EntityBossGigus;
 import dark.common.entity.EntityDefender;
 import dark.common.entity.EntityProj;
 import dark.common.entity.ItemBotSpawner;
@@ -88,6 +89,9 @@ public class DarkBotMain
 
         EntityRegistry.registerGlobalEntityID(EntityProj.class, "GSMMissileOne", EntityRegistry.findGlobalUniqueEntityId());
         EntityRegistry.registerModEntity(EntityProj.class, "GSMMissileOne", EntityRegistry.findGlobalUniqueEntityId(), instance, 60, 1, true);
+
+        EntityRegistry.registerGlobalEntityID(EntityBossGigus.class, "GSMBossGigus", EntityRegistry.findGlobalUniqueEntityId());
+        EntityRegistry.registerModEntity(EntityBossGigus.class, "GSMBossGigus", EntityRegistry.findGlobalUniqueEntityId(), instance, 60, 1, true);
 
         //TODO reg entities
         proxy.init();
