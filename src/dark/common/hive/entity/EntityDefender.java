@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
 import dark.common.DarkBotMain;
 import dark.common.api.IHiveObject;
+import dark.common.entity.EntityProj;
 import dark.common.hive.HiveManager;
 import dark.common.hive.spire.HiveSpire;
 import dark.common.prefab.Pos;
@@ -206,34 +207,37 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     @Override
     protected void attackEntity(Entity attackTarget, float range)
     {
-        if (this.attackTime <= 0 && range < 2.0F && attackTarget.boundingBox.maxY > this.boundingBox.minY && attackTarget.boundingBox.minY < this.boundingBox.maxY)
+        if (attackTarget instanceof EntityLivingBase)
         {
-            this.attackTime = 20;
-            this.attackEntityAsMob(attackTarget);
-        }
-        else if (range < 30.0F)
-        {
-            double deltaX = attackTarget.posX - this.posX;
-            double deltaY = attackTarget.boundingBox.minY + (double) (attackTarget.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
-            double deltaZ = attackTarget.posZ - this.posZ;
-
-            if (this.attackTime == 0)
+            if (this.attackTime <= 0 && range < 2.0F && attackTarget.boundingBox.maxY > this.boundingBox.minY && attackTarget.boundingBox.minY < this.boundingBox.maxY)
             {
                 this.attackTime = 20;
-
-                float f1 = MathHelper.sqrt_float(range) * 0.5F;
-                this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
-
-                for (int i = 0; i < 1; ++i)
-                {
-                    EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.worldObj, this, deltaX + this.rand.nextGaussian() * (double) f1, deltaY, deltaZ + this.rand.nextGaussian() * (double) f1);
-                    entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
-                    this.worldObj.spawnEntityInWorld(entitysmallfireball);
-                }
+                this.attackEntityAsMob(attackTarget);
             }
+            else if (range < 30.0F)
+            {
+                double deltaX = attackTarget.posX - this.posX;
+                double deltaY = attackTarget.boundingBox.minY + (double) (attackTarget.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
+                double deltaZ = attackTarget.posZ - this.posZ;
 
-            this.rotationYaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0D / Math.PI) - 90.0F;
-            this.hasAttacked = true;
+                if (this.attackTime == 0)
+                {
+                    this.attackTime = 20;
+
+                    float f1 = MathHelper.sqrt_float(range) * 0.5F;
+                    this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
+
+                    for (int i = 0; i < 1; ++i)
+                    {
+                        EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float)(14 - this.worldObj.difficultySetting * 4));
+                        entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
+                        this.worldObj.spawnEntityInWorld(entitysmallfireball);
+                    }
+                }
+
+                this.rotationYaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0D / Math.PI) - 90.0F;
+                this.hasAttacked = true;
+            }
         }
     }
 

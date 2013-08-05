@@ -1,13 +1,12 @@
 package dark.common.entity;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityFireball;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-public class EntityProj extends EntityFireball
+public class EntityProj extends EntityArrow
 {
     public EntityProj(World par1World)
     {
@@ -15,63 +14,22 @@ public class EntityProj extends EntityFireball
         this.setSize(0.3125F, 0.3125F);
     }
 
-    public EntityProj(World par1World, EntityLivingBase par2EntityLivingBase, double par3, double par5, double par7)
+    public EntityProj(World par1World, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase, float par5, float par7)
     {
-        super(par1World, par2EntityLivingBase, par3, par5, par7);
-        this.setSize(0.3125F, 0.3125F);
+        super(par1World, par2EntityLivingBase, par3EntityLivingBase, par5, par7);
     }
 
-    public EntityProj(World par1World, double par2, double par4, double par6, double par8, double par10, double par12)
+    public EntityProj(World par1World, double par2, double par4, double par6)
     {
-        super(par1World, par2, par4, par6, par8, par10, par12);
-        this.setSize(0.3125F, 0.3125F);
+        super(par1World, par2, par4, par6);
     }
 
     /** Called when this EntityFireball hits a block or entity. */
-    protected void onImpact(MovingObjectPosition par1MovingObjectPosition)
+    protected void onImpact(MovingObjectPosition vec)
     {
         if (!this.worldObj.isRemote)
         {
-            if (par1MovingObjectPosition.entityHit != null)
-            {
-                if (!par1MovingObjectPosition.entityHit.isImmuneToFire() && par1MovingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, this.shootingEntity), 5.0F))
-                {
-                    par1MovingObjectPosition.entityHit.setFire(5);
-                }
-            }
-            else
-            {
-                int i = par1MovingObjectPosition.blockX;
-                int j = par1MovingObjectPosition.blockY;
-                int k = par1MovingObjectPosition.blockZ;
-
-                switch (par1MovingObjectPosition.sideHit)
-                {
-                    case 0:
-                        --j;
-                        break;
-                    case 1:
-                        ++j;
-                        break;
-                    case 2:
-                        --k;
-                        break;
-                    case 3:
-                        ++k;
-                        break;
-                    case 4:
-                        --i;
-                        break;
-                    case 5:
-                        ++i;
-                }
-
-                if (this.worldObj.isAirBlock(i, j, k))
-                {
-                    this.worldObj.setBlock(i, j, k, Block.fire.blockID);
-                }
-            }
-
+            this.worldObj.createExplosion(this, vec.blockX, vec.blockY, vec.blockZ, 5, false);
             this.setDead();
         }
     }
