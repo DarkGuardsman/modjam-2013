@@ -20,6 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import dark.common.DarkBotMain;
 import dark.common.hive.spire.HiveSpire;
 import dark.common.prefab.BlockMain;
+import dark.common.prefab.BlockWrapper;
 import dark.common.prefab.PosWorld;
 
 public class BlockCreep extends BlockMain
@@ -133,10 +134,11 @@ public class BlockCreep extends BlockMain
     @Override
     public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
     {
-       HiveSpire spire =  HiveSpire.getSpire(new PosWorld(world,x,y,z), 100);
+        PosWorld pos = new PosWorld(world,x,y,z);
+       HiveSpire spire =  HiveSpire.getSpire(pos, 100);
        if(spire != null)
        {
-           spire.reportDeath(obj)
+           spire.reportDeath(new BlockWrapper(this, pos));
        }
     }
 }

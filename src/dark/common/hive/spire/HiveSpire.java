@@ -21,6 +21,7 @@ import dark.common.gen.BuildingTickHandler;
 import dark.common.gen.DarkSchematic;
 import dark.common.hive.HiveManager;
 import dark.common.hive.Hivemind;
+import dark.common.prefab.BlockWrapper;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
@@ -318,6 +319,10 @@ public class HiveSpire implements IHiveSpire
             {
                 this.getHive().hiveBots.remove((Entity) obj);
             }
+        }
+        if (obj instanceof BlockWrapper)
+        {
+
         }
 
     }
