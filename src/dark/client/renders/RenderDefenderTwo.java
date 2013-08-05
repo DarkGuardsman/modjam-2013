@@ -46,7 +46,7 @@ public class RenderDefenderTwo extends Render
 
         if (entity instanceof EntityLiving)
         {
-            GL11.glRotatef(-rotation + ((EntityLiving)entity).rotationYawHead, 0F, 1F, 0F);
+            //GL11.glRotatef(-rotation + ((EntityLiving)entity).rotationYawHead, 0F, 1F, 0F);
         }
 
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(track);
