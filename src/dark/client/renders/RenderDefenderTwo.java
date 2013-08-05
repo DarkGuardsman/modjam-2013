@@ -32,7 +32,7 @@ public class RenderDefenderTwo extends Render
     public void doRender(Entity entity, double xx, double yy, double zz, float f, float f1)
     {
         GL11.glPushMatrix();
-        GL11.glTranslated(xx, yy + 0.5, zz);
+        GL11.glTranslated(xx, yy, zz);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(1.5f, 1.5f, 1.5f);
         //GL11.glRotatef(-90, 0F, 1F, 0F);
