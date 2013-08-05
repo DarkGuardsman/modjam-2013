@@ -23,32 +23,38 @@ public class RenderDefenderTwo extends Render
 
     public RenderDefenderTwo()
     {
-        modelBody = AdvancedModelLoader.loadModel("/assets/dark/models/Drone.Wheel.Body.obj");
-        modelTrack = AdvancedModelLoader.loadModel("/assets/dark/models/Drone.Wheel.Track.obj");
-        modelWheel = AdvancedModelLoader.loadModel("/assets/dark/models/Drone.Wheel.Wheel.obj");
+        modelBody = AdvancedModelLoader.loadModel("/assets/dark/models/Drone.Wheel/Drone.Wheel.Body.obj");
+        modelTrack = AdvancedModelLoader.loadModel("/assets/dark/models/Drone.Wheel/Drone.Wheel.Track.obj");
+        modelWheel = AdvancedModelLoader.loadModel("/assets/dark/models/Drone.Wheel/Drone.Wheel.Wheel.obj");
     }
 
     @Override
     public void doRender(Entity entity, double xx, double yy, double zz, float f, float f1)
     {
         GL11.glPushMatrix();
-        GL11.glTranslated(xx, yy, zz);
+        GL11.glTranslated(xx, yy+0.5, zz);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(1.5f, 1.5f, 1.5f);
         float rotation = entity.rotationYaw - 90;
         GL11.glRotatef(rotation, 0F, 1F, 0F);
 
+        FMLClientHandler.instance().getClient().renderEngine.func_110577_a(wheel);
+        modelWheel.renderAll();
+
+        GL11.glTranslated(0, 1, 0);
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(body);
         modelBody.renderAll();
+
         if (entity instanceof EntityLiving)
         {
-            GL11.glRotatef(rotation - entity.r, 0F, 1F, 0F);
+            GL11.glRotatef(rotation - ((EntityLiving)entity).rotationYawHead, 0F, 1F, 0F);
         }
+
+        GL11.glTranslated(0, -.5, 0);
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(track);
         modelTrack.renderAll();
 
-        FMLClientHandler.instance().getClient().renderEngine.func_110577_a(wheel);
-        modelWheel.renderAll();
+
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glPopMatrix();
