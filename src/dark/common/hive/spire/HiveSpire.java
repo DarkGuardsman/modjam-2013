@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -16,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.chunk.Chunk;
-import dark.common.DarkBotMain;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.BuildingTickHandler;
 import dark.common.gen.DarkSchematic;
@@ -35,22 +33,25 @@ public class HiveSpire implements IHiveSpire
 
     /** Static list of spire since they run outside the map */
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
+    /** Level setting list <Level,<ScanRange,BuildDownAmount>> */
     public static HashMap<Integer, Pair<Integer, Integer>> level_List = new HashMap<Integer, Pair<Integer, Integer>>();
+    /** Schematic names to build from for each level <Level,SchematicName> */
     public static HashMap<Integer, String> level_Schematic = new HashMap<Integer, String>();
 
-    PosWorld location;
+    private PosWorld location;
     public DarkSchematic spireSchematic;
-    Hivemind hivemind;
-    String hiveName = "world";
-
-    public List<Trap> loadedTraps = new ArrayList<Trap>();
+    private Hivemind hivemind;
+    private String hiveName = "world";
     private int size = 1;
     private boolean built = false;
-
+    /** List of traps loaded from the last schematic built with */
+    public List<Trap> loadedTraps = new ArrayList<Trap>();
+    /** List of inventories the spire can use to store items */
     List<IInventory> inventory = new ArrayList<IInventory>();
 
     static
     {
+        //Pair.two for level list stacks with its levels before it
         level_List.put(1, new Pair<Integer, Integer>(10, 0));
         level_Schematic.put(1, "SpireOne");
         level_List.put(2, new Pair<Integer, Integer>(20, 18));
@@ -98,6 +99,7 @@ public class HiveSpire implements IHiveSpire
         return null;
     }
 
+    /** Called by the spire's core block as soon as it loads into the world */
     public void init()
     {
         Chunk chunk = this.getLocation().world.getChunkFromBlockCoords(this.getLocation().x(), this.getLocation().z());
@@ -107,6 +109,7 @@ public class HiveSpire implements IHiveSpire
         }
     }
 
+    /** Destroys the spire's entity and marks everything for unload */
     public void setInvalid()
     {
         //TODO clear the spire and mark all elements for deletion
@@ -127,6 +130,7 @@ public class HiveSpire implements IHiveSpire
         nbt.setInteger("Size", this.size);
     }
 
+    /** Gets a list of entities within the spires scan range */
     public List<Entity> getEntitiesInRange()
     {
         List<Entity> entityList = new ArrayList<Entity>();
@@ -139,6 +143,7 @@ public class HiveSpire implements IHiveSpire
         return entityList;
     }
 
+    /** Called for each player in range of the spire per tick to trigger trap entities */
     public void triggerTrapIfNear(TileEntitySpire spire, EntityPlayer player)
     {
         if (player != null)
@@ -160,6 +165,8 @@ public class HiveSpire implements IHiveSpire
         }
     }
 
+    /** Scans the entire structure of the spire looking for anything out of place. Also builds the
+     * spire on first call */
     public void scanArea()
     {
         //TODO add one mine timer to suck up all items and store them
@@ -225,6 +232,7 @@ public class HiveSpire implements IHiveSpire
         //TODO compare schematic to scan list and mark for correction
     }
 
+    /** Called to create the spire for the given level */
     public static void buildSpire(HiveSpire spire, int level)
     {
         System.out.println("Spire replicating itself at size " + level);
@@ -232,16 +240,20 @@ public class HiveSpire implements IHiveSpire
         if (level <= MAX_SIZE)
         {
             int drop = 0;
-            for(Entry<Integer, Pair<Integer,Integer>> entry : level_List.entrySet())
+            for (int i = 0; i < level; i++)
             {
-
+                Pair<Integer, Integer> pair = level_List.get(i);
+                if (pair != null)
+                {
+                    drop += level_List.get(i).getTwo();
+                }
             }
             String name = "SpireOne";
             spire.size = level;
 
             if (level_List.containsKey(level))
             {
-                drop = level_List.get(level).getTwo();
+                drop += level_List.get(level).getTwo();
             }
             if (level_Schematic.containsKey(level))
             {
@@ -264,6 +276,7 @@ public class HiveSpire implements IHiveSpire
 
     }
 
+    /** Called to load traps from the current build schematic */
     private void loadTraps()
     {
         if (this.spireSchematic != null)
@@ -329,9 +342,9 @@ public class HiveSpire implements IHiveSpire
         }
         if (obj instanceof BlockWrapper)
         {
-            Block block = ((BlockWrapper)obj).block;
-            PosWorld pos = ((BlockWrapper)obj).pos;
-            if(pos != null && pos.world == this.getLocation().world && block != null)
+            Block block = ((BlockWrapper) obj).block;
+            PosWorld pos = ((BlockWrapper) obj).pos;
+            if (pos != null && pos.world == this.getLocation().world && block != null)
             {
                 //TODO call some event or drones to this location
             }
