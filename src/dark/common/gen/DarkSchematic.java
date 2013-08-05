@@ -375,4 +375,25 @@ public class DarkSchematic
         }
 
     }
+
+    public void loadTraps(HiveSpire spire)
+    {
+        NBTTagCompound traps = this.extraData.getCompoundTag("traps");
+        int count = traps.getInteger("count");
+        List<Trap> trapList = new ArrayList<Trap>();
+        Pos corner = spire.getLocation().sub(this.getCenter());
+        for (int i = 0; i < count; i++)
+        {
+            NBTTagCompound trap = traps.getCompoundTag("trap" + i);
+            if (trap != null)
+            {
+                Trap lTrap = Trap.load(trap);
+                lTrap.pos.add(corner);
+                trapList.add(lTrap);
+                System.out.println("loaded Trap " + lTrap.toString());
+            }
+        }
+        spire.loadedTraps.clear();
+        spire.loadedTraps.addAll(trapList);
+    }
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.chunk.Chunk;
 import dark.common.api.IHiveSpire;
 import dark.common.gen.BuildingTickHandler;
 import dark.common.gen.DarkSchematic;
+import dark.common.gen.TrapSpawn;
 import dark.common.hive.HiveManager;
 import dark.common.hive.Hivemind;
 import dark.common.prefab.BlockWrapper;
@@ -40,7 +41,7 @@ public class HiveSpire implements IHiveSpire
     public static HashMap<Integer, String> level_Schematic = new HashMap<Integer, String>();
 
     private PosWorld location;
-    public DarkSchematic spireSchematic;
+    public DarkSchematic schematic;
     private Hivemind hivemind;
     private String hiveName = "world";
     int size = 1;
@@ -73,6 +74,16 @@ public class HiveSpire implements IHiveSpire
         staticList.add(this);
         this.getHive().addToHive(this);
         this.init();
+    }
+
+    public DarkSchematic getSchematic()
+    {
+        String name = level_Schematic.get(this.size);
+        if(this.schematic == null || !this.schematic.fileName.equalsIgnoreCase(name))
+        {
+            this.schematic = new DarkSchematic(name).load();
+        }
+        return this.schematic;
     }
 
     /** Gets a spire close to the location. Use mainly if a spire core unloaded from the map and
@@ -155,9 +166,9 @@ public class HiveSpire implements IHiveSpire
         if (player != null)
         {
             Pos pos = new Pos(player);
-            if(this.loadedTraps.size() == 0)
+            if (this.loadedTraps.size() == 0 && this.getSchematic() != null)
             {
-                this.loadTraps();
+                this.getSchematic().loadTraps(this);
             }
             Iterator<Trap> it = this.loadedTraps.iterator();
             System.out.println("Trap list size " + this.loadedTraps.size());
@@ -177,7 +188,17 @@ public class HiveSpire implements IHiveSpire
                     }
                 }
             }
+
+            if (this.loadedTraps.size() == 0)
+            {
+                if (this.getLocation().world.rand.nextInt(5) == 1)
+                {
+                    TrapSpawn trap = new TrapSpawn(new Pos(player).add(new Pos(this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(5))));
+                    trap.triggerTrap(player.worldObj);
+                }
+            }
         }
+
     }
 
     /** Scans the entire structure of the spire looking for anything out of place. Also builds the
@@ -274,50 +295,17 @@ public class HiveSpire implements IHiveSpire
             {
                 name = level_Schematic.get(level);
             }
-            if (spire.spireSchematic == null || !spire.spireSchematic.fileName.equalsIgnoreCase(name))
-            {
-                spire.spireSchematic = new DarkSchematic(level_Schematic.get(level)).load();
-            }
             spire.location.sub(new Pos(0, drop, 0));
 
-            if (spire.spireSchematic != null)
+            if (spire.getSchematic() != null)
             {
                 int path = new Random().nextBoolean() ? 1 : 2;
-                spire.spireSchematic.buildSpire(spire, true, true, path);
+                spire.getSchematic().buildSpire(spire, true, true, path);
                 spire.size = level;
-                spire.loadTraps();
+                spire.getSchematic().loadTraps(spire);
             }
         }
 
-    }
-
-    /** Called to load traps from the current build schematic */
-    private void loadTraps()
-    {
-        if(this.spireSchematic == null)
-        {
-            this.spireSchematic = new DarkSchematic(level_Schematic.get(this.size)).load();
-        }
-        if (this.spireSchematic != null)
-        {
-            NBTTagCompound traps = this.spireSchematic.extraData.getCompoundTag("traps");
-            int count = traps.getInteger("count");
-            List<Trap> trapList = new ArrayList<Trap>();
-            Pos corner = this.getLocation().sub(this.spireSchematic.getCenter());
-            for (int i = 0; i < count; i++)
-            {
-                NBTTagCompound trap = traps.getCompoundTag("trap" + i);
-                if (trap != null)
-                {
-                    Trap lTrap = Trap.load(trap);
-                    lTrap.pos.add(corner);
-                    trapList.add(lTrap);
-                    System.out.println("loaded Trap " + lTrap.toString());
-                }
-            }
-            this.loadedTraps.clear();
-            this.loadedTraps.addAll(trapList);
-        }
     }
 
     @Override
