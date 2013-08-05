@@ -41,7 +41,7 @@ public class HiveSpire implements IHiveSpire
     String hiveName = "world";
 
     public List<Trap> loadedTraps = new ArrayList<Trap>();
-    private int size = 0;
+    private int size = 1;
     private boolean built = false;
     private boolean loaded = false;
 
