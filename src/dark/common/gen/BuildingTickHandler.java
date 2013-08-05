@@ -25,15 +25,13 @@ public class BuildingTickHandler implements ITickHandler
     @Override
     public EnumSet<TickType> ticks()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return EnumSet.of(TickType.SERVER);
     }
 
     @Override
     public String getLabel()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return "Building-TickHandler";
     }
 
 }

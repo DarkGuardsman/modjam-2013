@@ -347,21 +347,25 @@ public class DarkSchematic
 
     public void defineTrap(int type, Pos start)
     {
-        String t = null;
+        Trap trap = null;
         if (type == 0)
         {
-            t = "fall";
+            trap = new TrapFall(start);
         }
-        if (t != null)
+        if(type == 1)
+        {
+            trap = new TrapSpawn(start);
+        }
+        if (trap != null)
         {
             NBTTagCompound tag = new NBTTagCompound();
-            new Trap(start, t).save(tag);
+            trap.save(tag);
 
-            NBTTagCompound trap = this.extraData.getCompoundTag("traps");
-            int c = trap.getInteger("count");
-            trap.setCompoundTag("trap" + c + 1, tag);
-            trap.setInteger("count", c + 1);
-            this.extraData.setCompoundTag("traps", trap);
+            NBTTagCompound trapList = this.extraData.getCompoundTag("traps");
+            int c = trapList.getInteger("count");
+            trapList.setCompoundTag("trap" + c + 1, tag);
+            trapList.setInteger("count", c + 1);
+            this.extraData.setCompoundTag("traps", trapList);
         }
 
     }
