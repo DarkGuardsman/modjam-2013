@@ -23,7 +23,7 @@ public class EntityBossGigus extends EntityDefender implements IBossDisplayData
         this.isImmuneToFire = true;
         this.getNavigator().setCanSwim(true);
         this.experienceValue = 200;
-        this.setSize(20, 15);
+        this.setSize(10, 10);
         this.jumpMovementFactor = 4;
     }
 
@@ -51,12 +51,6 @@ public class EntityBossGigus extends EntityDefender implements IBossDisplayData
     public String getEntityName()
     {
         return "Core Guardian";
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox()
-    {
-        return AxisAlignedBB.getBoundingBox(posX - 0.5, posY - 0.5, posZ - 0.5, posX + 0.5, posY + 0.5, posZ + 0.5);
     }
 
     @Override

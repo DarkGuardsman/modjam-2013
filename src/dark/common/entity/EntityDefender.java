@@ -12,8 +12,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -35,6 +33,7 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         super(par1World);
         this.isImmuneToFire = true;
         this.experienceValue = 30;
+        this.setSize(1.5f, 2);
     }
 
     protected void entityInit()
@@ -46,13 +45,6 @@ public class EntityDefender extends EntityCreature implements IHiveObject
     public void onLivingUpdate()
     {
         this.updateArmSwingProgress();
-        float f = this.getBrightness(1.0F);
-
-        if (f > 0.5F)
-        {
-            this.entityAge += 2;
-        }
-
         super.onLivingUpdate();
     }
 
@@ -95,12 +87,6 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return this.getClosetEntityForAttack(20);
     }
 
-    @Override
-    public AxisAlignedBB getBoundingBox()
-    {
-        return AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX + .5, posY + 1.5, posZ + .5);
-    }
-
     /** Gets the closest entity to this entity for attack */
     public EntityLiving getClosetEntityForAttack(double range)
     {
@@ -108,7 +94,7 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         Pos pos = new Pos(this);
         double distance = range * range;
         this.getBoundingBox();
-        List<EntityLiving> entityList = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, this.getBoundingBox().expand(range, 4, range));
+        List<EntityLiving> entityList = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, this.boundingBox.expand(range, 4, range));
         for (EntityLiving currentEntity : entityList)
         {
             if (currentEntity instanceof IHiveObject && ((IHiveObject) currentEntity).getHiveID().equalsIgnoreCase(this.getHiveID()))
@@ -164,7 +150,6 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return false;
     }
 
-
     @Override
     public boolean attackEntityAsMob(Entity entity)
     {
@@ -217,9 +202,9 @@ public class EntityDefender extends EntityCreature implements IHiveObject
 
             for (int i = 0; i < 1; ++i)
             {
-                EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float)(14 - this.worldObj.difficultySetting * 4));
+                EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float) (14 - this.worldObj.difficultySetting * 4));
                 entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
-                entitysmallfireball.setDamage((double)(range * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting * 0.11F));
+                entitysmallfireball.setDamage((double) (range * 2.0F) + this.rand.nextGaussian() * 0.25D + (double) ((float) this.worldObj.difficultySetting * 0.11F));
                 this.worldObj.spawnEntityInWorld(entitysmallfireball);
             }
         }

@@ -19,9 +19,9 @@ public class RenderBossGigus extends Render
     //private IModelCustom modelLeg;
     private IModelCustom modelPack;
 
-    private ResourceLocation body = new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/BossBody.png");
-    private ResourceLocation shoulders = new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/BossShoulders.png");
-    private ResourceLocation pack = new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/MissilePack.png");
+    private ResourceLocation body = new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/body.png");
+    private ResourceLocation shoulders = new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/shoulders.png");
+    private ResourceLocation pack = new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/missilePack.png");
     //private ResourceLocation leg = new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/BossLeg.png");
 
     public RenderBossGigus()
@@ -38,7 +38,7 @@ public class RenderBossGigus extends Render
         GL11.glPushMatrix();
         GL11.glTranslated(xx, yy + 0.5, zz);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glScalef(.5f, .5f, .5f);
+        GL11.glScalef(.35f, .35f, .35f);
         //GL11.glRotatef(-90, 0F, 1F, 0F);
         GL11.glRotatef(-entity.rotationYaw, 0F, 1F, 0F);
         /*Render Body */
