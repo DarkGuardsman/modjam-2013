@@ -1,12 +1,14 @@
 package dark.common.gen;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
+import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.Trap;
 
 public class TrapFall extends Trap
 {
-
+    Pair<Integer,Integer> resetBlock = null;
     public TrapFall(Pos pos)
     {
         super(pos, "fall", 10);
@@ -22,7 +24,15 @@ public class TrapFall extends Trap
         return false;
     }
 
-    public void triggerTrap()
+    @Override
+    public boolean triggerTrap(World world)
+    {
+        System.out.println("Trap triggered " + type);
+        pos.setBlock(world, 0);
+        return true;
+    }
+
+    public void reset()
     {
 
     }

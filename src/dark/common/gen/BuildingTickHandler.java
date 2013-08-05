@@ -1,17 +1,52 @@
 package dark.common.gen;
 
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import dark.common.hive.spire.HiveSpire;
+import dark.common.prefab.Pair;
+import dark.common.prefab.Trap;
 
 public class BuildingTickHandler implements ITickHandler
 {
 
+    static HashMap<Trap, Pair<Integer, Pair<Integer, Integer>>> trapResetList = new HashMap<Trap, Pair<Integer, Pair<Integer, Integer>>>();
+    static HashMap<Trap, HiveSpire> retrunList = new HashMap<Trap, HiveSpire>();
+
+    public static void markTrapReturn(HiveSpire hive, Trap trap, int ticks, Pair<Integer, Integer> block)
+    {
+        trapResetList.put(trap, new Pair<Integer, Pair<Integer, Integer>>(ticks, block));
+        retrunList.put(trap, hive);
+    }
+
     @Override
     public void tickStart(EnumSet<TickType> type, Object... tickData)
     {
-        // TODO Auto-generated method stub
+        Iterator<Entry<Trap, Pair<Integer, Pair<Integer, Integer>>>> it = trapResetList.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Entry<Trap, Pair<Integer, Pair<Integer, Integer>>> entry = it.next();
+            int tick = entry.getValue().getOne();
+            if (tick-- <= 0)
+            {
+                HiveSpire hive = retrunList.get(entry.getKey());
+                if (hive != null)
+                {
+                    hive.loadedTraps.add(entry.getKey());
+                    entry.getKey().pos.setBlock(hive.getLocation().world, entry.getValue().getTwo().getOne(), entry.getValue().getTwo().getTwo());
+                }
+                trapResetList.remove(entry.getKey());
+            }
+            else
+            {
+                trapResetList.put(entry.getKey(), new Pair<Integer, Pair<Integer, Integer>>(entry.getValue().getOne() - 1, entry.getValue().getTwo()));
+            }
+
+        }
 
     }
 

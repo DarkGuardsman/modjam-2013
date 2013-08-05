@@ -3,15 +3,13 @@ package dark.common.prefab;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import cpw.mods.fml.common.FMLLog;
-
-import dark.common.gen.TrapFall;
-import dark.common.gen.TrapSpawn;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import cpw.mods.fml.common.FMLLog;
+import dark.common.gen.TrapFall;
+import dark.common.gen.TrapSpawn;
 
 public class Trap
 {
@@ -39,9 +37,9 @@ public class Trap
         return false;
     }
 
-    public void triggerTrap()
+    public boolean triggerTrap(World world)
     {
-
+        return false;
     }
 
     public void save(NBTTagCompound nbt)
@@ -73,11 +71,11 @@ public class Trap
 
         try
         {
-            oclass = (Class)trapMap.get(par0NBTTagCompound.getString("id"));
+            oclass = (Class) trapMap.get(par0NBTTagCompound.getString("id"));
 
             if (oclass != null)
             {
-                trap = (Trap)oclass.newInstance();
+                trap = (Trap) oclass.newInstance();
             }
         }
         catch (Exception exception)
@@ -93,9 +91,7 @@ public class Trap
             }
             catch (Exception e)
             {
-                FMLLog.log(Level.SEVERE, e,
-                        "A Trap %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author",
-                        par0NBTTagCompound.getString("id"), oclass.getName());
+                FMLLog.log(Level.SEVERE, e, "A Trap %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", par0NBTTagCompound.getString("id"), oclass.getName());
                 trap = null;
             }
         }
@@ -106,6 +102,7 @@ public class Trap
 
         return trap;
     }
+
     @Override
     public String toString()
     {

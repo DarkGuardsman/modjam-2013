@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.chunk.Chunk;
 import dark.common.DarkBotMain;
 import dark.common.api.IHiveSpire;
+import dark.common.gen.BuildingTickHandler;
 import dark.common.gen.DarkSchematic;
 import dark.common.hive.HiveManager;
 import dark.common.hive.Hivemind;
@@ -149,15 +150,12 @@ public class HiveSpire implements IHiveSpire
             while (it.hasNext())
             {
                 Trap trap = it.next();
-                if (trap.type.equalsIgnoreCase("fall"))
+                if (trap.canTrigger(player, pos))
                 {
-                    if (pos.getDistanceFrom(trap.pos) < 3)
+                    if (trap.triggerTrap())
                     {
-                        System.out.println("Trap reset " + trap.toString());
-                        spire.markTrapReturn(trap, 10, new Pair<Integer, Integer>(pos.getBlockID(this.getLocation().world), pos.getBlockMeta(this.getLocation().world)));
-                        pos.setBlock(this.getLocation().world, 0);
+                        BuildingTickHandler.markTrapReturn(this, trap, 10, new Pair<Integer, Integer>(pos.getBlockID(this.getLocation().world), pos.getBlockMeta(this.getLocation().world)));
                         it.remove();
-
                     }
                 }
             }

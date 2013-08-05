@@ -19,7 +19,6 @@ import dark.common.prefab.Trap;
 public class TileEntitySpire extends TileEntityMain
 {
     HiveSpire spire;
-    HashMap<Trap, Pair<Integer, Pair<Integer, Integer>>> trapResetList = new HashMap<Trap, Pair<Integer, Pair<Integer, Integer>>>();
 
     @Override
     public void init()
@@ -39,23 +38,7 @@ public class TileEntitySpire extends TileEntityMain
             {
                 this.getSpire().scanArea();
             }
-            Iterator<Entry<Trap, Pair<Integer, Pair<Integer, Integer>>>> it = this.trapResetList.entrySet().iterator();
-            while (it.hasNext())
-            {
-                Entry<Trap, Pair<Integer, Pair<Integer, Integer>>> entry = it.next();
-                int tick = entry.getValue().getOne();
-                if (tick-- <= 0)
-                {
-                    this.getSpire().loadedTraps.add(entry.getKey());
-                    entry.getKey().pos.setBlock(worldObj, entry.getValue().getTwo().getOne(), entry.getValue().getTwo().getTwo());
-                    this.trapResetList.remove(entry.getKey());
-                }
-                else
-                {
-                    this.trapResetList.put(entry.getKey(), new Pair<Integer, Pair<Integer, Integer>>(entry.getValue().getOne() - 1, entry.getValue().getTwo()));
-                }
 
-            }
             if (this.ticks % 5 == 0)
             {
                 List<Entity> list = this.getSpire().getEntitiesInRange();
@@ -76,11 +59,7 @@ public class TileEntitySpire extends TileEntityMain
 
     }
 
-    public void markTrapReturn(Trap trap, int ticks, Pair<Integer, Integer> block)
-    {
-        this.trapResetList.put(trap, new Pair<Integer, Pair<Integer, Integer>>(ticks, block));
 
-    }
 
     public HiveSpire getSpire()
     {
