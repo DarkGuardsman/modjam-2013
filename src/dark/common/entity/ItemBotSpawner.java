@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,9 +29,37 @@ public class ItemBotSpawner extends Item
     }
 
     @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+    {
+        if (itemStack != null)
+        {
+            if (itemStack.getItemDamage() == 0)
+            {
+                par3List.add("Copies then save a schematic");
+            }
+            if (itemStack.getItemDamage() == 1)
+            {
+                par3List.add("Builds a max level spire");
+            }
+            if (itemStack.getItemDamage() == 2)
+            {
+                par3List.add("Pastes the current schematic");
+            }
+        }
+    }
+
+    @Override
     public String getItemDisplayName(ItemStack par1ItemStack)
     {
-        return "Drone Spawn Tool";
+        if (par1ItemStack.getItemDamage() == 0)
+        {
+            return "Defender II";
+        }
+        if (par1ItemStack.getItemDamage() == 1)
+        {
+            return "Core Guardian";
+        }
+        return "Unkown Item";
     }
 
     @Override
@@ -53,7 +82,7 @@ public class ItemBotSpawner extends Item
                 d0 = 0.5D;
             }
 
-            this.spawnCreature(world, (double) x + 0.5D, (double) y + d0, (double) z + 0.5D);
+            this.spawnCreature(world, (double) x + 0.5D, (double) y + d0, (double) z + 0.5D, itemstack.getItemDamage());
 
             return true;
         }
@@ -61,27 +90,26 @@ public class ItemBotSpawner extends Item
 
     /** Spawns the creature specified by the egg's type in the location specified by the last three
      * parameters. Parameters: world, entityID, x, y, z. */
-    public void spawnCreature(World world, double x, double y, double z)
+    public void spawnCreature(World world, double x, double y, double z, int i)
     {
-        EntityDefender entityliving = new EntityDefender(world);
-        entityliving.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0F), 0.0F);
-        entityliving.rotationYawHead = entityliving.rotationYaw;
-        entityliving.renderYawOffset = entityliving.rotationYaw;
-        world.spawnEntityInWorld(entityliving);
-        entityliving.playLivingSound();
-    }
+        EntityLiving entityliving = null;
+        if (i == 0)
+        {
+            entityliving = new EntityDefender(world);
+        }
+        if (i == 1)
+        {
+            entityliving = new EntityBossGigus(world);
+        }
 
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses()
-    {
-        return true;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public Icon getIconFromDamageForRenderPass(int par1, int par2)
-    {
-        return par2 > 0 ? this.theIcon : super.getIconFromDamageForRenderPass(par1, par2);
+        if (entityliving != null)
+        {
+            entityliving.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0F), 0.0F);
+            entityliving.rotationYawHead = entityliving.rotationYaw;
+            entityliving.renderYawOffset = entityliving.rotationYaw;
+            world.spawnEntityInWorld(entityliving);
+            entityliving.playLivingSound();
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -89,12 +117,12 @@ public class ItemBotSpawner extends Item
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(new ItemStack(par1, 1, 0));
+        par3List.add(new ItemStack(par1, 1, 1));
     }
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
         super.registerIcons(par1IconRegister);
-        this.theIcon = par1IconRegister.registerIcon("monsterPlacer_overlay");
     }
 }

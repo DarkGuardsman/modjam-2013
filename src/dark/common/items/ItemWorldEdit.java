@@ -39,6 +39,43 @@ public class ItemWorldEdit extends Item
         this.setCreativeTab(CreativeTabs.tabTools);
     }
 
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+    {
+        if (itemStack != null)
+        {
+            if (itemStack.getItemDamage() == 0)
+            {
+               par3List.add("Copies then save a schematic");
+            }
+            if (itemStack.getItemDamage() == 1)
+            {
+                par3List.add("Builds a max level spire");
+            }
+            if (itemStack.getItemDamage() == 2)
+            {
+                par3List.add("Pastes the current schematic");
+            }
+        }
+    }
+    @Override
+    public String getItemDisplayName(ItemStack par1ItemStack)
+    {
+        if (par1ItemStack.getItemDamage() == 0)
+        {
+            return "Copy & Save";
+        }
+        if (par1ItemStack.getItemDamage() == 1)
+        {
+            return "Spire";
+        }
+        if (par1ItemStack.getItemDamage() == 2)
+        {
+            return "Paste";
+        }
+        return "Unkown Item";
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
     public Icon getIconFromDamage(int par1)
