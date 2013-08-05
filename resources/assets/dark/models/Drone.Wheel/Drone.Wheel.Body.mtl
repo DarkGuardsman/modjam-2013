@@ -1,10 +1,10 @@
-# Blender MTL File: 'Drone.Wheel.blend'
+# Blender MTL File: 'None'
 # Material Count: 1
 
 newmtl Metal.001
-Ns 84.313725
+Ns 78.431373
 Ka 0.000000 0.000000 0.000000
-Kd 0.119507 0.119507 0.119507
+Kd 0.076485 0.076485 0.076485
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
