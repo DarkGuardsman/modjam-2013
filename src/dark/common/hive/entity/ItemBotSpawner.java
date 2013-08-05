@@ -95,6 +95,6 @@ public class ItemBotSpawner extends Item
     public void registerIcons(IconRegister par1IconRegister)
     {
         super.registerIcons(par1IconRegister);
-        //this.theIcon = par1IconRegister.registerIcon("monsterPlacer_overlay");
+        this.theIcon = par1IconRegister.registerIcon("monsterPlacer_overlay");
     }
 }

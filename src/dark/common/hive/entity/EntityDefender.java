@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -85,13 +86,19 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         return this.getClosetEntityForAttack(20);
     }
 
+    @Override
+    public AxisAlignedBB getBoundingBox()
+    {
+        return AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX + .5, posY + 1.5, posZ + .5);
+    }
+
     /** Gets the closest entity to this entity for attack */
     public EntityLiving getClosetEntityForAttack(double range)
     {
         EntityLiving entity = null;
         Pos pos = new Pos(this);
         double distance = range * range;
-
+        this.getBoundingBox();
         List<EntityLiving> entityList = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, this.getBoundingBox().expand(range, 4, range));
         for (EntityLiving currentEntity : entityList)
         {

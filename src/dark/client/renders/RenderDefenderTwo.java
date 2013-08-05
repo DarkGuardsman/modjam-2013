@@ -22,9 +22,9 @@ public class RenderDefenderTwo extends Render
     public void doRender(Entity entity, double xx, double yy, double zz, float f, float f1)
     {
         GL11.glPushMatrix();
-        GL11.glTranslated(xx + .50, yy + 2.2, zz + .50);
+        GL11.glTranslated(xx, yy, zz);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glScalef(1, 1, 1);
+        GL11.glScalef(1.5f, 1.5f, 1.5f);
         GL11.glRotatef(entity.rotationYaw, 0F, 1F, 0F);
 
         FMLClientHandler.instance().getClient().renderEngine.func_110577_a(this.func_110775_a(entity));
@@ -40,7 +40,7 @@ public class RenderDefenderTwo extends Render
     @Override
     protected ResourceLocation func_110775_a(Entity entity)
     {
-        return new ResourceLocation(DarkBotMain.DOMAIN, "uv/Drone.Wheel.png");
+        return new ResourceLocation(DarkBotMain.DOMAIN, "textures/uv/Drone.Wheel.png");
     }
 
 }
