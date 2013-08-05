@@ -17,7 +17,7 @@ public class WorldGen implements IWorldGenerator
         chunkX = chunkX << 4;
         chunkZ = chunkZ << 4;
         PosWorld pos = new PosWorld(world, chunkX, 63, chunkZ);
-        if (random.nextInt(50) == 1 && HiveSpire.getSpire(pos, 400) == null)
+        if (random.nextInt(30) == 1 && HiveSpire.getSpire(pos, 400) == null)
         {
             HiveSpire spire = new HiveSpire(pos);
             HiveSpire.buildSpire(spire, 1 + random.nextInt(HiveSpire.MAX_SIZE - 1));
