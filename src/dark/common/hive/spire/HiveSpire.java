@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.chunk.Chunk;
 import dark.common.api.IHiveSpire;
+import dark.common.entity.EntityDefender;
 import dark.common.gen.BuildingTickHandler;
 import dark.common.gen.DarkSchematic;
 import dark.common.gen.TrapSpawn;
@@ -191,7 +192,8 @@ public class HiveSpire implements IHiveSpire
 
             if (this.loadedTraps.size() == 0)
             {
-                if (this.getLocation().world.rand.nextInt(5) == 1)
+                int si = this.getLocation().world.getEntitiesWithinAABB(EntityDefender.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(100, 100 + 50, 100))).size();
+                if (si < 30 && this.getLocation().world.rand.nextInt(20) == 1)
                 {
                     TrapSpawn trap = new TrapSpawn(new Pos(player).add(new Pos(this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(5), this.getLocation().world.rand.nextInt(5))));
                     trap.triggerTrap(player.worldObj);
