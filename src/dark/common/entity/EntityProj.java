@@ -48,6 +48,7 @@ public class EntityProj extends Entity implements IProjectile
 
     /** The amount of knockback an arrow applies when it hits a mob. */
     private int knockbackStrength;
+    private int tickInGroundDelay;
 
     public EntityProj(World par1World)
     {
@@ -216,12 +217,16 @@ public class EntityProj extends Entity implements IProjectile
 
             if (j == this.inTile && k == this.inData)
             {
+                if(ticksInGround == 0)
+                {
+                    this.tickInGroundDelay = 10 + this.worldObj.rand.nextInt(50);
+                }
                 ++this.ticksInGround;
 
-                if (this.ticksInGround == 40)
+                if (this.ticksInGround == this.tickInGroundDelay)
                 {
                     this.setDead();
-                    this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 5 - this.worldObj.rand.nextInt(4), false);
+                    this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 3 - this.worldObj.rand.nextInt(2), false);
                 }
             }
             else
