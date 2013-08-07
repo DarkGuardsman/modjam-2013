@@ -41,20 +41,27 @@ public class HiveSpire implements IHiveSpire
     public static HashMap<Integer, Pair<Integer, Integer>> level_List = new HashMap<Integer, Pair<Integer, Integer>>();
     /** Schematic names to build from for each level <Level,SchematicName> */
     public static HashMap<Integer, String> level_Schematic = new HashMap<Integer, String>();
-
+    /** Location of the spire. Don't call this var instead use getLocation() */
     private PosWorld location;
+    /** Currently loaded schematic */
     public DarkSchematic schematic;
+    /** Linked hivemind that controls this spire */
     private Hivemind hivemind;
+    /** Hive name */
     private String hiveName = "world";
-    int size = 1;
+    /** current size of the spire */
+    protected int size = 1;
+    /** Has been built after being created */
     private boolean built = false;
+    /** Has loaded from save file */
     private boolean loaded = false;
     /** List of traps loaded from the last schematic built with */
     public List<Trap> loadedTraps = new ArrayList<Trap>();
     /** List of inventories the spire can use to store items */
     List<IInventory> inventory = new ArrayList<IInventory>();
-
+    /** Counter of how many drones have been killed in its range */
     private int deaths = 0;
+
     static
     {
         //Pair.two for level list stacks with its levels before it
@@ -72,10 +79,14 @@ public class HiveSpire implements IHiveSpire
     public HiveSpire(PosWorld pos)
     {
         location = pos;
-        staticList.add(this);
+        synchronized (staticList)
+        {
+            staticList.add(this);
+        }
         this.getHive().addToHive(this);
     }
 
+    /** Gets the schematic for the current level of spire */
     public DarkSchematic getSchematic()
     {
         String name = level_Schematic.get(this.size);
@@ -92,19 +103,23 @@ public class HiveSpire implements IHiveSpire
      * @param location - world location
      * @param i - max distance to search for the spire
      * @return */
+
     public static HiveSpire getSpire(PosWorld location, int i)
     {
         if (location != null)
         {
             double distance = Double.MAX_VALUE;
             HiveSpire spire = null;
-            for (HiveSpire entry : staticList)
+            synchronized (staticList)
             {
-                double distanceTo = entry.getLocation().getDistanceFrom2D(location);
-                if (entry.getLocation().world == location.world && distanceTo < distance && distanceTo < i)
+                for (HiveSpire entry : staticList)
                 {
-                    spire = entry;
-                    distance = distanceTo;
+                    double distanceTo = entry.getLocation().getDistanceFrom2D(location);
+                    if (entry.getLocation().world == location.world && distanceTo < distance && distanceTo < i)
+                    {
+                        spire = entry;
+                        distance = distanceTo;
+                    }
                 }
             }
             return spire;
