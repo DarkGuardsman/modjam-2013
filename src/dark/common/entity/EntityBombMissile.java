@@ -27,14 +27,14 @@ import net.minecraft.world.World;
 
 public class EntityBombMissile extends Entity implements IProjectile
 {
-    private int xTile = -1, yTile = -1, zTile = -1, groundID, groundMeta, fuelTicks = 60;
+    private int xTile = -1, yTile = -1, zTile = -1, groundID, groundMeta, fuelTicks = 60, ticksInGround, ticksInAir;;
     /** Is this in/on a block */
     private boolean inGround;
 
     /** The owner of this missile. */
     public Entity shootingEntity;
-    private int ticksInGround, ticksInAir;
-    private double damage = 2.0D;
+
+    private double damage = 6.0D;
 
     /** The amount of knockback an arrow applies when it hits a mob. */
     private int knockbackStrength;
@@ -397,7 +397,7 @@ public class EntityBombMissile extends Entity implements IProjectile
                 f1 = 0.01F;
                 for (int bb = 0; bb < 12; bb++)
                 {
-                    this.worldObj.spawnParticle("smoke", this.posX +(.1 - .1 * this.worldObj.rand.nextFloat()), this.posY+(.1 - .1 * this.worldObj.rand.nextFloat()), this.posZ+(.1 - .1 * this.worldObj.rand.nextFloat()), this.motionX/2, this.motionY/2, this.motionZ/2);
+                    this.worldObj.spawnParticle("smoke", this.posX + (.1 - .1 * this.worldObj.rand.nextFloat()), this.posY + (.1 - .1 * this.worldObj.rand.nextFloat()), this.posZ + (.1 - .1 * this.worldObj.rand.nextFloat()), this.motionX / 2, this.motionY / 2, this.motionZ / 2);
                 }
             }
             else

@@ -44,6 +44,7 @@ public class BlockCreep extends BlockMain
         ignoreList.add(Block.ladder);
         ignoreList.add(Block.redstoneWire);
         ignoreList.add(Block.lever);
+        ignoreList.add(Block.redstoneComparatorIdle);
     }
 
     public BlockCreep(int par1)

@@ -24,7 +24,7 @@ public class TileEntitySpireCore extends TileHive
         {
             this.getSpire().size = this.size;
         }
-        //this.getSpire().init();
+        this.getSpire().init();
         if (this.getSpire() != null)
         {
             System.out.println("Spire activated at " + this.getSpire().getLocation().toString());
@@ -39,19 +39,19 @@ public class TileEntitySpireCore extends TileHive
         {
             if (this.ticks % mcday == 0)
             {
-                //this.getSpire().scanArea();
+                this.getSpire().scanArea();
             }
 
             if (this.ticks % 5 == 0)
             {
-                List<Entity> list = this.worldObj.playerEntities;
+                List<Entity> list = this.getSpire().getEntitiesInRange();
                 if (list != null)
                 {
                     for (Entity entity : list)
                     {
                         if (entity instanceof EntityPlayer)
                         {
-                            //this.getSpire().triggerTrapIfNear(this, (EntityPlayer) entity);
+                            this.getSpire().triggerTrapIfNear(this, (EntityPlayer) entity);
                         }
                     }
                 }
