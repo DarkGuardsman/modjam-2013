@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 public class EntityBombMissile extends Entity implements IProjectile
 {
-    private int xTile = -1, yTile = -1, zTile = -1, inTile, inData;
+    private int xTile = -1, yTile = -1, zTile = -1, groundID, groundMeta;
     /** Is this in/on a block */
     private boolean inGround;
 
@@ -115,7 +115,6 @@ public class EntityBombMissile extends Entity implements IProjectile
     @Override
     protected void entityInit()
     {
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
     }
 
     /** Similar to setArrowHeading, it's point the throwable entity to a x, y, z direction. */
@@ -134,9 +133,9 @@ public class EntityBombMissile extends Entity implements IProjectile
         this.motionX = xx;
         this.motionY = yy;
         this.motionZ = zz;
-        float f3 = MathHelper.sqrt_double(xx * xx + zz * zz);
+        float xzMag = MathHelper.sqrt_double(xx * xx + zz * zz);
         this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(xx, zz) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(yy, (double) f3) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(yy, (double) xzMag) * 180.0D / Math.PI);
         this.ticksInGround = 0;
     }
 
@@ -196,7 +195,7 @@ public class EntityBombMissile extends Entity implements IProjectile
             int blockID = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
             int blockMeta = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 
-            if (blockID == this.inTile && blockMeta == this.inData)
+            if (blockID == this.groundID && blockMeta == this.groundMeta)
             {
                 if (ticksInGround == 0)
                 {
@@ -238,27 +237,26 @@ public class EntityBombMissile extends Entity implements IProjectile
             Entity entity = null;
             List entityList = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double d0 = 0.0D;
-            int l;
             float f1;
 
-            for (l = 0; l < entityList.size(); ++l)
+            for (int l = 0; l < entityList.size(); ++l)
             {
-                Entity entity1 = (Entity) entityList.get(l);
+                Entity currentEntity = (Entity) entityList.get(l);
 
-                if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5))
+                if (currentEntity.canBeCollidedWith() && (currentEntity != this.shootingEntity || this.ticksInAir >= 5))
                 {
                     f1 = 0.3F;
-                    AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand((double) f1, (double) f1, (double) f1);
+                    AxisAlignedBB axisalignedbb1 = currentEntity.boundingBox.expand((double) f1, (double) f1, (double) f1);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(currentLocation, nextLocation);
 
                     if (movingobjectposition1 != null)
                     {
-                        double d1 = currentLocation.distanceTo(movingobjectposition1.hitVec);
+                        double distanceTo = currentLocation.distanceTo(movingobjectposition1.hitVec);
 
-                        if (d1 < d0 || d0 == 0.0D)
+                        if (distanceTo < d0 || d0 == 0.0D)
                         {
-                            entity = entity1;
-                            d0 = d1;
+                            entity = currentEntity;
+                            d0 = distanceTo;
                         }
                     }
                 }
@@ -289,11 +287,6 @@ public class EntityBombMissile extends Entity implements IProjectile
                     f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
                     int i1 = MathHelper.ceiling_double_int((double) f2 * this.damage);
 
-                    if (this.getIsCritical())
-                    {
-                        i1 += this.rand.nextInt(i1 / 2 + 2);
-                    }
-
                     DamageSource damagesource = null;
 
                     if (this.shootingEntity == null)
@@ -309,7 +302,7 @@ public class EntityBombMissile extends Entity implements IProjectile
                     {
                         if (movingobjectposition.entityHit instanceof EntityLivingBase)
                         {
-                            this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 3 - this.worldObj.rand.nextInt(2), false);
+                            this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 1 + this.worldObj.rand.nextInt(2), false);
                             EntityLivingBase entitylivingbase = (EntityLivingBase) movingobjectposition.entityHit;
 
                             if (!this.worldObj.isRemote)
@@ -340,11 +333,6 @@ public class EntityBombMissile extends Entity implements IProjectile
                         }
 
                         this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
-
-                        if (!(movingobjectposition.entityHit instanceof EntityEnderman))
-                        {
-                            this.setDead();
-                        }
                     }
                     else
                     {
@@ -361,8 +349,8 @@ public class EntityBombMissile extends Entity implements IProjectile
                     this.xTile = movingobjectposition.blockX;
                     this.yTile = movingobjectposition.blockY;
                     this.zTile = movingobjectposition.blockZ;
-                    this.inTile = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
-                    this.inData = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
+                    this.groundID = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+                    this.groundMeta = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
                     this.motionX = (double) ((float) (movingobjectposition.hitVec.xCoord - this.posX));
                     this.motionY = (double) ((float) (movingobjectposition.hitVec.yCoord - this.posY));
                     this.motionZ = (double) ((float) (movingobjectposition.hitVec.zCoord - this.posZ));
@@ -372,20 +360,11 @@ public class EntityBombMissile extends Entity implements IProjectile
                     this.posZ -= this.motionZ / (double) f2 * 0.05000000074505806D;
                     this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                     this.inGround = true;
-                    this.setIsCritical(false);
 
-                    if (this.inTile != 0)
+                    if (this.groundID != 0)
                     {
-                        Block.blocksList[this.inTile].onEntityCollidedWithBlock(this.worldObj, this.xTile, this.yTile, this.zTile, this);
+                        Block.blocksList[this.groundID].onEntityCollidedWithBlock(this.worldObj, this.xTile, this.yTile, this.zTile, this);
                     }
-                }
-            }
-
-            if (this.getIsCritical())
-            {
-                for (l = 0; l < 4; ++l)
-                {
-                    this.worldObj.spawnParticle("crit", this.posX + this.motionX * (double) l / 4.0D, this.posY + this.motionY * (double) l / 4.0D, this.posZ + this.motionZ * (double) l / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
                 }
             }
 
@@ -394,11 +373,6 @@ public class EntityBombMissile extends Entity implements IProjectile
             this.posZ += this.motionZ;
             f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-
-            for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
-            {
-                ;
-            }
 
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
             {
@@ -446,8 +420,8 @@ public class EntityBombMissile extends Entity implements IProjectile
         par1NBTTagCompound.setShort("xTile", (short) this.xTile);
         par1NBTTagCompound.setShort("yTile", (short) this.yTile);
         par1NBTTagCompound.setShort("zTile", (short) this.zTile);
-        par1NBTTagCompound.setByte("inTile", (byte) this.inTile);
-        par1NBTTagCompound.setByte("inData", (byte) this.inData);
+        par1NBTTagCompound.setByte("inTile", (byte) this.groundID);
+        par1NBTTagCompound.setByte("inData", (byte) this.groundMeta);
         par1NBTTagCompound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
         par1NBTTagCompound.setDouble("damage", this.damage);
     }
@@ -458,8 +432,8 @@ public class EntityBombMissile extends Entity implements IProjectile
         this.xTile = par1NBTTagCompound.getShort("xTile");
         this.yTile = par1NBTTagCompound.getShort("yTile");
         this.zTile = par1NBTTagCompound.getShort("zTile");
-        this.inTile = par1NBTTagCompound.getByte("inTile") & 255;
-        this.inData = par1NBTTagCompound.getByte("inData") & 255;
+        this.groundID = par1NBTTagCompound.getByte("inTile") & 255;
+        this.groundMeta = par1NBTTagCompound.getByte("inData") & 255;
         this.inGround = par1NBTTagCompound.getByte("inGround") == 1;
 
         if (par1NBTTagCompound.hasKey("damage"))
@@ -501,27 +475,5 @@ public class EntityBombMissile extends Entity implements IProjectile
     public boolean canAttackWithItem()
     {
         return false;
-    }
-
-    /** Whether the arrow has a stream of critical hit particles flying behind it. */
-    public void setIsCritical(boolean par1)
-    {
-        byte b0 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (par1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 | 1)));
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -2)));
-        }
-    }
-
-    /** Whether the arrow has a stream of critical hit particles flying behind it. */
-    public boolean getIsCritical()
-    {
-        byte b0 = this.dataWatcher.getWatchableObjectByte(16);
-        return (b0 & 1) != 0;
     }
 }
