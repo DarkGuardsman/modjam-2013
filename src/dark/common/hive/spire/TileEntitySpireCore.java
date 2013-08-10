@@ -8,11 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import dark.common.hive.TileHive;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
-import dark.common.prefab.TileEntityMain;
 
-public class TileEntitySpire extends TileEntityMain
+public class TileEntitySpireCore extends TileHive
 {
     HiveSpire spire;
     private int size;
@@ -24,9 +24,11 @@ public class TileEntitySpire extends TileEntityMain
         {
             this.getSpire().size = this.size;
         }
-        this.getSpire().init();
-        //TODO get dimension id
-        //System.out.println("Sleep mode decatived for spire at " + xCoord + "x " + yCoord + "y " + zCoord + "z ");
+        //this.getSpire().init();
+        if (this.getSpire() != null)
+        {
+            System.out.println("Spire activated at " + this.getSpire().getLocation().toString());
+        }
     }
 
     @Override
@@ -37,7 +39,7 @@ public class TileEntitySpire extends TileEntityMain
         {
             if (this.ticks % mcday == 0)
             {
-                this.getSpire().scanArea();
+                //this.getSpire().scanArea();
             }
 
             if (this.ticks % 5 == 0)
@@ -49,7 +51,7 @@ public class TileEntitySpire extends TileEntityMain
                     {
                         if (entity instanceof EntityPlayer)
                         {
-                            this.getSpire().triggerTrapIfNear(this, (EntityPlayer) entity);
+                            //this.getSpire().triggerTrapIfNear(this, (EntityPlayer) entity);
                         }
                     }
                 }

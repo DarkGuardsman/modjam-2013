@@ -10,18 +10,18 @@ import dark.client.renders.RenderMissile;
 import dark.common.CommonProxy;
 import dark.common.entity.EntityBossGigus;
 import dark.common.entity.EntityDefender;
-import dark.common.entity.EntityProj;
-import dark.common.hive.spire.TileEntitySpire;
+import dark.common.entity.EntityBombMissile;
+import dark.common.hive.spire.TileEntitySpireCore;
 
 public class ClientProxy extends CommonProxy
 {
 
     public void init()
     {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpire.class, new RenderCore());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpireCore.class, new RenderCore());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityDefender.class, new RenderDefenderTwo());
-        RenderingRegistry.registerEntityRenderingHandler(EntityProj.class, new RenderMissile());
+        RenderingRegistry.registerEntityRenderingHandler(EntityBombMissile.class, new RenderMissile());
         RenderingRegistry.registerEntityRenderingHandler(EntityBossGigus.class, new RenderBossGigus());
 
         MinecraftForge.EVENT_BUS.register(SoundHandler.INSTANCE);

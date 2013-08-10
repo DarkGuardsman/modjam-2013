@@ -37,9 +37,9 @@ public class HiveSpire implements IHiveSpire
 
     /** Static list of spire since they run outside the map */
     public static List<HiveSpire> staticList = new ArrayList<HiveSpire>();
-    /** Level setting list <Level,<ScanRange,BuildDownAmount>> */
+    /** Level setting list -Level,-ScanRange,BuildDownAmount-- */
     public static HashMap<Integer, Pair<Integer, Integer>> level_List = new HashMap<Integer, Pair<Integer, Integer>>();
-    /** Schematic names to build from for each level <Level,SchematicName> */
+    /** Schematic names to build from for each level -Level,SchematicName- */
     public static HashMap<Integer, String> level_Schematic = new HashMap<Integer, String>();
     /** Location of the spire. Don't call this var instead use getLocation() */
     private PosWorld location;
@@ -71,7 +71,7 @@ public class HiveSpire implements IHiveSpire
         //level_Schematic.put(2, "SpireThree");
     }
 
-    public HiveSpire(TileEntitySpire core)
+    public HiveSpire(TileEntitySpireCore core)
     {
         this(new PosWorld(core.worldObj, new Pos(core)));
     }
@@ -142,8 +142,11 @@ public class HiveSpire implements IHiveSpire
     {
         //TODO clear the spire and mark all elements for deletion
         //Case if the spire's core was removed and it can't re-populate the core
-        this.getHive().remove(this);
-        staticList.remove(this);
+        this.getHive().remove(this);'
+        synchronized (staticList)
+        {
+            staticList.remove(this);
+        }
     }
 
     @Override
@@ -176,7 +179,7 @@ public class HiveSpire implements IHiveSpire
     }
 
     /** Called for each player in range of the spire per tick to trigger trap entities */
-    public void triggerTrapIfNear(TileEntitySpire spire, EntityPlayer player)
+    public void triggerTrapIfNear(TileEntitySpireCore spire, EntityPlayer player)
     {
         if (player != null)
         {
@@ -243,7 +246,7 @@ public class HiveSpire implements IHiveSpire
         Pos start = new Pos(getLocation().xx + delta, Math.min(getLocation().yy + delta, 255), getLocation().zz + delta);
         Pos end = new Pos(getLocation().xx - delta, Math.max(getLocation().yy - delta, 6), getLocation().zz - delta);
 
-        TileEntitySpire spire = null;
+        TileEntitySpireCore spire = null;
         double distance = Double.MAX_VALUE;
         boolean coreFound = false;
 
@@ -260,9 +263,9 @@ public class HiveSpire implements IHiveSpire
 
                     Block block = Block.blocksList[id];
                     TileEntity entity = pos.getTileEntity(getLocation().world);
-                    if (entity instanceof TileEntitySpire && new Pos(entity).getDistanceFrom(this.getLocation()) < distance)
+                    if (entity instanceof TileEntitySpireCore && new Pos(entity).getDistanceFrom(this.getLocation()) < distance)
                     {
-                        spire = (TileEntitySpire) entity;
+                        spire = (TileEntitySpireCore) entity;
                         distance = new Pos(entity).getDistanceFrom(this.getLocation());
                         if (new Pos(entity).equals(this.getLocation()))
                         {

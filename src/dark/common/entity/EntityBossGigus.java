@@ -67,7 +67,7 @@ public class EntityBossGigus extends EntityDefender implements IBossDisplayData
 
             for (int i = 0; i < 12; ++i)
             {
-                EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float) (14 - this.worldObj.difficultySetting * 4));
+                EntityBombMissile entitysmallfireball = new EntityBombMissile(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float) (14 - this.worldObj.difficultySetting * 4));
                 entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
                 entitysmallfireball.setDamage((double) (range * 2.0F) + this.rand.nextGaussian() * 0.25D + (double) ((float) this.worldObj.difficultySetting * 0.11F));
                 this.worldObj.spawnEntityInWorld(entitysmallfireball);

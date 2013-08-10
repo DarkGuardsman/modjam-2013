@@ -1,34 +1,18 @@
 package dark.common.entity;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentThorns;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.IFluidBlock;
-import dark.common.DarkBotMain;
 import dark.common.api.IHiveObject;
-import dark.common.hive.HiveManager;
-import dark.common.hive.spire.HiveSpire;
-import dark.common.prefab.Pos;
-import dark.common.prefab.PosWorld;
 
-public class EntityDefender extends EntityCreature implements IHiveObject
+public class EntityDefender extends EntityWeaponDrone
 {
-    private String hiveID = "world";
-    private HiveSpire spire = null;
-    private boolean reported = false;
 
     public EntityDefender(World par1World)
     {
@@ -38,113 +22,14 @@ public class EntityDefender extends EntityCreature implements IHiveObject
         this.setSize(1.5f, 2);
     }
 
+    @Override
     protected void entityInit()
     {
         super.entityInit();
         this.dataWatcher.addObject(16, new Byte((byte) 0));
     }
 
-    public void onLivingUpdate()
-    {
-        this.updateArmSwingProgress();
-        super.onLivingUpdate();
-    }
 
-    @Override
-    public void setHiveID(String id)
-    {
-        this.hiveID = id;
-
-    }
-
-    @Override
-    public String getHiveID()
-    {
-        if (this.hiveID.equalsIgnoreCase("world") || this.hiveID.equalsIgnoreCase(HiveManager.NEUTRIAL))
-        {
-            this.hiveID = HiveManager.getHiveID(this);
-        }
-        return this.hiveID;
-    }
-
-    @Override
-    protected Entity findPlayerToAttack()
-    {
-        return this.getClosetEntityForAttack(30);
-    }
-
-    @SuppressWarnings("unchecked")
-    public EntityLivingBase getClosetEntityForAttack(double range)
-    {
-        EntityLivingBase entity = null;
-        Pos pos = new Pos(this);
-        double distance = range * range;
-        this.getBoundingBox();
-        List<EntityLivingBase> entityList = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(range, 4, range));
-
-        for (EntityLivingBase currentEntity : entityList)
-        {
-            if (currentEntity instanceof EntityPlayer && ((EntityPlayer) currentEntity).capabilities.isCreativeMode)
-            {
-
-            }
-            else if (currentEntity instanceof IHiveObject && ((IHiveObject) currentEntity).getHiveID().equalsIgnoreCase(this.getHiveID()))
-            {
-
-            }
-            else if (this.canEntityBeSeen(currentEntity) && !currentEntity.isInvisible() && currentEntity.isEntityAlive())
-            {
-                double distanceTo = pos.getDistanceFrom(new Pos(currentEntity));
-                if (distanceTo < distance)
-                {
-                    distance = distanceTo;
-                    entity = currentEntity;
-                }
-            }
-        }
-
-        return entity;
-    }
-
-    @Override
-    // called when this is attacked
-    public boolean attackEntityFrom(DamageSource source, float damage)
-    {
-        if (this.isEntityInvulnerable())
-        {
-            return false;
-        }
-        else if (source != null)
-        {
-            Entity entity = source.getEntity();
-            if (entity != null && entity instanceof IHiveObject && ((IHiveObject) entity).getHiveID().equalsIgnoreCase(this.getHiveID()))
-            {
-                return false;
-            }
-            else if (super.attackEntityFrom(source, damage))
-            {
-                if (this.riddenByEntity != entity && this.ridingEntity != entity)
-                {
-                    if (entity != this)
-                    {
-                        this.entityToAttack = entity;
-                    }
-
-                    return true;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void addPotionEffect(PotionEffect par1PotionEffect)
-    {
-    }
 
     @Override
     public boolean attackEntityAsMob(Entity entity)
@@ -198,7 +83,7 @@ public class EntityDefender extends EntityCreature implements IHiveObject
 
             for (int i = 0; i < 1; ++i)
             {
-                EntityProj entitysmallfireball = new EntityProj(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float) (14 - this.worldObj.difficultySetting * 4));
+                EntityBombMissile entitysmallfireball = new EntityBombMissile(this.worldObj, this, (EntityLivingBase) attackTarget, 1.6F, (float) (14 - this.worldObj.difficultySetting * 4));
                 entitysmallfireball.posY = this.posY + (double) (this.height / 2.0F) + 0.5D;
                 entitysmallfireball.setDamage((double) (range * 2.0F) + this.rand.nextGaussian() * 0.25D + (double) ((float) this.worldObj.difficultySetting * 0.11F));
                 this.worldObj.spawnEntityInWorld(entitysmallfireball);
@@ -226,26 +111,6 @@ public class EntityDefender extends EntityCreature implements IHiveObject
             }
 
         }
-    }
-
-    @Override
-    public float getBlockPathWeight(int x, int y, int z)
-    {
-        PosWorld pos = new PosWorld(this.worldObj, x, y, z);
-        int blockID = pos.getBlockID();
-        Block block = Block.blocksList[blockID];
-        if (blockID == DarkBotMain.blockCreep.blockID || blockID == DarkBotMain.blockDeco.blockID)
-        {
-            return 100;
-        }
-        else if (block != null)
-        {
-            if (block instanceof BlockFluid || block instanceof IFluidBlock)
-            {
-                return -1000;
-            }
-        }
-        return 0.5F + this.worldObj.getLightBrightness(x, y, z);
     }
 
     @Override

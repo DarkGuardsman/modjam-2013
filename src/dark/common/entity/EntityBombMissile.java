@@ -25,7 +25,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityProj extends Entity implements IProjectile
+public class EntityBombMissile extends Entity implements IProjectile
 {
     private int xTile = -1;
     private int yTile = -1;
@@ -50,14 +50,14 @@ public class EntityProj extends Entity implements IProjectile
     private int knockbackStrength;
     private int tickInGroundDelay;
 
-    public EntityProj(World par1World)
+    public EntityBombMissile(World par1World)
     {
         super(par1World);
         this.renderDistanceWeight = 10.0D;
         this.setSize(0.5F, 0.5F);
     }
 
-    public EntityProj(World par1World, double par2, double par4, double par6)
+    public EntityBombMissile(World par1World, double par2, double par4, double par6)
     {
         super(par1World);
         this.renderDistanceWeight = 10.0D;
@@ -66,7 +66,7 @@ public class EntityProj extends Entity implements IProjectile
         this.yOffset = 0.0F;
     }
 
-    public EntityProj(World par1World, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase, float par4, float par5)
+    public EntityBombMissile(World par1World, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase, float par4, float par5)
     {
         super(par1World);
         this.renderDistanceWeight = 10.0D;
@@ -96,7 +96,7 @@ public class EntityProj extends Entity implements IProjectile
         }
     }
 
-    public EntityProj(World par1World, EntityLivingBase par2EntityLivingBase, float par3)
+    public EntityBombMissile(World par1World, EntityLivingBase par2EntityLivingBase, float par3)
     {
         super(par1World);
         this.renderDistanceWeight = 10.0D;

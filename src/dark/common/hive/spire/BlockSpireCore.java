@@ -58,9 +58,9 @@ public class BlockSpireCore extends BlockMain
                 else if (stack.getItem().itemID == Block.dirt.blockID)
                 {
                     TileEntity entity = world.getBlockTileEntity(x, y, z);
-                    if (entity instanceof TileEntitySpire)
+                    if (entity instanceof TileEntitySpireCore)
                     {
-                        ((TileEntitySpire) entity).getSpire().scanArea();
+                        ((TileEntitySpireCore) entity).getSpire().scanArea();
                     }
                 }
             }
@@ -91,7 +91,7 @@ public class BlockSpireCore extends BlockMain
     public void breakBlock(World world, int x, int y, int z, int par5, int par6)
     {
         TileEntity entity = world.getBlockTileEntity(x, y, z);
-        if (entity instanceof TileEntitySpire)
+        if (entity instanceof TileEntitySpireCore)
         {
 
         }
@@ -103,7 +103,7 @@ public class BlockSpireCore extends BlockMain
     {
         if (metadata == 0)
         {
-            return new TileEntitySpire();
+            return new TileEntitySpireCore();
         }
         else
         {

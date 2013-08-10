@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import dark.common.DarkBotMain;
 import dark.common.gen.DarkSchematic;
 import dark.common.hive.spire.HiveSpire;
-import dark.common.hive.spire.TileEntitySpire;
+import dark.common.hive.spire.TileEntitySpireCore;
 import dark.common.prefab.Pair;
 import dark.common.prefab.Pos;
 import dark.common.prefab.PosWorld;
@@ -162,7 +162,7 @@ public class ItemWorldEdit extends Item
                 HiveSpire hiveSpire = HiveSpire.getSpire(new PosWorld(world, new Pos(x, y, z)), 30);
                 if (hiveSpire == null)
                 {
-                    TileEntitySpire spire = new TileEntitySpire();
+                    TileEntitySpireCore spire = new TileEntitySpireCore();
                     spire.worldObj = world;
                     spire.xCoord = x;
                     spire.yCoord = y;
