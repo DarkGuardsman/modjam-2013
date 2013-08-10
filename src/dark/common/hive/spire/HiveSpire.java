@@ -9,6 +9,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -174,7 +175,7 @@ public class HiveSpire implements IHiveSpire
         {
             delta = level_List.get(this.size).getOne();
         }
-        entityList.addAll(this.getLocation().world.getEntitiesWithinAABB(EntityLiving.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(delta, delta + 50, delta))));
+        entityList.addAll(this.getLocation().world.getEntitiesWithinAABB(Entity.class, new Pos(this.getLocation().xx + 0.5, this.getLocation().yy + 0.5, this.getLocation().zz + 0.5).expandBound(new Pos(delta, delta + 50, delta))));
         return entityList;
     }
 
