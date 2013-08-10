@@ -199,7 +199,7 @@ public class EntityBombMissile extends Entity implements IProjectile
             {
                 if (ticksInGround == 0)
                 {
-                    this.tickInGroundDelay = 10 + this.worldObj.rand.nextInt(50);
+                    this.tickInGroundDelay = 10 + this.worldObj.rand.nextInt(10);
                 }
                 ++this.ticksInGround;
 
@@ -291,11 +291,11 @@ public class EntityBombMissile extends Entity implements IProjectile
 
                     if (this.shootingEntity == null)
                     {
-                        damagesource = new EntityDamageSourceIndirect("arrow", this, this).setProjectile();
+                        damagesource = new EntityDamageSourceIndirect("rocket", this, this).setProjectile();
                     }
                     else
                     {
-                        damagesource = new EntityDamageSourceIndirect("arrow", this, this.shootingEntity).setProjectile();
+                        damagesource = new EntityDamageSourceIndirect("rocket", this, this.shootingEntity).setProjectile();
                     }
 
                     if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float) i1))
