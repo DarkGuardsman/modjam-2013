@@ -27,88 +27,80 @@ import net.minecraft.world.World;
 
 public class EntityBombMissile extends Entity implements IProjectile
 {
-    private int xTile = -1;
-    private int yTile = -1;
-    private int zTile = -1;
-    private int inTile;
-    private int inData;
+    private int xTile = -1, yTile = -1, zTile = -1, inTile, inData;
+    /** Is this in/on a block */
     private boolean inGround;
 
-    /** 1 if the player can pick up the arrow */
-    public int canBePickedUp;
-
-    /** Seems to be some sort of timer for animating an arrow. */
-    public int arrowShake;
-
-    /** The owner of this arrow. */
+    /** The owner of this missile. */
     public Entity shootingEntity;
-    private int ticksInGround;
-    private int ticksInAir;
+    private int ticksInGround, ticksInAir;
     private double damage = 2.0D;
 
     /** The amount of knockback an arrow applies when it hits a mob. */
     private int knockbackStrength;
+    /** Delay before the bomb should blow up after inpacting the ground */
     private int tickInGroundDelay;
 
-    public EntityBombMissile(World par1World)
+    public EntityBombMissile(World world)
     {
-        super(par1World);
+        super(world);
         this.renderDistanceWeight = 10.0D;
         this.setSize(0.5F, 0.5F);
     }
 
-    public EntityBombMissile(World par1World, double par2, double par4, double par6)
+    public EntityBombMissile(World world, double x, double y, double z)
     {
-        super(par1World);
-        this.renderDistanceWeight = 10.0D;
-        this.setSize(0.5F, 0.5F);
-        this.setPosition(par2, par4, par6);
+        this(world);
+        this.setPosition(x, y, z);
         this.yOffset = 0.0F;
     }
 
-    public EntityBombMissile(World par1World, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase, float par4, float par5)
+    /** Used the difference in location of the shooter and target to position the missile
+     *
+     * @param world - world both the shooter and target are in
+     * @param shooter - entity that is firing this missile
+     * @param target - were the missile is destine for
+     * @param velocity - starting velocity of the missile
+     * @param spread - how far off center the missile should fly */
+    public EntityBombMissile(World world, EntityLivingBase shooter, EntityLivingBase target, float velocity, float spread)
     {
-        super(par1World);
+        super(world);
         this.renderDistanceWeight = 10.0D;
-        this.shootingEntity = par2EntityLivingBase;
+        this.shootingEntity = shooter;
 
-        if (par2EntityLivingBase instanceof EntityPlayer)
+        this.posY = shooter.posY + (double) shooter.getEyeHeight() - 0.10000000149011612D;
+        double deltaX = target.posX - shooter.posX;
+        double deltaY = target.boundingBox.minY + (double) (target.height / 3.0F) - this.posY;
+        double deltaZ = target.posZ - shooter.posZ;
+        double xzMag = (double) MathHelper.sqrt_double(deltaX * deltaX + deltaZ * deltaZ);
+
+        if (xzMag >= 1.0E-7D)
         {
-            this.canBePickedUp = 1;
-        }
+            float yaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0D / Math.PI) - 90.0F;
+            float pitch = (float) (-(Math.atan2(deltaY, xzMag) * 180.0D / Math.PI));
 
-        this.posY = par2EntityLivingBase.posY + (double) par2EntityLivingBase.getEyeHeight() - 0.10000000149011612D;
-        double d0 = par3EntityLivingBase.posX - par2EntityLivingBase.posX;
-        double d1 = par3EntityLivingBase.boundingBox.minY + (double) (par3EntityLivingBase.height / 3.0F) - this.posY;
-        double d2 = par3EntityLivingBase.posZ - par2EntityLivingBase.posZ;
-        double d3 = (double) MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+            double changeX = deltaX / xzMag;
+            double changeZ = deltaZ / xzMag;
 
-        if (d3 >= 1.0E-7D)
-        {
-            float f2 = (float) (Math.atan2(d2, d0) * 180.0D / Math.PI) - 90.0F;
-            float f3 = (float) (-(Math.atan2(d1, d3) * 180.0D / Math.PI));
-            double d4 = d0 / d3;
-            double d5 = d2 / d3;
-            this.setLocationAndAngles(par2EntityLivingBase.posX + d4, this.posY, par2EntityLivingBase.posZ + d5, f2, f3);
+            this.setLocationAndAngles(shooter.posX + changeX, this.posY, shooter.posZ + changeZ, yaw, pitch);
+
             this.yOffset = 0.0F;
-            float f4 = (float) d3 * 0.2F;
-            this.setThrowableHeading(d0, d1 + (double) f4, d2, par4, par5);
+
+            float f4 = (float) xzMag * 0.2F;
+
+            this.setThrowableHeading(deltaX, deltaY + (double) f4, deltaZ, velocity, spread);
         }
     }
 
-    public EntityBombMissile(World par1World, EntityLivingBase par2EntityLivingBase, float par3)
+    /** Uses the shooters facing direction and velocity to fire the missile */
+    public EntityBombMissile(World world, EntityLivingBase shooter, float velocity)
     {
-        super(par1World);
+        super(world);
         this.renderDistanceWeight = 10.0D;
-        this.shootingEntity = par2EntityLivingBase;
-
-        if (par2EntityLivingBase instanceof EntityPlayer)
-        {
-            this.canBePickedUp = 1;
-        }
+        this.shootingEntity = shooter;
 
         this.setSize(0.5F, 0.5F);
-        this.setLocationAndAngles(par2EntityLivingBase.posX, par2EntityLivingBase.posY + (double) par2EntityLivingBase.getEyeHeight(), par2EntityLivingBase.posZ, par2EntityLivingBase.rotationYaw, par2EntityLivingBase.rotationPitch);
+        this.setLocationAndAngles(shooter.posX, shooter.posY + (double) shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
         this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
         this.posY -= 0.10000000149011612D;
         this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
@@ -117,62 +109,56 @@ public class EntityBombMissile extends Entity implements IProjectile
         this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
         this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
         this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
-        this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, par3 * 1.5F, 1.0F);
+        this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, velocity * 1.5F, 1.0F);
     }
 
+    @Override
     protected void entityInit()
     {
         this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
     }
 
     /** Similar to setArrowHeading, it's point the throwable entity to a x, y, z direction. */
-    public void setThrowableHeading(double par1, double par3, double par5, float par7, float par8)
+    public void setThrowableHeading(double xx, double yy, double zz, float velocity, float spread)
     {
-        float f2 = MathHelper.sqrt_double(par1 * par1 + par3 * par3 + par5 * par5);
-        par1 /= (double) f2;
-        par3 /= (double) f2;
-        par5 /= (double) f2;
-        par1 += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) par8;
-        par3 += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) par8;
-        par5 += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) par8;
-        par1 *= (double) par7;
-        par3 *= (double) par7;
-        par5 *= (double) par7;
-        this.motionX = par1;
-        this.motionY = par3;
-        this.motionZ = par5;
-        float f3 = MathHelper.sqrt_double(par1 * par1 + par5 * par5);
-        this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(par1, par5) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(par3, (double) f3) * 180.0D / Math.PI);
+        float mag = MathHelper.sqrt_double(xx * xx + yy * yy + zz * zz);
+        xx /= (double) mag;
+        yy /= (double) mag;
+        zz /= (double) mag;
+        xx += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
+        yy += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
+        zz += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
+        xx *= (double) velocity;
+        yy *= (double) velocity;
+        zz *= (double) velocity;
+        this.motionX = xx;
+        this.motionY = yy;
+        this.motionZ = zz;
+        float f3 = MathHelper.sqrt_double(xx * xx + zz * zz);
+        this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(xx, zz) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(yy, (double) f3) * 180.0D / Math.PI);
         this.ticksInGround = 0;
     }
 
-    @SideOnly(Side.CLIENT)
-    /**
-     * Sets the position and rotation. Only difference from the other one is no bounding on the rotation. Args: posX,
-     * posY, posZ, yaw, pitch
-     */
-    public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
+    @Override
+    public void setPositionAndRotation2(double xx, double yy, double zz, float yaw, float pitch, int par9)
     {
-        this.setPosition(par1, par3, par5);
-        this.setRotation(par7, par8);
+        this.setPosition(xx, yy, zz);
+        this.setRotation(yaw, pitch);
     }
 
-    @SideOnly(Side.CLIENT)
-    /**
-     * Sets the velocity to the args. Args: x, y, z
-     */
-    public void setVelocity(double par1, double par3, double par5)
+    @Override
+    public void setVelocity(double vx, double vy, double vz)
     {
-        this.motionX = par1;
-        this.motionY = par3;
-        this.motionZ = par5;
+        this.motionX = vx;
+        this.motionY = vy;
+        this.motionZ = vz;
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt_double(par1 * par1 + par5 * par5);
-            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(par1, par5) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(par3, (double) f) * 180.0D / Math.PI);
+            float f = MathHelper.sqrt_double(vx * vx + vz * vz);
+            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(vx, vz) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(vy, (double) f) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch;
             this.prevRotationYaw = this.rotationYaw;
             this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -180,16 +166,16 @@ public class EntityBombMissile extends Entity implements IProjectile
         }
     }
 
-    /** Called to update the entity's position/logic. */
+    @Override
     public void onUpdate()
     {
         super.onUpdate();
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            float xzMag = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, (double) xzMag) * 180.0D / Math.PI);
         }
 
         int i = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
@@ -205,19 +191,14 @@ public class EntityBombMissile extends Entity implements IProjectile
             }
         }
 
-        if (this.arrowShake > 0)
-        {
-            --this.arrowShake;
-        }
-
         if (this.inGround)
         {
-            int j = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
-            int k = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
+            int blockID = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+            int blockMeta = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 
-            if (j == this.inTile && k == this.inData)
+            if (blockID == this.inTile && blockMeta == this.inData)
             {
-                if(ticksInGround == 0)
+                if (ticksInGround == 0)
                 {
                     this.tickInGroundDelay = 10 + this.worldObj.rand.nextInt(50);
                 }
@@ -226,7 +207,7 @@ public class EntityBombMissile extends Entity implements IProjectile
                 if (this.ticksInGround == this.tickInGroundDelay)
                 {
                     this.setDead();
-                    this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 3 - this.worldObj.rand.nextInt(2), false);
+                    this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 1 + this.worldObj.rand.nextInt(2), false);
                 }
             }
             else
@@ -242,36 +223,37 @@ public class EntityBombMissile extends Entity implements IProjectile
         else
         {
             ++this.ticksInAir;
-            Vec3 vec3 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-            Vec3 vec31 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks_do_do(vec3, vec31, false, true);
-            vec3 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-            vec31 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            Vec3 currentLocation = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
+            Vec3 nextLocation = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+
+            MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks_do_do(currentLocation, nextLocation, false, true);
+            currentLocation = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
+            nextLocation = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
             if (movingobjectposition != null)
             {
-                vec31 = this.worldObj.getWorldVec3Pool().getVecFromPool(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
+                nextLocation = this.worldObj.getWorldVec3Pool().getVecFromPool(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
             }
 
             Entity entity = null;
-            List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            List entityList = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double d0 = 0.0D;
             int l;
             float f1;
 
-            for (l = 0; l < list.size(); ++l)
+            for (l = 0; l < entityList.size(); ++l)
             {
-                Entity entity1 = (Entity) list.get(l);
+                Entity entity1 = (Entity) entityList.get(l);
 
                 if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5))
                 {
                     f1 = 0.3F;
                     AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand((double) f1, (double) f1, (double) f1);
-                    MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec3, vec31);
+                    MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(currentLocation, nextLocation);
 
                     if (movingobjectposition1 != null)
                     {
-                        double d1 = vec3.distanceTo(movingobjectposition1.hitVec);
+                        double d1 = currentLocation.distanceTo(movingobjectposition1.hitVec);
 
                         if (d1 < d0 || d0 == 0.0D)
                         {
@@ -321,11 +303,6 @@ public class EntityBombMissile extends Entity implements IProjectile
                     else
                     {
                         damagesource = new EntityDamageSourceIndirect("arrow", this, this.shootingEntity).setProjectile();
-                    }
-
-                    if (this.isBurning() && !(movingobjectposition.entityHit instanceof EntityEnderman))
-                    {
-                        movingobjectposition.entityHit.setFire(5);
                     }
 
                     if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float) i1))
@@ -395,7 +372,6 @@ public class EntityBombMissile extends Entity implements IProjectile
                     this.posZ -= this.motionZ / (double) f2 * 0.05000000074505806D;
                     this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                     this.inGround = true;
-                    this.arrowShake = 7;
                     this.setIsCritical(false);
 
                     if (this.inTile != 0)
@@ -472,9 +448,7 @@ public class EntityBombMissile extends Entity implements IProjectile
         par1NBTTagCompound.setShort("zTile", (short) this.zTile);
         par1NBTTagCompound.setByte("inTile", (byte) this.inTile);
         par1NBTTagCompound.setByte("inData", (byte) this.inData);
-        par1NBTTagCompound.setByte("shake", (byte) this.arrowShake);
         par1NBTTagCompound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
-        par1NBTTagCompound.setByte("pickup", (byte) this.canBePickedUp);
         par1NBTTagCompound.setDouble("damage", this.damage);
     }
 
@@ -486,42 +460,11 @@ public class EntityBombMissile extends Entity implements IProjectile
         this.zTile = par1NBTTagCompound.getShort("zTile");
         this.inTile = par1NBTTagCompound.getByte("inTile") & 255;
         this.inData = par1NBTTagCompound.getByte("inData") & 255;
-        this.arrowShake = par1NBTTagCompound.getByte("shake") & 255;
         this.inGround = par1NBTTagCompound.getByte("inGround") == 1;
 
         if (par1NBTTagCompound.hasKey("damage"))
         {
             this.damage = par1NBTTagCompound.getDouble("damage");
-        }
-
-        if (par1NBTTagCompound.hasKey("pickup"))
-        {
-            this.canBePickedUp = par1NBTTagCompound.getByte("pickup");
-        }
-        else if (par1NBTTagCompound.hasKey("player"))
-        {
-            this.canBePickedUp = par1NBTTagCompound.getBoolean("player") ? 1 : 0;
-        }
-    }
-
-    /** Called by a player entity when they collide with an entity */
-    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
-    {
-        if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0)
-        {
-            boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && par1EntityPlayer.capabilities.isCreativeMode;
-
-            if (this.canBePickedUp == 1 && !par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.arrow, 1)))
-            {
-                flag = false;
-            }
-
-            if (flag)
-            {
-                this.playSound("random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                par1EntityPlayer.onItemPickup(this, 1);
-                this.setDead();
-            }
         }
     }
 

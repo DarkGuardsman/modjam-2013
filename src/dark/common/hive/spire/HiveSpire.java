@@ -142,7 +142,7 @@ public class HiveSpire implements IHiveSpire
     {
         //TODO clear the spire and mark all elements for deletion
         //Case if the spire's core was removed and it can't re-populate the core
-        this.getHive().remove(this);'
+        this.getHive().remove(this);
         synchronized (staticList)
         {
             staticList.remove(this);
