@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 public class EntityBombMissile extends Entity implements IProjectile
 {
-    private int xTile = -1, yTile = -1, zTile = -1, groundID, groundMeta, fuelTicks;
+    private int xTile = -1, yTile = -1, zTile = -1, groundID, groundMeta, fuelTicks = 60;
     /** Is this in/on a block */
     private boolean inGround;
 
@@ -46,7 +46,6 @@ public class EntityBombMissile extends Entity implements IProjectile
         super(world);
         this.renderDistanceWeight = 10.0D;
         this.setSize(0.5F, 0.5F);
-        this.fuelTicks = 300;
     }
 
     public EntityBombMissile(World world, double x, double y, double z)
@@ -393,9 +392,13 @@ public class EntityBombMissile extends Entity implements IProjectile
             this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
             float f4 = 0.99F;
 
-            if (this.ticksInAir < this.fuelTicks)
+            if (this.ticksInAir <= this.fuelTicks)
             {
                 f1 = 0.01F;
+                for (int bb = 0; bb < 12; bb++)
+                {
+                    this.worldObj.spawnParticle("smoke", this.posX +(.1 - .1 * this.worldObj.rand.nextFloat()), this.posY+(.1 - .1 * this.worldObj.rand.nextFloat()), this.posZ+(.1 - .1 * this.worldObj.rand.nextFloat()), this.motionX/2, this.motionY/2, this.motionZ/2);
+                }
             }
             else
             {
