@@ -44,8 +44,8 @@ public class ModelMissile extends ModelBase
 
     public void render()
     {
-        //Body.render(0.0625f);
-        //Fin.render(0.0625f);
+        Body.render(0.0625f);
+        Fin.render(0.0625f);
         Head.render(0.0625f);
     }
 
