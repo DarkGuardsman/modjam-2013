@@ -22,12 +22,12 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import dark.common.entity.EntityBossGigus;
 import dark.common.entity.EntityDefender;
-import dark.common.entity.EntityProj;
+import dark.common.entity.EntityBombMissile;
 import dark.common.entity.ItemBotSpawner;
 import dark.common.gen.WorldGen;
 import dark.common.hive.Hivemind;
 import dark.common.hive.spire.BlockSpireCore;
-import dark.common.hive.spire.TileEntitySpire;
+import dark.common.hive.spire.TileEntitySpireCore;
 import dark.common.items.ItemBlockMain;
 import dark.common.items.ItemWorldEdit;
 import dark.common.tiles.BlockCreep;
@@ -51,19 +51,27 @@ public class DarkBotMain
     public static final String DOMAIN = "dark";
     public static final String PREFIX = DOMAIN + ":";
 
-    public static Item worldEditTool;
-    public static Item droneSpawnTool;
-    public static Block blockDeco;
-    public static Block blockCreep;
-    public static Block blockCore;
-
-    public static Configuration config = new Configuration(new File(Loader.instance().getConfigDir(), "Dark/BotMain.cfg"));
-
-    @Instance(MOD_ID)
+    @Instance(DarkBotMain.MOD_ID)
     public static DarkBotMain instance;
 
     @SidedProxy(clientSide = "dark.client.ClientProxy", serverSide = "dark.common.CommonProxy")
     public static CommonProxy proxy;
+
+    public static Configuration config = new Configuration(new File(Loader.instance().getConfigDir(), "Dark/BotMain.cfg"));
+
+    public static Item worldEditTool, droneSpawnTool;
+    public static Block blockDeco, blockCreep, blockCore;
+
+    /** Disables the hiveminds and there activity */
+    public static boolean disableHive = false;
+    /** Prevents the hives from launching attacks */
+    public static boolean disableHiveAgression = false;
+    /** Disables hive drones and spawns */
+    public static boolean disableDrones = false;
+    /** Disable hive world gen buildings */
+    public static boolean disableWorldGen = false;
+    /** Disables spires from rebuilding */
+    public static boolean disableSpireBuilding = false;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -90,14 +98,14 @@ public class DarkBotMain
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(Hivemind.class);
-        GameRegistry.registerTileEntity(TileEntitySpire.class, "HiveSpire");
+        GameRegistry.registerTileEntity(TileEntitySpireCore.class, "HiveSpire");
         GameRegistry.registerWorldGenerator(new WorldGen());
 
         EntityRegistry.registerGlobalEntityID(EntityDefender.class, "GSMDefenderII", EntityRegistry.findGlobalUniqueEntityId());
         EntityRegistry.registerModEntity(EntityDefender.class, "GSMDefenderII", EntityRegistry.findGlobalUniqueEntityId(), instance, 60, 1, true);
 
-        EntityRegistry.registerGlobalEntityID(EntityProj.class, "GSMMissileOne", EntityRegistry.findGlobalUniqueEntityId());
-        EntityRegistry.registerModEntity(EntityProj.class, "GSMMissileOne", EntityRegistry.findGlobalUniqueEntityId(), instance, 60, 1, true);
+        EntityRegistry.registerGlobalEntityID(EntityBombMissile.class, "GSMMissileOne", EntityRegistry.findGlobalUniqueEntityId());
+        EntityRegistry.registerModEntity(EntityBombMissile.class, "GSMMissileOne", EntityRegistry.findGlobalUniqueEntityId(), instance, 60, 1, true);
 
         EntityRegistry.registerGlobalEntityID(EntityBossGigus.class, "GSMBossGigus", EntityRegistry.findGlobalUniqueEntityId());
         EntityRegistry.registerModEntity(EntityBossGigus.class, "GSMBossGigus", EntityRegistry.findGlobalUniqueEntityId(), instance, 60, 1, true);
