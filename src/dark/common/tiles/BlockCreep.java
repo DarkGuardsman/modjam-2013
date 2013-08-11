@@ -25,26 +25,18 @@ import dark.common.prefab.PosWorld;
 
 public class BlockCreep extends BlockMain
 {
-    public static List<Block> ignoreList = new ArrayList<Block>();
+    public static List<Block> spreadList = new ArrayList<Block>();
 
     static
     {
         //TODO add special conversion cases like tree to metal tree
         //or water into acid pool
-        ignoreList.add(DarkBotMain.blockCore);
-        ignoreList.add(DarkBotMain.blockDeco);
-        ignoreList.add(DarkBotMain.blockCreep);
-        ignoreList.add(Block.blockIron);
-        ignoreList.add(Block.blockGold);
-        ignoreList.add(Block.blockDiamond);
-        ignoreList.add(Block.oreCoal);
-        ignoreList.add(Block.oreGold);
-        ignoreList.add(Block.oreIron);
-        ignoreList.add(Block.oreDiamond);
-        ignoreList.add(Block.ladder);
-        ignoreList.add(Block.redstoneWire);
-        ignoreList.add(Block.lever);
-        ignoreList.add(Block.redstoneComparatorIdle);
+        spreadList.add(Block.stone);
+        spreadList.add(Block.dirt);
+        spreadList.add(Block.grass);
+        spreadList.add(Block.gravel);
+        spreadList.add(Block.sand);
+        spreadList.add(Block.cobblestone);
     }
 
     public BlockCreep(int par1)
@@ -82,7 +74,7 @@ public class BlockCreep extends BlockMain
                     int id2 = pos2.getBlockID();
                     Block two = Block.blocksList[id2];
 
-                    if (entity == null && id != this.blockID && id2 != this.blockID && two != null && !ignoreList.contains(one))
+                    if (entity == null && id != this.blockID && id2 != this.blockID && two != null && spreadList.contains(one))
                     {
                         world.setBlock(i1, j1, k1, this.blockID, meta, 3);
                     }
